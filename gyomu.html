@@ -118,6 +118,21 @@ th:first-child,td:first-child{text-align:left;font-weight:700}
 .shaken b{display:block;margin-bottom:2px}
 .shk{display:inline-block;margin-top:4px;font-size:.82rem;color:var(--muted)}
 .shk.on{color:var(--warn);font-weight:700}
+:root{--g-mat:#2F6FD6;--g-mat-soft:#E3ECFA;--g-veh:#2E7D4F;--g-veh-soft:#E2F2E8;--g-prep:#B7791F;--g-prep-soft:#FBF0DC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g-mat:#7FA8E0;--g-mat-soft:#1E2B3D;--g-veh:#6BC48F;--g-veh-soft:#1C2E24;--g-prep:#E2AC4E;--g-prep-soft:#33291A}}
+:root[data-theme="dark"]{--g-mat:#7FA8E0;--g-mat-soft:#1E2B3D;--g-veh:#6BC48F;--g-veh-soft:#1C2E24;--g-prep:#E2AC4E;--g-prep-soft:#33291A}
+.grps{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0 0}
+.grp{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:62px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);border-top:5px solid var(--gc);background:var(--surface);color:var(--ink);font-family:inherit;text-align:left;cursor:pointer}
+.grp b{font-size:1.05rem}
+.grp span{font-size:.72rem;color:var(--muted);line-height:1.3}
+.grp[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
+.grp[aria-pressed="true"] span{color:rgba(255,255,255,.85)}
+.g-mat{--gc:var(--g-mat);--gs:var(--g-mat-soft)} .g-veh{--gc:var(--g-veh);--gs:var(--g-veh-soft)} .g-prep{--gc:var(--g-prep);--gs:var(--g-prep-soft)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .grp[aria-pressed="true"]{color:#161A1C} :root:not([data-theme="light"]) .grp[aria-pressed="true"] span{color:rgba(22,26,28,.8)}}
+.cats[class*="g-"]{background:var(--gs);border-radius:10px;padding:8px;margin-top:8px}
+.cats[class*="g-"] .chip[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
+.list[class*="g-"] > details{border-left:5px solid var(--gc)}
+.list[class*="g-"] > details > summary svg{color:var(--gc)}
 .empty{color:var(--muted);text-align:center;padding:20px}
 .foot{font-size:.8rem;color:var(--muted);margin-top:18px}
 input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
@@ -131,6 +146,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   <div class="shaken" id="shaken" hidden></div>
   <div class="toolbar"><button type="button" class="gbtn" id="inspbtn">月次点検をする</button><button type="button" class="gbtn" id="invbtn" hidden>棚卸しをする</button></div>
   <input class="search" id="q" type="search" placeholder="名前で探す（全部の種類から探します）" aria-label="材料を名前で探す">
+  <div class="grps" id="grps" role="group" aria-label="大きな分類"></div>
   <div class="cats" id="cats" role="group" aria-label="種類で絞り込む"></div>
   <div class="list" id="list"></div>
   <button class="cartbtn" id="cartbtn" type="button">カート 0</button>
@@ -489,9 +505,20 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   var CATS = ["車両","検査機器","検査の手順"];
   var cur = "車両", q = "";
   var esc = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  var GROUPS = [
+    {k:"車両", g:"veh", d:"ハイエース・ユニック車など", cats:["車両"]},
+    {k:"検査", g:"mat", d:"検査機器・検査の手順", cats:["検査機器","検査の手順"]}
+  ];
+  function grpOf(c){ for(var i=0;i<GROUPS.length;i++) if(GROUPS[i].cats.indexOf(c) >= 0) return GROUPS[i]; return GROUPS[0]; }
   function drawCats(){
+    var G = grpOf(cur);
+    var gb = document.getElementById("grps");
+    gb.innerHTML = GROUPS.map(function(x){ return '<button type="button" class="grp g-'+x.g+'" data-g="'+x.k+'" aria-pressed="'+(x===G)+'"><b>'+x.k+'</b><span>'+x.d+'</span></button>'; }).join("");
+    gb.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){ var x = GROUPS.filter(function(y){ return y.k === b.dataset.g; })[0]; cur = x.cats[0]; drawCats(); drawList(); }); });
     var box = document.getElementById("cats");
-    box.innerHTML = CATS.map(function(c){ return '<button type="button" class="chip" data-c="'+c+'" aria-pressed="'+(c===cur)+'">'+c+'</button>'; }).join("");
+    box.className = "cats g-"+G.g;
+    box.hidden = G.cats.length < 2;
+    box.innerHTML = G.cats.map(function(c){ return '<button type="button" class="chip" data-c="'+c+'" aria-pressed="'+(c===cur)+'">'+c+'</button>'; }).join("");
     box.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){ cur = b.dataset.c; drawCats(); drawList(); }); });
   }
   function drawList(){
@@ -502,6 +529,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     });
     var box = document.getElementById("list");
     if(!items.length){ box.innerHTML = '<div class="empty">見つかりませんでした。別の言葉で探してください。</div>'; return; }
+    box.className = "list" + (key ? "" : " g-"+grpOf(cur).g);
     box.innerHTML = items.map(itemHtml).join("");
   }
   function itemHtml(m){
@@ -521,7 +549,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
         (m.fig || '')+
         '<div class="sec"><h3>何に使う</h3><p>'+esc(m.use)+'</p></div>'+
         '<div class="sec place"><h3>どこにある</h3><p>'+m.place+'</p></div>'+
-        (m.spec ? '<div class="sec"><h3>仕様・使うオイルなど</h3><table class="spec">'+m.spec.map(function(r){ return '<tr><td>'+esc(r[0])+'</td><td>'+(r[1] ? esc(r[1]) : TODO)+'</td></tr>'; }).join("")+'</table></div>' : '')+
+        (m.spec ? '<div class="sec"><h3>仕様・サイズ</h3><table class="spec">'+m.spec.map(function(r){ return '<tr><td>'+esc(r[0])+'</td><td>'+(r[1] ? esc(r[1]) : TODO)+'</td></tr>'; }).join("")+'</table></div>' : '')+
         (m.steps ? '<div class="sec"><h3>オイル交換の手順</h3><ol style="margin:0;padding-left:1.4em">'+m.steps.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ol></div>' : '')+
         (m.insp ? '<div class="sec"><h3>点検項目</h3><ul>'+m.insp.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></div>' : '')+
         (m.parts !== undefined ? '<div class="sec"><h3>パーツリスト</h3>'+(m.parts ? '<a class="linkbtn" href="'+m.parts+'" target="_blank" rel="noopener">パーツリストを開く</a>' : '<p>'+TODO+'（メーカーのパーツリストのリンクを登録すると、ここから開けます）</p>')+'</div>' : '')+

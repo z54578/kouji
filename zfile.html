@@ -34,7 +34,7 @@
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--ink);
   font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;
-  font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+  font-size:1rem;line-height:1.6;-webkit-text-size-adjust:100%}
 .wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
 .back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
 h1{font-size:1.5rem;line-height:1.25;margin:4px 0 12px}
@@ -118,6 +118,46 @@ th:first-child,td:first-child{text-align:left;font-weight:700}
 .shaken b{display:block;margin-bottom:2px}
 .shk{display:inline-block;margin-top:4px;font-size:.82rem;color:var(--muted)}
 .shk.on{color:var(--warn);font-weight:700}
+.act2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.act2 .pbtn{display:flex;align-items:center;justify-content:center;text-decoration:none}
+.act2 .ghostb{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.act2 .dis{background:var(--line);color:var(--muted);font-weight:400;font-size:.85rem}
+.tsel{grid-column:1 / 3}
+.addform > input[type="text"]{grid-column:1 / 3}
+.qty{grid-column:1 / 3;display:grid;grid-template-columns:52px 1fr 52px;gap:6px}
+.qty input{text-align:center}
+.qbtn{min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:1.3rem;font-weight:700;cursor:pointer}
+.tsel span{font-size:.82rem;color:var(--muted)}
+.rel .chip{font-size:.85rem;min-height:38px}
+.g2r{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rentf .cfield input{height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1rem;padding:0 10px;width:100%}
+
+:root{--g-mat:#2F6FD6;--g-mat-soft:#E3ECFA;--g-veh:#2E7D4F;--g-veh-soft:#E2F2E8;--g-prep:#B7791F;--g-prep-soft:#FBF0DC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g-mat:#7FA8E0;--g-mat-soft:#1E2B3D;--g-veh:#6BC48F;--g-veh-soft:#1C2E24;--g-prep:#E2AC4E;--g-prep-soft:#33291A}}
+:root[data-theme="dark"]{--g-mat:#7FA8E0;--g-mat-soft:#1E2B3D;--g-veh:#6BC48F;--g-veh-soft:#1C2E24;--g-prep:#E2AC4E;--g-prep-soft:#33291A}
+.grps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 0}
+.grp{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:62px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);border-top:5px solid var(--gc);background:var(--surface);color:var(--ink);font-family:inherit;text-align:left;cursor:pointer}
+.grp b{font-size:1.05rem}
+.grp span{font-size:.72rem;color:var(--muted);line-height:1.3}
+.grp[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
+.grp[aria-pressed="true"] span{color:rgba(255,255,255,.85)}
+.g-mat{--gc:var(--g-mat);--gs:var(--g-mat-soft)} .g-veh{--gc:var(--g-veh);--gs:var(--g-veh-soft)} .g-prep{--gc:var(--g-prep);--gs:var(--g-prep-soft)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .grp[aria-pressed="true"]{color:#161A1C} :root:not([data-theme="light"]) .grp[aria-pressed="true"] span{color:rgba(22,26,28,.8)}}
+.cats[class*="g-"]{background:var(--gs);border-radius:10px;padding:8px;margin-top:8px}
+.cats[class*="g-"] .chip[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
+.list[class*="g-"] > details{border-left:5px solid var(--gc)}
+.list[class*="g-"] > details > summary svg{color:var(--gc)}
+html{font-size:19px}
+.fsz{display:flex;align-items:center;gap:6px;justify-content:flex-end;margin:-4px 0 8px}
+.fsz span{font-size:.8rem;color:var(--muted)}
+.fsz .chip{min-height:34px;padding:0 12px;font-size:.85rem}
+summary .fav{background:none;border:0;font-size:1.5rem;line-height:1;color:var(--muted);padding:6px;cursor:pointer;font-family:inherit}
+summary .fav[aria-pressed="true"]{color:#E0A800}
+.favmark{color:#E0A800;margin-right:4px;font-size:.9em}
+.favbtn{display:block;margin:4px 0 0;background:none;border:0;color:var(--muted);font-family:inherit;font-size:.85rem;padding:6px 0;cursor:pointer;text-align:left}
+details.more{border:0;background:none;margin-top:4px}
+details.more > summary{display:block;padding:4px 0;font-size:.85rem;font-weight:700;color:inherit;text-decoration:underline;list-style:none}
+details.more > summary::after{content:none}
 .empty{color:var(--muted);text-align:center;padding:20px}
 .foot{font-size:.8rem;color:var(--muted);margin-top:18px}
 input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
@@ -131,6 +171,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   <div class="shaken" id="shaken" hidden></div>
   <div class="toolbar"><button type="button" class="gbtn" id="inspbtn">月次点検をする</button><button type="button" class="gbtn" id="invbtn">棚卸しをする</button></div>
   <input class="search" id="q" type="search" placeholder="名前で探す（全部の種類から探します）" aria-label="材料を名前で探す">
+  <div class="grps" id="grps" role="group" aria-label="大きな分類"></div>
   <div class="cats" id="cats" role="group" aria-label="種類で絞り込む"></div>
   <div class="list" id="list"></div>
   <button class="cartbtn" id="cartbtn" type="button">カート 0</button>
@@ -184,6 +225,9 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     truck: sv('<rect x="4" y="10" width="26" height="14" rx="1" stroke-width="2.5"/><path d="M30 14 H38 L44 20 V24 H30 Z" stroke-width="2.5"/><circle cx="12" cy="27" r="3" fill="currentColor" stroke="none"/><circle cx="37" cy="27" r="3" fill="currentColor" stroke="none"/>'),
     truckS: sv('<rect x="4" y="10" width="26" height="14" rx="1" fill="#B9C0C4" stroke="#555B5E" stroke-width="1.5"/><path d="M30 14 H38 L44 20 V24 H30 Z" fill="#B9C0C4" stroke="#555B5E" stroke-width="1.5"/><circle cx="12" cy="27" r="3" fill="#333" stroke="none"/><circle cx="37" cy="27" r="3" fill="#333" stroke="none"/>'),
     truckW: sv('<rect x="4" y="10" width="26" height="14" rx="1" fill="#FFFFFF" stroke="#555B5E" stroke-width="1.5"/><path d="M30 14 H38 L44 20 V24 H30 Z" fill="#FFFFFF" stroke="#555B5E" stroke-width="1.5"/><circle cx="12" cy="27" r="3" fill="#333" stroke="none"/><circle cx="37" cy="27" r="3" fill="#333" stroke="none"/>'),
+    inn: sv('<path d="M6 28 V14 L24 4 L42 14 V28 Z" stroke-width="2.5"/><path d="M18 28 V19 H30 V28" stroke-width="2.5"/><path d="M12 16 H16 M32 16 H36" stroke-width="2"/>'),
+    pipe: sv('<rect x="2" y="10" width="44" height="12" rx="2" stroke-width="2.5"/><path d="M8 10 V22 M40 10 V22" stroke-width="2"/>'),
+    canWB: sv('<rect x="4" y="8" width="18" height="22" rx="2" fill="#FFFFFF" stroke="#8A9499" stroke-width="2"/><rect x="8" y="4" width="10" height="5" rx="1" fill="#8A9499" stroke="none"/><rect x="26" y="8" width="18" height="22" rx="2" fill="#2F6FD6" stroke="#1E4E9E" stroke-width="2"/><rect x="30" y="4" width="10" height="5" rx="1" fill="#1E4E9E" stroke="none"/>'),
     valve: sv('<path d="M4 20 H44" stroke-width="7"/><path d="M18 14 H30 V26 H18 Z" fill="currentColor" stroke="none"/><path d="M24 14 V6 M17 5 H31" stroke-width="3"/>'),
     gasket: sv('<circle cx="24" cy="16" r="13" stroke-width="2.5"/><circle cx="24" cy="16" r="6.5" stroke-width="2.5"/>'),
     gasketF: sv('<circle cx="24" cy="16" r="14" stroke-width="2"/><circle cx="24" cy="16" r="6" stroke-width="2"/><circle cx="24" cy="5.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="24" cy="26.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="13.5" cy="16" r="1.8" fill="currentColor" stroke="none"/><circle cx="34.5" cy="16" r="1.8" fill="currentColor" stroke="none"/>'),
@@ -223,6 +267,11 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   var TODO = '<span class="todo">未登録</span>';
   // 材料データ（補充元・注文先は会社の情報がわかったら入れる）
   var M = [
+    {sizes:["15A", "20A", "25A", "32A", "40A", "50A", "65A", "80A", "100A"], unit:"本", c:"ねじ込み継手", ic:IC.pipe, n:"白ガス管（SGP・4m）", s:"ねじ込み配管に使う管（定尺4m）",
+     use:"ねじ込み配管に使う、亜鉛めっきの白ガス管。1本4m。",
+     place:"デカ・キャンター：助手席側の棚の下",
+     warn:["溶接に使う黒ガス管と間違えない（白はねじ込み用）","切断長はねじ込み配管アプリで計算する","ねじ切り後は、ねじゲージで確認する"],
+     tbl:{"h": ["呼び", "外径", "厚さ"], "r": [["15A(1/2)", "21.7", "2.8"], ["20A(3/4)", "27.2", "2.8"], ["25A(1)", "34.0", "3.2"], ["32A(1 1/4)", "42.7", "3.5"], ["40A(1 1/2)", "48.6", "3.5"], ["50A(2)", "60.5", "3.8"], ["65A(2 1/2)", "76.3", "4.2"], ["80A(3)", "89.1", "4.2"], ["100A(4)", "114.3", "4.5"]], "n": "配管用炭素鋼鋼管（SGP）JIS G 3452（単位mm）。"}, from:null, order:null},
     {c:"ねじ込み継手", ic:IC.el, n:"90°エルボ（ねじ込み）", s:"管を90°に曲げる",
      use:"ねじを切った管をねじ込んで、配管の向きを90°変える。",
      place:"デカ・キャンター：助手席側の棚（継手箱）",
@@ -245,6 +294,11 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      use:"後で取り外す可能性がある所や、機器のつなぎに使う。パッキンを使う。",
      place:"デカ・キャンター：助手席側の棚（継手箱）",
      warn:["点検や増し締めができる場所にだけ使う","パッキンが入っているか確認する"], from:null, order:null},
+    {sizes:["15A", "20A", "25A", "32A", "40A", "50A", "65A", "80A", "100A"], unit:"本", c:"溶接継手", ic:IC.pipe, n:"黒ガス管（SGP・5.5m）", s:"溶接配管に使う管（定尺5.5m）",
+     use:"溶接配管に使う黒ガス管。1本5.5m。",
+     place:"デカ・キャンター：助手席側の棚の下",
+     warn:["ねじ込みに使う白ガス管と間違えない（黒は溶接用）","切断長は溶接配管アプリで計算する","埋設する所は防食テープ・ペトロテープで防食する"],
+     tbl:{"h": ["呼び", "外径", "厚さ"], "r": [["15A(1/2)", "21.7", "2.8"], ["20A(3/4)", "27.2", "2.8"], ["25A(1)", "34.0", "3.2"], ["32A(1 1/4)", "42.7", "3.5"], ["40A(1 1/2)", "48.6", "3.5"], ["50A(2)", "60.5", "3.8"], ["65A(2 1/2)", "76.3", "4.2"], ["80A(3)", "89.1", "4.2"], ["100A(4)", "114.3", "4.5"]], "n": "配管用炭素鋼鋼管（SGP）JIS G 3452（単位mm）。"}, from:null, order:null},
     {c:"溶接継手", ic:IC.wel, n:"溶接エルボ（ロング・ショート）", s:"溶接でつなぐ90°エルボ",
      use:"突合せ溶接で管をつなぎ、向きを90°変える。ロングはゆるく、ショートは急に曲がる。",
      place:"デカ・キャンター：助手席側の棚（継手箱）",
@@ -298,19 +352,19 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      use:"配管の途中に付けて、流れを止めたり開けたりする。",
      place:"デカ・キャンター：助手席側の棚（継手の近く）",
      warn:["流れの向きの矢印がある物は、向きを合わせて付ける"], from:null, order:null},
-    {c:"パッキン", ic:IC.gasketF, n:"パッキン 10K", s:"フランジの間にはさむ",
+    {c:"パッキン", shape:"耳付きリングパッキン", ic:IC.gasketF, n:"パッキン 10K", s:"フランジの間にはさむ",
      use:"フランジとフランジの間にはさんで、漏れを防ぐ。25A〜100A。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ6番（サイズ順の仕切り）",
-     warn:["組フラ用と形が似ているので混ぜない","袋に描いた実寸の絵に合わせて選ぶ","一度使ったパッキンは使い回さない"], tbl:"G10", from:null, order:null},
-    {c:"パッキン", ic:IC.gasketF, n:"パッキン 5K", s:"5Kフランジの間にはさむ",
+     warn:["組フラ用と形が似ているので混ぜない","袋に描いた実寸の絵に合わせて選ぶ","一度使ったパッキンは使い回さない"], tbl:"G10", spec2:[["形","耳付きリングパッキン（固定）"],["厚み","1.5mm・2mm・3mm（注文のときに選ぶ）"]], from:null, order:null},
+    {c:"パッキン", shape:"耳付きリングパッキン", ic:IC.gasketF, n:"パッキン 5K", s:"5Kフランジの間にはさむ",
      use:"5Kのフランジとフランジの間にはさんで、漏れを防ぐ。",
      place:"デカ・キャンター：置き場所は"+TODO,
      warn:["10K用と混ぜない（外径と穴の位置が違う）","袋に描いた実寸の絵に合わせて選ぶ","一度使ったパッキンは使い回さない"],
-     tbl:"G5", from:null, order:null},
-    {c:"パッキン", ic:IC.gasket, n:"パッキン 組フラ", s:"組フランジ用",
+     tbl:"G5", spec2:[["形","耳付きリングパッキン（固定）"],["厚み","1.5mm・2mm・3mm（注文のときに選ぶ）"]], from:null, order:null},
+    {c:"パッキン", shape:"全面パッキン", ic:IC.gasket, n:"パッキン 組フラ", s:"組フランジ用",
      use:"組フランジの間にはさんで、漏れを防ぐ。25A〜100A。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ7番（サイズ順の仕切り）",
-     warn:["10K用と混ぜない","一度使ったパッキンは使い回さない"], from:null, order:null},
+     warn:["10K用と混ぜない","一度使ったパッキンは使い回さない"], spec2:[["形","全面パッキン（固定）"],["厚み","1.5mm・2mm・3mm（注文のときに選ぶ）"]], from:null, order:null},
 
     {c:"樹脂配管", ic:IC.rp, n:"樹脂配管の施工方法（埋設・離隔・融着）", s:"埋設深度・離隔距離・埋め戻しの決まり",
      custom:'<figure style="margin:0">'+'<svg viewBox="0 0 340 210" role="img" aria-label="樹脂配管の埋設深度と離隔距離の断面図" style="width:100%;height:auto;display:block"><defs><marker id="ga" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs><rect x="0" y="30" width="340" height="18" style="fill:var(--line)"/><text x="330" y="43" text-anchor="end" font-size="11" font-weight="700" fill="currentColor">舗装</text><path d="M0 30 H340" stroke="currentColor" stroke-width="2"/><text x="6" y="24" font-size="12" font-weight="700" fill="currentColor">GL</text><rect x="104" y="96" width="176" height="74" rx="4" fill="#E9D9A8" opacity=".55"/><text x="272" y="164" text-anchor="end" font-size="10" fill="currentColor">砂で埋め戻し</text><rect x="30" y="58" width="40" height="140" fill="#8A9499"/><text x="50" y="132" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">支柱</text><text x="50" y="145" text-anchor="middle" font-size="9" fill="#fff">など</text><circle cx="156" cy="128" r="18" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/><circle cx="234" cy="128" r="18" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/><path d="M156 33 V108" stroke="currentColor" stroke-width="1.5" marker-start="url(#ga)" marker-end="url(#ga)"/><path d="M140 110 H172" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/><text x="164" y="66" font-size="11" font-weight="700" fill="currentColor">コンクリート舗装 300以上</text><text x="164" y="81" font-size="11" font-weight="700" fill="currentColor">アスファルト 600以上</text><path d="M72 128 H136" stroke="currentColor" stroke-width="1.5" marker-start="url(#ga)" marker-end="url(#ga)"/><text x="104" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">120以上</text><path d="M176 128 H214" stroke="currentColor" stroke-width="1.5" marker-start="url(#ga)" marker-end="url(#ga)"/><text x="195" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">配管同士 120以上</text><path d="M195 133 V178" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/></svg>'+'<figcaption class="tnote">断面図（単位mm）。黄色が樹脂配管。</figcaption></figure>'+
@@ -321,112 +375,135 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      '<div class="sec"><h3>融着（EF接合）の流れ</h3><ul><li>管と継手に可燃性の油や蒸気がないことを確認する</li><li>EFコントローラのコネクターを継手のターミナルに差し、バーコードを読んで通電する</li><li>通電が終わったら、冷えるまで動かさない</li><li>インジケーターが継手の表面より上に出ていれば融着完了</li></ul></div>'+
      '<div class="sec warn"><h3>守ること</h3><ul><li>埋設部分では融着以外の接続をしない</li><li>金属管とのつなぎは点検ボックスの中で、フランジ接合用継手などを使う</li><li>地上の配管と点検ボックス内の接続部から先は金属配管にする</li><li>ボックスやマンホールを貫通する所はウォータープルーフを使う</li><li>施工が終わったら、配管系統ごとに評価済証を付ける</li><li>施工中は技能講習会の修了証を携帯する</li></ul></div>'
     },
-    {c:"樹脂配管", ic:IC.rp, n:"バリアパイプ 直管（エスロン バリアパイプエスエス）", s:"油を送る地中埋設用の樹脂管",
+    {sizes:["30A", "50A", "100A（厚肉）", "100A（薄肉・注油管用）"], c:"樹脂配管", ic:IC.rp, n:"バリアパイプ 直管（エスロン バリアパイプエスエス）", unit:"本", s:"樹脂管（定尺5m・30A・50A・100A）",
      use:"給油所の地下に埋める石油用の樹脂管。ガソリン（レギュラー・ハイオク）、軽油、灯油、A重油、廃油に使える。中間にバリア層がある3種5層構造。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["埋設専用。地上に出す配管には絶対に使わない","施工には技能講習会の修了証が必要で、施工中は必ず携帯する","100は2種類ある。厚肉（緑のマーキング）と薄肉（赤のマーキング）。100Uは注油管に使う","地下タンクから上り勾配1/100以上で敷設する","配管同士は120mm以上離す（会社の基準）","コンクリート構造物（地下タンクの支柱も含む）からも120mm以上離す","埋設深度はGLから管の上まで、コンクリート舗装300mm以上、アスファルト舗装・無舗装600mm以上"],
      tbl:{h:["呼び","品番","外径D","厚さt","長さ","質量"],r:[["30","BP305","42.0","3.9","5,000","2.4kg"],["50","BP505","60.0","5.5","5,000","4.8kg"],["100（薄肉・注油管）","BP1H5U","114.0","6.7","5,000","11.6kg"],["100（厚肉）","BP1H5","114.0","10.4","5,000","16.9kg"]],n:"積水化学 エスロンバリアパイプエスエスシステム カタログ（2025年7月 改訂3版）より。単位mm。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.rs, n:"EFソケット", s:"管と管を融着でつなぐ",
+    {sizes:["30A", "50A", "100A", "50×30（異径）"], c:"樹脂配管", ic:IC.rs, n:"EFソケット", s:"管と管を融着でつなぐ",
      use:"中に電熱線が入った継手。EFコントローラで通電して、管と継手を溶かして一体にする。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["融着したら、インジケーターが継手の表面より上に出ているかで完了を確認する","埋設部分では融着以外の接続をしない","管の中や周りにガソリンなどの可燃性の蒸気がないことを確認してから融着する"],
      tbl:{h:["呼び","品番","L","Le"],r:[["30","BPES30","93","45"],["50","BPES50","108","52"],["100","BPES1HN","142","69"],["50×30（異径）","BPES502","128","ℓ1 54・ℓ2 46"]],n:"単位mm。Leは管を差し込む深さ。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.rl, n:"EFエルボ（90°）", s:"融着で90°に曲げる",
+    {sizes:["30A", "50A", "100A"], c:"樹脂配管", ic:IC.rl, n:"EFエルボ（90°）", s:"融着で90°に曲げる",
      use:"融着でつなぐ90°のエルボ。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["管の差し込み深さ（Le）まで確実に入れてから融着する"],
      tbl:{h:["呼び","品番","Le","H"],r:[["30","BPEL30","45","74"],["50","BPEL50","52","92"],["100","BPEL1H","69","136"]],n:"単位mm。Hは中心から端まで。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.r45, n:"EF 45°エルボ", s:"融着で45°に曲げる",
+    {sizes:["50A", "100A"], c:"樹脂配管", ic:IC.r45, n:"EF 45°エルボ", s:"融着で45°に曲げる",
      use:"融着でつなぐ45°のエルボ。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["管の差し込み深さ（Le）まで確実に入れてから融着する"],
      tbl:{h:["呼び","品番","Le","H"],r:[["50","BPE4L50","52","78"],["100","BPE4L1H","69","120"]],n:"単位mm。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.rt, n:"EFチーズ", s:"融着で3方向に分ける",
+    {sizes:["30A", "50A", "100A", "100×50"], c:"樹脂配管", ic:IC.rt, n:"EFチーズ", s:"融着で3方向に分ける",
      use:"融着でつなぐT字の継手。100×50は枝が50。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["枝の向きを確認してから融着する"],
      tbl:{h:["呼び","品番","L","Le","H"],r:[["30","BPET30","140","45.4","115"],["50","BPET50","171","52","143"],["100","BPET1H","268","69","209"],["100×50","BPET1H3","239","69","175.5"]],n:"単位mm。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.rc, n:"EFキャップ", s:"管の端をふさぐ",
+    {sizes:["30A", "50A", "100A"], c:"樹脂配管", ic:IC.rc, n:"EFキャップ", s:"管の端をふさぐ",
      use:"融着で管の端をふさぐ。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["差し込み深さ（Le）まで確実に入れてから融着する"],
      tbl:{h:["呼び","品番","L","Le"],r:[["30","BPEC30","75","45"],["50","BPEC50","97","54"],["100","BPEC1H","101","69"]],n:"単位mm。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.rf, n:"フランジ接合用継手", s:"点検ボックス内で金属管とつなぐ",
+    {sizes:["50A", "100A", "50A ロング", "100A ロング"], c:"樹脂配管", ic:IC.rf, n:"フランジ接合用継手", s:"点検ボックス内で金属管とつなぐ",
      use:"樹脂管の先に付いたフランジで、点検ボックスやサンプの中で金属管や機器とつなぐ。フランジはJIS 10K相当。ロングタイプは高さ調整用（受注生産）。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["パッキンは耐油性のある指定品を使う","ボルト・ナットは防食仕様を使う","金属管とのつなぎは点検ボックスの中で行う"],
      tbl:{h:["呼び","品番","L","外径A","PCD","穴"],r:[["50","BPF50S","144","155","120","4×φ19"],["100","BPF1HS","160","210","175","8×φ19"],["50（ロング）","BPF50L","545","155","120","4×φ19"],["100（ロング）","BPF1HL","565","210","175","8×φ19"]],n:"単位mm。フランジはSS400溶融亜鉛めっき。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.rft, n:"フランジ付きEFチーズ", s:"タンク上部で使う",
+    {sizes:["100×50", "100×100"], c:"樹脂配管", ic:IC.rft, n:"フランジ付きEFチーズ", s:"タンク上部で使う",
      use:"地下タンクの上部で、フランジとチーズが一体になった継手。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["タンク上部での接続に使う","分岐の高さ調整が必要なときは、フランジ接合用継手100のロングタイプを使う","パッキンは耐油性のある指定品を使う"],
      tbl:{h:["呼び","品番","L","H","PCD","穴"],r:[["100×50","BPFT1H3","239","290","120","4×φ19"],["100×100","BPFT1H","268","340","175","8×φ19"]],n:"単位mm。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.rn, n:"ねじ付きスピゴット継手・ねじ付きエルボ継手", s:"計量器の下で鋼管にねじでつなぐ",
+    {sizes:["スピゴット 50×40", "エルボ 50×40"], c:"樹脂配管", ic:IC.rn, n:"ねじ付きスピゴット継手・ねじ付きエルボ継手", s:"計量器の下で鋼管にねじでつなぐ",
      use:"樹脂管と、R1 1/2（40）の金属のおねじをつなぐ継手。計量器ボックスなどで使う。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["金属管にねじ込むときの締め付けトルクは150N・m。締めすぎると漏れや破損の原因になる"],
      tbl:{h:["呼び","品番","L"],r:[["50×40 スピゴット","BPNS501","175（最大）"],["50×40 エルボ","BPNL501","L1 179"]],n:"単位mm。金属ねじ部はR1 1/2用。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.rtr, n:"トランジション継手（鋼管接続用）", s:"鋼管と溶接でつなぐ",
+    {sizes:["50A", "100A"], c:"樹脂配管", ic:IC.rtr, n:"トランジション継手（鋼管接続用）", s:"鋼管と溶接でつなぐ",
      use:"片側が鋼管、片側が樹脂管になった継手。鋼管側を金属管に溶接でき、ボックスを設置せずにつなげる。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["圧力のかかる管路や送油管ラインには使えない（注油管・廃油管・通気管用）","溶接後は、溶接部と継手の鋼管部全体に防食処理をする（ペトロラタムペースト→ペトロテープ→防食テープ2回巻きハーフラップ）"],
      tbl:{h:["呼び","品番","全長L","樹脂側D1","鋼管側D2"],r:[["50","BPTR50","670","60","60.5"],["100","BPTR1H","730","114","114.3"]],n:"単位mm。"}, from:null, order:null},
-    {c:"樹脂配管", ic:IC.wp, n:"ウォータープルーフ", s:"ボックスを貫通する所の止水",
+    {sizes:["30A", "50A", "100A"], c:"樹脂配管", ic:IC.wp, n:"ウォータープルーフ", s:"ボックスを貫通する所の止水",
      fig:'<figure style="margin:0"><svg viewBox="0 0 340 170" role="img" aria-label="ウォータープルーフの向きの図。止水ラバーと締め付けバンドはサンプの内側" style="width:100%;height:auto;display:block"><rect x="0" y="10" width="150" height="150" fill="#E9D9A8" opacity=".55"/><text x="8" y="28" font-size="11" font-weight="700" fill="currentColor">サンプの外側（土側）</text><text x="332" y="28" text-anchor="end" font-size="11" font-weight="700" fill="currentColor">サンプの内側</text><rect x="150" y="10" width="20" height="150" fill="#8A9499"/><text x="160" y="156" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">壁</text><rect x="0" y="75" width="340" height="20" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/><rect x="140" y="64" width="40" height="42" fill="#555B5E"/><rect x="135" y="56" width="7" height="58" rx="1" fill="#3A3F42"/><rect x="178" y="56" width="7" height="58" rx="1" fill="#3A3F42"/><path d="M185 62 L252 71 V99 L185 108 Z" fill="#3E8E5A"/><rect x="236" y="68" width="10" height="34" rx="2" fill="#B9C0C4" stroke="#555B5E" stroke-width="1"/><text x="62" y="128" font-size="10" fill="currentColor">樹脂配管</text><path d="M150 46 L139 56" stroke="currentColor" stroke-width="1"/><text x="56" y="50" font-size="10" font-weight="700" fill="currentColor">本体・ロックナット</text><path d="M218 50 L218 66" stroke="currentColor" stroke-width="1"/><text x="218" y="46" text-anchor="middle" font-size="11" font-weight="700" fill="#2F7A4A">止水ラバー</text><path d="M241 104 L262 128" stroke="currentColor" stroke-width="1"/><text x="264" y="140" font-size="11" font-weight="700" fill="currentColor">締め付けバンド</text></svg><figcaption class="tnote">止水ラバーと締め付けバンドは、必ずサンプの内側に来る向きで付けます。</figcaption></figure>',
      use:"サンプやマンホール・点検ボックスの壁を樹脂管が貫通する所に付けて、すき間をふさぐ。油漏れをボックス内にとどめる。",
      place:"4トン（樹脂配管の現場）："+TODO,
      warn:["向きに注意。止水ラバーと締め付けバンドはサンプの内側に来るように付ける","ボックスを貫通する所には必ず使う","樹脂管用を使う"], from:null, order:null},
     {c:"樹脂配管", ic:IC.efc, n:"EFコントローラ（レッキス GEF200B-II）", s:"EF継手を融着する機械",
-     use:"EF継手のバーコードを読み取って、自動で通電して融着する。",
+     use:"EF継手のバーコードを読み取って、自動で通電して融着する。融着の履歴も記録される。",
      place:"4トン（樹脂配管の現場）："+TODO,
-     warn:["電源は必要容量2.0kVA以上。15Aコンセントや小さい発電機だと途中で電源が落ちることがある","ウェルダーから電源を取るときは、溶接や投光器と同時に使って容量を超えないようにする","発電機はインバーター式が必須。インバーターなしだと電圧や波形が乱れて、電源が落ちたり誤作動・故障したりする","延長コードはなるべく短く、太いものを使う。リールは全部引き出す"], from:null, order:null},
-    {c:"ボルト", ic:IC.bolt, n:"M16ボルト・ナット（55・65・80）", s:"フランジを締める",
+     warn:["電源は必要容量2.0kVA以上。15Aコンセントや小さい発電機だと途中で電源が落ちることがある","同じ発電機（ウェルダー）で、ほかの電動工具や投光器を同時に使わない","発電機はインバーター式が必須。インバーターなしだと電圧や波形が乱れて、電源が落ちたり誤作動・故障したりする","延長コードは太さ2mm²以上・長さ10m以下。ドラム型は全部引き出して使う","バーコードリーダーのレーザー光をのぞかない","使わないときは、電極アダプターにキャップをする","汚れは乾いた柔らかい布で拭く（シンナーなどは使わない）","液晶に直射日光を当てない。見えにくくなったら日陰で10分ほど待つ","自分で分解・修理しない"],
+     steps:["使う前に、下の「点検項目」（日常点検）を確認する","電源スイッチを入れ、液晶に日時・外気温・入力電圧が出ているか見る","継手を接続して、バーコードリーダーで継手のバーコードを読み取る","スタートスイッチで通電を始める（通電中は通電ランプが点く）","止めたいときはリセット／非常停止スイッチを押す","融着が終わったら、継手のインジケーターが表面より上に出ているか確認する","バーコードが読めないときは、【バーコード／履歴表示】キーでテンキー入力できる（24桁か32桁を選び、確認のためもう一度入力）","異常ランプが点滅したら、液晶の表示を確認する"],
+     spec:[["必要な電源","AC80〜120V・2.0kVA以上"],["延長コード","2mm²以上・10m以下"],["定期点検","約1年ごと（有償）"],["無償修理の保証","購入後1年"],["修理・問い合わせ","レッキス工業 札幌営業所 011-787-4611"],["お客様相談窓口","0120-475-476（平日 10:00〜12:00、13:00〜16:00）"]],
+     insp:["本体に破損・損傷がない","電源・出力ケーブルに破損・損傷がない","電極アダプターに異物が入っていない","電極アダプターの電極端子が変形していない","電極端子の保持力が十分ある","電動ファンが作動している","バーコードリーダーが発光している","液晶に日時・外気温・入力電圧が正しく表示されている","漏電ブレーカーの動作確認をした","異常があったら使わずに修理を依頼する"],
+     parts:undefined, from:null, order:null},
+    {sizes:["M16×55", "M16×65", "M16×80"], c:"ボルト", ic:IC.bolt, n:"M16ボルト・ナット（55・65・80）", s:"フランジを締める",
      use:"フランジ同士を締める。ナットを付けた状態でセットにしてある。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ1番（55）・2番（65）・3番（80）",
-     warn:["長さ違いを混ぜない。戻すときは色テープで確認","10Kフランジは80Aで8本、40Aで4本使う","W5/8ナットと絶対に混ぜない"], from:null, order:null},
+     warn:["長さ違いを混ぜない。戻すときは色テープで確認","10Kフランジは80Aで8本、40Aで4本使う","W5/8ナットと絶対に混ぜない"], spec:[["スパナ（二面幅）","24mm"]], from:null, order:null},
     {c:"ボルト", ic:IC.nut, n:"W5/8ナット（インチ）", s:"古いインチのボルト用",
      use:"インチのねじ（W5/8）のボルトに使うナット。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ4番（Uボルトと仕切りで分けてある）",
-     warn:["M16と見た目がほぼ同じで見分けられない","混ざると途中で止まったり、ねじ山をつぶしたりする","怪しいときはコンテナ内の確認用ボルトで試す"], from:null, order:null},
-    {c:"ボルト", ic:IC.ubolt, n:"Uボルト（50A・80A・100A）", s:"管を支持材に固定する",
+     warn:["M16と見た目がほぼ同じで見分けられない","混ざると途中で止まったり、ねじ山をつぶしたりする","怪しいときはコンテナ内の確認用ボルトで試す"], spec:[["スパナ（二面幅）","26mm"]], from:null, order:null},
+    {sizes:["50A", "80A", "100A"], c:"ボルト", ic:IC.ubolt, n:"Uボルト（50A・80A・100A）", s:"管を支持材に固定する",
      use:"管をアングルや架台に固定する。ナットを付けた状態で保管。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ4番",
-     warn:["管のサイズに合ったものを使う","材質（ステンレス・ドブメッキ）が混ざらないようにする"], from:null, order:null},
-    {c:"ボルト", ic:IC.anchor, n:"オールアンカー（M10・M12）", s:"コンクリートに固定する",
+     warn:["ナットはW3/8（インチ）。M10と見た目が似ているので混ぜない","管のサイズに合ったものを使う","材質（ステンレス・ドブメッキ）が混ざらないようにする"], spec:[["ナット","W3/8（インチ）"],["スパナ（二面幅）","14mm"]], from:null, order:null},
+    {sizes:["M10", "M12"], c:"ボルト", ic:IC.anchor, n:"オールアンカー（M10・M12）", s:"コンクリートに固定する",
      use:"コンクリートに下穴をあけて打ち込み、架台や支持金具を固定する。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ10番（対応ビットと一緒）",
-     warn:["袋に書いてある径のビットで下穴をあける","ビットのテープの印まで、決まった深さであける","穴の中の粉をダストポンプで飛ばしてから打つ"], from:null, order:null},
+     warn:["袋に書いてある径のビットで下穴をあける","ビットのテープの印まで、決まった深さであける","穴の中の粉をダストポンプで飛ばしてから打つ"], spec:[["M10 下穴径（ドリル径）","10.5mm"],["M10 ナットのスパナ（二面幅）","17mm"],["M12 下穴径（ドリル径）","12.7mm"],["M12 ナットのスパナ（二面幅）","19mm"]], from:null, order:null},
 
     {c:"シール材", ic:IC.tape, n:"シールテープ", s:"ねじのすき間をふさぐ",
      use:"おねじに巻いて、ねじ込み部分からの漏れを防ぐ。",
      place:"デカ・キャンター：コンテナ8番（予備）・キャビン（使いかけ）",
      warn:["ねじの向きに沿って巻く（管の先から見て時計回り）","管の先の1山目は巻かずに残す","汚れたテープはシール不良の原因"], from:null, order:null},
+    {c:"シール材", ic:IC.tube, n:"ドレンタイト", s:"プロテクターの止水に使う（2液 1:1）",
+     use:"マンホールのプロテクターのすき間に使い、水が入らないように止水する。2液を1:1で混ぜて使う。",
+     place:"置き場所は"+TODO,
+     warn:["2液は必ず1:1で混ぜる（比率がずれると固まらない・止水不良の原因）","よく混ぜてから使い、混ぜた分は早めに使い切る","使い捨て手袋を使う","塗る面の水・泥・汚れを落としてから使う"],
+     spec:[["混合","2液 1:1"],["保護具","使い捨て手袋"]],
+     from:null, order:null},
+    {c:"シール材", ic:IC.tape, n:"アルミテープ", s:"プロテクターの穴やすき間をふさぐ",
+     use:"プロテクターの穴やすき間を埋める。",
+     place:"置き場所は"+TODO,
+     warn:["貼る面の水・汚れ・油を拭き取ってから貼る","しわや浮きがないように、押さえつけて貼る"],
+     from:null, order:null},
+    {c:"シール材", ic:IC.tape, n:"マスカーテープ", s:"コンクリート打設時のマンホール養生",
+     use:"コンクリートを打つときに、マンホールを汚さないよう養生する。",
+     place:"置き場所は"+TODO,
+     warn:["打設の前に、マンホールのふた・枠のすき間までしっかり覆う","養生のすき間からコンクリートが入らないように貼る","コンクリートが固まる前にはがす（固まるとはがしにくい）"],
+     from:null, order:null},
+    {c:"シール材", ic:IC.tube, n:"ガスケットペースト", s:"パッキン・フランジ面に塗る",
+     use:"パッキンやフランジ面に塗って、密着をよくし、漏れを防ぐ。",
+     place:"デカ・キャンター：コンテナ8番（シール材セット）",
+     warn:["パッキンの材質や流体に合うか、缶の表示で確認する","薄く均一に塗る（塗りすぎると、はみ出しや締め付け不良の原因）","フランジ面の汚れ・古いパッキンを落としてから塗る"],
+     from:null, order:null},
     {c:"シール材", ic:IC.tube, n:"ヘルメチック", s:"ねじに塗るシール剤",
      use:"ねじに塗って、ねじ込み部分の漏れを防ぐ。",
      place:"デカ・キャンター：夏はコンテナ8番、冬はキャビン",
      warn:["夏のキャビンなど高温の場所に置かない","ふたをしっかり閉める","冬は硬くなるので温めてから使う"], from:null, order:null},
-    {c:"溶接継手", ic:IC.wrap, n:"防食テープ", s:"管の外側のさび止め",
+    {nosize:true, c:"溶接継手", ic:IC.wrap, n:"防食テープ", s:"管の外側のさび止め",
      use:"埋設部などの管の外側に巻いて、腐食を防ぐ。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ5番（防食セット）",
      warn:["1/2ラップ（半分ずつ重ねる）で巻く","下地の汚れ・さび・水分を落としてから巻く","しわ・すき間・浮きがないか確認する"], from:null, order:null},
-    {c:"溶接継手", ic:IC.wrap, n:"ペトロテープ", s:"油分を含んだ防食テープ",
+    {nosize:true, c:"溶接継手", ic:IC.wrap, n:"ペトロテープ", s:"油分を含んだ防食テープ",
      use:"継手まわりなど形が複雑な所に巻いて、腐食を防ぐ。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ5番（袋に入れて保管）",
      warn:["ベタつくので1巻ずつ袋に入れる","ペトロ専用のハサミを使う","暑いと柔らかく、寒いと硬くなる"], from:null, order:null},
 
-    {c:"コーティング", ic:IC.canW, n:"エポキシ樹脂 主剤（白）", s:"パイプコーティングの主剤",
-     use:"硬化剤と2:1で混ぜて、管の内側をコーティングする。量はPC打設量計算アプリで出す。",
+    {c:"コーティング", ic:IC.canWB, unit:"セット", n:"エポキシ樹脂（主剤・硬化剤 1セット）", s:"主剤（白）と硬化剤（青）の1セットで注文",
+     use:"主剤（白）と硬化剤（青）を2:1で混ぜて、管の内側をコーティングする。量はPC打設量計算アプリで出す。",
      place:"コーティング用の車両（置き場所は"+TODO+"）",
-     warn:["硬化剤と取り違えない（主剤は白）","配合は必ず主剤2：硬化剤1","寒いと粘りが強くなる。冬は車内で保管"], from:null, order:null},
-    {c:"コーティング", ic:IC.canB, n:"エポキシ樹脂 硬化剤（青）", s:"パイプコーティングの硬化剤",
-     use:"主剤と混ぜて固める。",
-     place:"コーティング用の車両（置き場所は"+TODO+"）",
-     warn:["主剤と取り違えない（硬化剤は青）","肌に付くとかぶれる。手袋と保護メガネを必ず使う","ふたを確実に閉めて、においがこもらないようにする"], from:null, order:null},
-    {c:"コーティング", ic:IC.act, n:"アセトン", s:"器具に付いた樹脂を落とす",
+     warn:["主剤（白）と硬化剤（青）を取り違えない","配合は必ず主剤2：硬化剤1","肌に付くとかぶれる。手袋と保護メガネを必ず使う","寒いと粘りが強くなる。冬は車内で保管","ふたを確実に閉めて、においがこもらないようにする"],
+     spec:[["注文の単位","主剤（白）＋硬化剤（青）で1セット"],["配合","主剤2：硬化剤1"]],
+     from:null, order:null},
+    {unit:"缶", c:"コーティング", ic:IC.act, n:"アセトン", s:"器具に付いた樹脂を落とす（20L缶）",
      use:"固まる前のエポキシ樹脂が付いた器具やホースを洗う。",
      place:"コーティング用の車両（置き場所は"+TODO+"）",
      warn:["とても引火しやすい。ウェルダー・バーナー・たばこなど火の近くでは使わない、置かない","車のマフラーの近くや、溶接作業をしている近くにも置かない・使わない","直射日光の当たる場所に置かない（荷台や車内の日なたも含む）","使っている間はヘルメットのシールドを下ろして、目や喉を守る","換気のよい場所で使い、手袋をする","使ったらすぐふたを閉める。人が乗る車内にこもらないようにする"],
-     from:null, order:null},
+     spec:[["容量","20L × 1缶"]], from:null, order:null},
     {c:"コーティング", ic:IC.hoseB, n:"透明ホース（太）", s:"2.5mに切断して使う",
      use:"パイプコーティングの作業に使う太いほうの透明ホース。",
      place:"コーティング用の車両（置き場所は"+TODO+"）",
@@ -437,17 +514,58 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      place:"コーティング用の車両（置き場所は"+TODO+"）",
      warn:["1.5mに切断して使う","太いホースと長さを間違えない（太いほうは2.5m）","樹脂が固まる前に片付ける"],
      from:null, order:null},
+    {unit:"缶", c:"コーティング", ic:IC.act, n:"洗剤", s:"パイプコーティングで使う（20L缶）",
+     use:"パイプコーティングの作業で使う洗剤。",
+     place:"コーティング用の車両（置き場所は"+TODO+"）",
+     warn:["使い方・薄め方は容器の表示に従う","手袋をして使い、目に入らないようにする"],
+     spec:[["容量","20L × 1缶"]], from:null, order:null},
     {c:"工具", ic:IC.wr, n:"コーナーレンチ（350・450・600・900）", s:"大きい管や継手を回す",
      use:"管や継手をくわえて回す。サイズごとに各2本。",
      place:"デカ・キャンター：助手席側の棚の側面（レンチ掛け）",
-     warn:["管のサイズに合ったレンチを使う","柄にパイプを継ぎ足して力をかけない（レンチが壊れる・けがの原因）","戻すときはサイズ順に掛ける"],
+     warn:["管の太さに合ったサイズを使う（仕様・サイズの表を見る）","管のサイズに合ったレンチを使う","柄にパイプを継ぎ足して力をかけない（レンチが壊れる・けがの原因）","戻すときはサイズ順に掛ける"],
      insp:["アゴの歯の欠け・すり減り","スプリングがきちんと戻るか","柄の曲がり・割れ"],
+     parts:null, spec:[["350","15A〜40A（管の外径21〜51mm）"],["450","25A〜50A（33〜70mm）"],["600","40A〜80A（48〜90mm）"],["900","65A〜100A（76〜115mm）"]], from:null, order:null},
+    {c:"工具", ic:IC.act, n:"錆止め塗料（赤・グレー）", s:"4L缶 各1缶。ハケ・ローラー付き",
+     use:"鉄の配管や支持金具に塗って、さびを防ぐ。",
+     place:"デカ・キャンター：助手席側の棚（ケミカルのアルミボックス）",
+     warn:["塗る前に、さび・汚れ・油を落として乾かす","引火しやすい。火の近く・溶接の近くで使わない、置かない","換気のよい場所で塗り、手袋をする","使ったらふたを確実に閉め、直射日光の当たる所に置かない","ハケ・ローラーは使い終わったらすぐ洗うか、袋に密閉する"],
+     spec:[["赤","4L缶 × 1"],["グレー","4L缶 × 1"],["ハケ・ローラー","各1セット"]],
+     parts:undefined, from:null, order:null},
+    {c:"工具", ic:IC.act, n:"ラスペネ（各車両1本）", s:"固着がひどいねじにだけ使う",
+     use:"さびて固着したねじやボルトに吹き付けて、ゆるめやすくする。",
+     place:"デカ・キャンター：助手席側の棚（ケミカルのアルミボックス）",
+     warn:["固着がひどいねじにだけ使う。普通のねじには使わない","引火しやすいスプレー。火の近く・溶接や切断の近くで使わない","吹き付けたら少し待って、しみ込んでから回す","油分が残るので、塗装やシールをする所はよく拭き取る"],
+     spec:[["本数","各車両 1本"]],
+     parts:undefined, from:null, order:null},
+    {c:"工具", ic:IC.box, n:"ウエス（1袋）", s:"拭き取り・清掃用",
+     use:"油・汚れ・樹脂の拭き取りや、ねじ部・フランジ面の清掃に使う。",
+     place:"デカ・キャンター：助手席側の棚",
+     warn:["油やアセトンをしみ込ませたウエスは、まとめて袋に入れ、火の近くに置かない"],
+     spec:[["量","1袋"]],
+     parts:undefined, from:null, order:null},
+    {c:"工具", ic:IC.box, n:"土嚢袋（1袋・50枚）", s:"ゴミ袋・ホース入れ・高さ調整に",
+     use:"ゴミ袋として、パイプコーティングの透明ホースを入れる袋として、配管を敷くときの高さ調整として使う。",
+     place:"デカ・キャンター：助手席側の棚（マット・土嚢の場所）",
+     warn:["高さ調整に使うときは、配管の勾配（1/100以上）と埋設深度を守る","ゴミを入れた袋と、使う予定の袋を混ぜない"],
+     spec:[["量","1袋（50枚）"]],
+     parts:undefined, from:null, order:null},
+    {c:"工具", ic:IC.stand, n:"水糸", s:"マンホールの高さ調整に使う",
+     use:"水糸を張って、マンホールの高さを周りの地面や舗装に合わせる。",
+     place:"デカ・キャンター：助手席側の棚",
+     warn:["糸がたるまないように、ピンと張ってから高さを見る","舗装の仕上がり高さに合わせる（低すぎ・高すぎは段差の原因）"],
+     parts:undefined, from:null, order:null},
+    {c:"工具", ic:IC.wr, n:"スパナ・メガネ・ソケット（よく使うサイズ）", s:"ボルト・ナットに合うサイズの早見表",
+     use:"ボルトやナットを締める。サイズを間違えると、ナットの角をなめてしまう。",
+     place:"デカ・キャンター：運転席側の台の上（締める系ケース）",
+     warn:["インチのナット（W3/8・W5/8）とミリのナットを間違えない","サイズが合わないときは無理に回さない（角がつぶれる）"],
+     spec:[["14mm","W3/8 ナット（Uボルト）"],["17mm","M10 ナット（オールアンカー）"],["19mm","M12 ナット（オールアンカー）"],["24mm","M16 ボルト・ナット（フランジ）"],["26mm","W5/8 ナット"]],
+     insp:["口の開き・すり減り","ソケットの割れ"],
      parts:null, from:null, order:null},
     {c:"工具", ic:IC.wr, n:"パイプレンチ（300・ライト）", s:"管や継手を回す",
      use:"小さめの管や継手をくわえて回す。",
      place:"デカ・キャンター：助手席側の棚の側面（レンチ掛け）",
      warn:["メッキ管は歯で傷が付くので、力のかけすぎに注意"],
-     insp:["アゴの歯の欠け・すり減り","調整ナットが回るか"], parts:null, from:null, order:null},
+     insp:["アゴの歯の欠け・すり減り","調整ナットが回るか"], parts:null, spec:[["300","〜40A（管の外径49mmまで）※本体の表示で確認"]], from:null, order:null},
     {c:"工具", ic:IC.wr, n:"チェーントング", s:"太い管をチェーンで回す",
      use:"チェーンを管に巻き付けて回す。太い管や狭い所で使う。",
      place:"デカ・キャンター：助手席側の棚の側面",
@@ -495,7 +613,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      use:"フランジのボルトなどを締めたり、ゆるめたりする。",
      place:"デカ・キャンター：運転席側の台の上（締める系ケース）",
      warn:["最後の本締めは手で確認する（締めすぎ・片締めに注意）"],
-     spec:[["バッテリー型番",null],["ソケットのサイズ",null]],
+     spec:[["バッテリー型番",null],["よく使うソケット","14mm（Uボルト）・17mm（M10アンカー）・19mm（M12アンカー）・24mm（M16）・26mm（W5/8）"]],
      insp:["本体の割れ","異音","正転・逆転の切り替え","ソケットの割れ","バッテリー端子"], parts:null, from:null, order:null},
     {c:"充電工具", ic:IC.cordless, n:"インパクトドライバー", s:"ビス・小さいボルトを締める",
      use:"ビスや小さいボルトを締める。",
@@ -549,6 +667,16 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      spec:[["品番","273015"],["寸法","770×480×405mm"],["質量","65kg"],["オイルタンク","4L"],["切削油の銘柄",null],["チェーザの型番（サイズごと）",null]],
      insp:["切削油の量・汚れ","タンク・フィルターの切粉","チャックの爪の摩耗","チェーザの欠け","電源コードの傷","非常停止・スイッチ"],
      parts:null, from:null, order:null},
+    {c:"宿", ic:IC.inn, n:"ききょう旅館", s:"函館方面（北斗市七重浜）・2食付き", inn:{area:"函館方面", meals:"2食付き", tel:"", addr:"〒049-0111 北海道北斗市七重浜4丁目28-20", near:"北斗市 七重浜"}},
+    {c:"宿", ic:IC.inn, n:"旭川方面の宿", s:"まだ登録されていません", custom:'<div class="sec"><p>旭川方面の宿は、まだ登録されていません。地域・宿の名前・何食付き・電話番号・住所を教えてもらえれば追加します。</p></div>'},
+    {c:"宿", ic:IC.inn, n:"釧路方面の宿", s:"まだ登録されていません", custom:'<div class="sec"><p>釧路方面の宿は、まだ登録されていません。地域・宿の名前・何食付き・電話番号・住所を教えてもらえれば追加します。</p></div>'},
+    {c:"宿", ic:IC.inn, n:"北見方面の宿", s:"まだ登録されていません", custom:'<div class="sec"><p>北見方面の宿は、まだ登録されていません。地域・宿の名前・何食付き・電話番号・住所を教えてもらえれば追加します。</p></div>'},
+    {c:"宿", ic:IC.inn, n:"三石旅館", s:"静内・浦河方面（新ひだか町三石）・3食付き", inn:{area:"静内・浦河方面", meals:"3食付き", tel:"", addr:"〒059-3107 北海道日高郡新ひだか町三石旭町18", near:"新ひだか町 三石"}},
+    {c:"宿", ic:IC.inn, n:"帯広方面の宿", s:"まだ登録されていません", custom:'<div class="sec"><p>帯広方面の宿は、まだ登録されていません。地域・宿の名前・何食付き・電話番号・住所を教えてもらえれば追加します。</p></div>'},
+    {c:"レンタル", ic:IC.box, n:"コンプレッサー（レンタル）", s:"PDS670（〜100A）・PDS185（〜50A）", rent:{label:"コンプレッサー", models:["PDS670（〜100A）","PDS185（〜50A）"], time:"13時"}},
+    {c:"レンタル", ic:IC.truck, n:"4トンユニック（レンタル）", s:"樹脂配管の現場など", rent:{label:"4トンユニック"}},
+    {c:"レンタル", ic:IC.truck, n:"スーパーデッキ（ステージ車・レンタル）", s:"ステージ車", rent:{label:"スーパーデッキ（ステージ車）"}},
+    {c:"レンタル", ic:IC.truck, n:"2トン平トラック（レンタル）", s:"資材の運搬など", rent:{label:"2トン平トラック"}},
     {c:"車両", ic:IC.truckS, n:"デカ", s:"シルバーのトラック", veh:true, eq:true},
     {c:"車両", ic:IC.truckW, n:"キャンター", s:"白いトラック", veh:true, eq:true},
     {c:"車両", ic:IC.truck, n:"10号車", s:"車種：未登録", veh:true},
@@ -561,14 +689,46 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     // 他のメンバーは記入フォームで集めてから追加
   ];
   var SUP = {
+    "タマダ株式会社": {mail:"masatoshi_kadowaki@tamada.co.jp", person:"門脇", memo:"北日本支店 北海道営業所 担当：門脇 正敏さん"},
+    "ビルドシステム": {mail:"edwood9466@yahoo.co.jp", person:"明瀬", memo:"担当：明瀬 仁志さん 090-2237-5790"},
+    "札幌軸受工具株式会社": {mail:"fuse@jiku.co.jp", person:"布施", memo:"担当：布施さん（ふせ）080-9003-8585"},
     // 例："〇〇商会": {mail:"order@example.co.jp", memo:"担当：〇〇さん"}
   };
+  // 一緒によく使う物（組み合わせのルール）
+  var REL = {};
+  function relAdd(names, with_){ names.forEach(function(n){ REL[n] = (REL[n]||[]).concat(with_.filter(function(w){ return w !== n; })); }); }
+  relAdd(["90°エルボ（ねじ込み）","チーズ（ねじ込み）","45°エルボ（ねじ込み）","ソケット","ユニオン","止水栓（置きゴマ）"], ["シールテープ","ヘルメチック"]);
+  relAdd(["相フランジ 10K（ねじ込み）","溶接フランジ 10K（SOP）","メクラフランジ 10K"], ["パッキン 10K","M16ボルト・ナット（55・65・80）","ガスケットペースト"]);
+  relAdd(["相フランジ 5K（ねじ込み）","溶接フランジ 5K（SOP）","メクラフランジ 5K"], ["パッキン 5K","ガスケットペースト"]);
+  relAdd(["組フランジ（組フラ）"], ["パッキン 組フラ"]);
+  relAdd(["パッキン 10K"], ["M16ボルト・ナット（55・65・80）","ガスケットペースト"]);
+  relAdd(["パッキン 5K"], ["ガスケットペースト"]);
+  relAdd(["溶接エルボ（ロング・ショート）","溶接45°エルボ","溶接チーズ"], ["防食テープ","ペトロテープ","錆止め塗料（赤・グレー）"]);
+  relAdd(["防食テープ","ペトロテープ"], ["防食テープ","ペトロテープ"]);
+  relAdd(["オールアンカー（M10・M12）"], ["Uボルト（50A・80A・100A）"]);
+  relAdd(["Uボルト（50A・80A・100A）"], ["オールアンカー（M10・M12）"]);
+  relAdd(["エポキシ樹脂（主剤・硬化剤 1セット）"], ["アセトン","洗剤","透明ホース（太）","透明ホース（細）"]);
+  relAdd(["ドレンタイト"], ["アルミテープ"]);
+  relAdd(["EFソケット","EFエルボ（90°）","EF 45°エルボ","EFチーズ","EFキャップ"], ["バリアパイプ 直管（エスロン バリアパイプエスエス）"]);
+  function relHtml(m){
+    var r = (REL[m.n]||[]).filter(function(n, i, a){ return a.indexOf(n) === i && findM(n); });
+    if(!r.length) return "";
+    return '<div class="sec rel"><h3>一緒によく使う物</h3><div class="chips">'+r.map(function(n){ return '<button type="button" class="chip relgo" data-go="'+esc(n)+'">'+esc(n)+'</button>'; }).join("")+'</div></div>';
+  }
+  function noSize(m){ var cs = Array.isArray(m.c) ? m.c : [m.c]; return m.nosize || cs.indexOf("コーティング") >= 0; }
+  function sizesOf(m){
+    if(noSize(m)) return null;
+    if(m.sizes) return m.sizes;
+    var cs = Array.isArray(m.c) ? m.c : [m.c];
+    if(m.shape || cs.some(function(c){ return c === "ねじ込み継手" || c === "溶接継手"; })) return ["15A","20A","25A","32A","40A","50A","65A","80A","100A"];
+    return null;
+  }
   function orderHtml(m){
     var sp = m.order ? SUP[m.order] : null;
-    return '<p>'+(m.order ? esc(m.order)+(sp && sp.memo ? '（'+esc(sp.memo)+'）' : '') : TODO)+'</p>'+
-      '<div class="addform" data-n="'+esc(m.n)+'">'+
-        '<input type="text" placeholder="サイズ（例：50A）" aria-label="サイズ">'+
-        '<input type="text" inputmode="numeric" placeholder="数量" aria-label="数量">'+
+    return '<div class="addform" data-n="'+esc(m.n)+'">'+
+        (m.shape ? '<div class="tsel"><span>厚み（'+esc(m.shape)+'）</span><div class="chips">'+["1.5mm","2mm","3mm"].map(function(t){ return '<button type="button" class="chip tchip" data-t="'+t+'" aria-pressed="false">'+t+'</button>'; }).join("")+'</div></div>' : '')+
+        (sizesOf(m) ? '<div class="tsel"><span>サイズ</span><div class="chips">'+sizesOf(m).map(function(z){ return '<button type="button" class="chip zchip" data-z="'+z+'" aria-pressed="false">'+z+'</button>'; }).join("")+'</div></div><input type="hidden">' : noSize(m) ? '<input type="hidden">' : '<input type="text" placeholder="サイズ（例：50A）" aria-label="サイズ">')+
+        '<div class="qty"><button type="button" class="qbtn" data-q="-1" aria-label="1つ減らす">−</button><input type="text" inputmode="numeric" placeholder="数量'+(m.unit ? '（'+m.unit+'）' : '')+'" aria-label="数量"><button type="button" class="qbtn" data-q="1" aria-label="1つ増やす">＋</button></div>'+
         '<button type="button" class="pbtn addbtn">カートに入れる</button>'+
       '</div>';
   }
@@ -578,7 +738,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   try{ var cs = JSON.parse(localStorage.getItem(CKEY)); if(cs && Array.isArray(cs.items)) cart = cs; }catch(e){}
   function saveCart(){ try{ localStorage.setItem(CKEY, JSON.stringify(cart)); }catch(e){} }
   function findM(n){ for(var i=0;i<M.length;i++) if(M[i].n===n) return M[i]; return null; }
-  function toast(t){ var el = document.getElementById("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.tm); toast.tm = setTimeout(function(){ el.hidden = true; }, 1800); }
+  function toast(t){ var el = document.getElementById("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.tm); toast.tm = setTimeout(function(){ el.hidden = true; }, t.length > 20 ? 4000 : 1800); }
   function updateCartBtn(){ document.getElementById("cartbtn").textContent = "カート " + cart.items.length; }
   function groups(){
     var g = {}, order = [];
@@ -590,8 +750,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     var lines = items.map(function(it){ return "・"+it.n+(it.size ? "　"+it.size : "")+"　"+it.qty; }).join("\n");
     var title = items[0].n + (items.length > 1 ? " ほか"+(items.length-1)+"点" : "");
     var subject = (quote ? "【見積・納期のお問い合わせ】" : reg ? "【注文】" : "【注文依頼】") + title;
-    var body = (quote ? k+" ご担当者様\n\nいつもお世話になっております。\n以下の材料の見積と納期を教えてください。" : reg ? k+" ご担当者様\n\nいつもお世話になっております。\n以下の材料を注文します。" : "注文先が未登録の材料です。担当の方は注文をお願いします。") +
-      "\n\n"+lines+"\n\n希望納期："+(cart.due||"")+"\n納品場所："+(cart.site||"")+"\n注文者："+(cart.who||"")+(reg ? "\n\nよろしくお願いいたします。" : "");
+    var body = (quote ? (sp && sp.person ? k+"\n"+sp.person+"様" : k+" ご担当者様")+"\n\nいつもお世話になっております。\n以下の材料の見積と納期を教えてください。" : reg ? (sp && sp.person ? k+"\n"+sp.person+"様" : k+" ご担当者様")+"\n\nいつもお世話になっております。\n以下の材料を注文します。" : "注文先が未登録の材料です。担当の方は注文をお願いします。") +
+      "\n\n"+lines+"\n\n希望納期："+(cart.due||"")+"\n納品場所："+((cart.dest||"会社")==="会社" ? "弊社（会社）" : "現場　"+(cart.site||""))+"\n注文者："+(cart.who||"")+(reg ? "\n\nよろしくお願いいたします。" : "");
     var to = reg ? sp.mail : TEAM_CC.join(",");
     var cc = reg && TEAM_CC.length ? "cc="+TEAM_CC.join(",")+"&" : "";
     return "mailto:"+to+"?"+cc+"subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
@@ -605,7 +765,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     }
     h += cart.items.map(function(it, i){ return '<div class="citem"><div><b>'+esc(it.n)+'</b><span>'+(it.size ? esc(it.size)+'・' : '')+esc(it.qty)+'・'+(it.order ? esc(it.order) : '注文先未登録')+'</span></div><button type="button" class="gbtn" data-del="'+i+'" aria-label="'+esc(it.n)+'をカートから外す">外す</button></div>'; }).join("");
     h += '<label class="cfield">注文者<input id="c-who" value="'+esc(cart.who)+'" placeholder="名前"></label>'+
-         '<label class="cfield">納品場所（現場名）<input id="c-site" value="'+esc(cart.site)+'" placeholder="例：〇〇SS"></label>'+
+         '<div class="cfield">納品場所<div class="chips" id="c-dest">'+["会社","現場"].map(function(x){ return '<button type="button" class="chip" data-d="'+x+'" aria-pressed="'+((cart.dest||"会社")===x)+'">'+x+'に納品</button>'; }).join("")+'</div></div>'+
+         ((cart.dest||"会社")==="現場" ? '<label class="cfield">現場名・住所<input id="c-site" value="'+esc(cart.site)+'" placeholder="例：〇〇SS 帯広市〇〇"></label>' : '')+
          '<label class="cfield">希望納期<input id="c-due" value="'+esc(cart.due)+'" placeholder="例：11月10日"></label>';
     var gr = groups();
     gr.order.forEach(function(k){
@@ -618,7 +779,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     h += '<p class="tnote" style="margin-top:14px">メールを送ったら、下のボタンでカートを空にしてください。</p><button type="button" class="gbtn" id="cdone" style="width:100%;margin-top:6px">注文済み・カートを空にする</button></div>';
     box.innerHTML = h;
     document.getElementById("cclose").onclick = closeCart;
-    [["c-who","who"],["c-site","site"],["c-due","due"]].forEach(function(p){ var el = document.getElementById(p[0]); el.oninput = function(){ cart[p[1]] = el.value; saveCart(); }; });
+    [["c-who","who"],["c-site","site"],["c-due","due"]].forEach(function(p){ var el = document.getElementById(p[0]); if(el) el.oninput = function(){ cart[p[1]] = el.value; saveCart(); }; });
+    box.querySelectorAll("#c-dest .chip").forEach(function(b){ b.onclick = function(){ cart.dest = b.dataset.d; saveCart(); var y = box.scrollTop; drawCart(); box.scrollTop = y; }; });
     box.querySelectorAll("[data-del]").forEach(function(b){ b.onclick = function(){ cart.items.splice(+b.dataset.del,1); saveCart(); updateCartBtn(); drawCart(); }; });
     box.querySelectorAll("[data-mail]").forEach(function(a){ a.onclick = function(){ var k = a.dataset.mail; a.href = mailFor(k, groups().g[k]); }; });
     box.querySelectorAll("[data-quote]").forEach(function(a){ a.onclick = function(){ var k = a.dataset.quote; a.href = mailFor(k, groups().g[k], true); }; });
@@ -666,6 +828,16 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     {g:"パッキン", n:"パッキン 組フラ 100A", u:"枚", std:null, of:"パッキン 組フラ"},
     {g:"シール材・テープ", n:"シールテープ", u:"個", std:null, of:"シールテープ"},
     {g:"シール材・テープ", n:"ヘルメチック", u:"本", std:null, of:"ヘルメチック"},
+    {g:"シール材・テープ", n:"ドレンタイト", u:"セット", std:null, of:"ドレンタイト"},
+    {g:"シール材・テープ", n:"ガスケットペースト", u:"本", std:null, of:"ガスケットペースト"},
+    {g:"シール材・テープ", n:"アルミテープ", u:"巻", std:null, of:"アルミテープ"},
+    {g:"シール材・テープ", n:"マスカーテープ", u:"巻", std:null, of:"マスカーテープ"},
+    {g:"その他", n:"錆止め塗料 赤（4L缶）", u:"缶", std:1, of:"錆止め塗料（赤・グレー）"},
+    {g:"その他", n:"錆止め塗料 グレー（4L缶）", u:"缶", std:1, of:"錆止め塗料（赤・グレー）"},
+    {g:"その他", n:"ラスペネ", u:"本", std:1, of:"ラスペネ（各車両1本）"},
+    {g:"その他", n:"ウエス", u:"袋", std:1, of:"ウエス（1袋）"},
+    {g:"その他", n:"水糸", u:"巻", std:null, of:"水糸"},
+    {g:"その他", n:"土嚢袋（50枚）", u:"袋", std:1, of:"土嚢袋（1袋・50枚）"},
     {g:"その他", n:"ねじ切りオイル（4L缶）", u:"缶", std:1, of:null},
     {g:"その他", n:"使い捨て手袋", u:"箱", std:null, of:null}
   ];
@@ -709,7 +881,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     box.querySelectorAll("[data-now]").forEach(function(el){ el.oninput = function(){ (inv.now[inv.veh] = inv.now[inv.veh] || {})[INV[+el.dataset.now].n] = el.value.replace(/[^0-9]/g,""); inv.date[inv.veh] = today(); saveInv(); refresh(+el.dataset.now); }; });
     document.getElementById("itocart").onclick = function(){
       var n = 0;
-      INV.forEach(function(r){ var sh = shortOf(r); if(!sh) return; var m = r.of ? findM(r.of) : null; cart.items.push({n:r.n, size:"", qty:sh+r.u, order:(m && m.order) || ""}); n++; });
+      INV.forEach(function(r){ var sh = shortOf(r); if(!sh) return; var m = r.of ? findM(r.of) : null; cart.items.push({n:r.n, size:(m && m.shape) ? m.shape+"　厚みは要確認" : "", qty:sh+r.u, order:(m && m.order) || ""}); n++; });
       saveCart(); updateCartBtn(); toast(n ? n+'品目をカートに入れました' : '不足はありません');
     };
     document.getElementById("imail").onclick = function(){
@@ -820,16 +992,90 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     else { toast("この端末では共有できません。メールで送ってください。"); }
   }
   function openInsp(){ drawInsp(); document.getElementById("insp").hidden = false; document.body.style.overflow = "hidden"; }
+  // レンタル（片桐機械）
+  var RENT_TO = { name:"片桐機械株式会社", person:"卜部係長", kana:"うらべ", mail:"" }; // メールアドレスが決まったら mail に入れる
+  var WD = ["日","月","火","水","木","金","土"];
+  function jd(v){ if(!v) return ""; var p = v.split("-"), d = new Date(+p[0], +p[1]-1, +p[2]); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日（"+WD[d.getDay()]+"）"; }
+  function rentHtml(m){
+    var R = m.rent, k = esc(m.n);
+    var mod = R.models ? '<div class="cfield">機種<div class="chips" data-rmodel="'+k+'">'+R.models.map(function(x){ return '<button type="button" class="chip" data-v="'+esc(x)+'" aria-pressed="false">'+esc(x)+'</button>'; }).join("")+'</div></div>' : '';
+    var tm = R.time ? '（'+R.time+'）' : '';
+    return '<div class="rentf" data-rent="'+k+'">'+
+      '<div class="sec place"><h3>借りる先</h3><p>'+esc(RENT_TO.name)+'　担当：'+esc(RENT_TO.person)+'（'+esc(RENT_TO.kana)+'）'+(RENT_TO.mail ? '' : '<br><span class="todo">メールアドレス未登録</span>')+'</p></div>'+
+      mod+
+      '<div class="g2r"><label class="cfield">借りる日<input type="date" data-rf="start"></label><label class="cfield">返す日<input type="date" data-rf="end"></label></div>'+
+      '<div class="cfield">搬入'+tm+'<div class="chips" data-rc="in"><button type="button" class="chip" data-v="あり" aria-pressed="false">搬入してもらう</button><button type="button" class="chip" data-v="なし" aria-pressed="false">取りに行く</button></div></div>'+
+      '<div class="cfield">引取'+tm+'<div class="chips" data-rc="out"><button type="button" class="chip" data-v="あり" aria-pressed="false">引き取ってもらう</button><button type="button" class="chip" data-v="なし" aria-pressed="false">返しに行く</button></div></div>'+
+      '<label class="cfield">台数<input data-rf="qty" inputmode="numeric" value="1"></label>'+
+      '<label class="cfield">現場名<input data-rf="site" placeholder="例：〇〇石油 〇〇SS"></label>'+
+      '<label class="cfield">現場住所<input data-rf="addr" placeholder="例：帯広市〇〇"></label>'+
+      '<label class="cfield">注文者<input data-rf="who" placeholder="名前"></label>'+
+      '<div class="rmsg"></div>'+
+      '<a href="#" class="pbtn rentgo" style="display:flex;align-items:center;justify-content:center;text-decoration:none;margin-top:10px">レンタルを依頼するメールを作る（全員にCC）</a></div>';
+  }
+  function rentMail(m, box){
+    var R = m.rent, g = function(k){ var el = box.querySelector('[data-rf="'+k+'"]'); return el ? el.value.trim() : ""; };
+    var sel = function(sel){ var b = box.querySelector(sel+' .chip[aria-pressed="true"]'); return b ? b.dataset.v : ""; };
+    var model = R.models ? sel('[data-rmodel]') : "", st = g("start"), en = g("end"), inn = sel('[data-rc="in"]'), out = sel('[data-rc="out"]');
+    var miss = [];
+    if(R.models && !model) miss.push("機種");
+    if(!st) miss.push("借りる日"); if(!en) miss.push("返す日");
+    if(st && en && en < st) miss.push("返す日が借りる日より前になっています");
+    if(!inn) miss.push("搬入"); if(!out) miss.push("引取");
+    if(!/^[0-9]+$/.test(g("qty"))) miss.push("台数");
+    if(!g("site")) miss.push("現場名"); if(!g("addr")) miss.push("現場住所"); if(!g("who")) miss.push("注文者");
+    if(miss.length){ box.querySelector(".rmsg").innerHTML = '<p class="todo" style="display:block;margin-top:8px;padding:6px 8px">未記入：'+esc(miss.join("・"))+'</p>'; return null; }
+    box.querySelector(".rmsg").innerHTML = "";
+    var t = R.time ? " "+R.time : "";
+    var name = m.rent.label + (model ? " "+model : "");
+    var body = RENT_TO.name+"\n"+RENT_TO.person+"（"+RENT_TO.kana+"）様\n\nいつもお世話になっております。\n以下のとおり、レンタルをお願いいたします。\n\n"+
+      "品名："+name+"\n台数："+g("qty")+"台\n期間："+jd(st)+"〜"+jd(en)+"\n"+
+      "搬入："+(inn==="あり" ? "お願いします（"+jd(st)+t+"）" : "こちらで取りに伺います")+"\n"+
+      "引取："+(out==="あり" ? "お願いします（"+jd(en)+t+"）" : "こちらで返却に伺います")+"\n\n"+
+      "現場名："+g("site")+"\n現場住所："+g("addr")+"\n\n"+
+      "現場の近くの営業所・拠点からお借りできると助かります。\n在庫と料金をご確認のうえ、ご連絡いただけますでしょうか。\n\nよろしくお願いいたします。\n注文者："+g("who");
+    var subject = "【レンタル依頼】"+name+" "+jd(st)+"〜 "+g("site");
+    return "mailto:"+(RENT_TO.mail||"")+"?"+(TEAM_CC.length ? "cc="+TEAM_CC.join(",")+"&" : "")+"subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+  }
+  function innHtml(m){
+    var I = m.inn, q = I.addr || (m.n+" "+(I.near||""));
+    return '<div class="sec place"><h3>地域・食事</h3><p>'+esc(I.area)+'　'+esc(I.meals)+'</p></div>'+
+      '<div class="sec"><h3>電話</h3><p>'+(I.tel ? esc(I.tel) : TODO)+'</p></div>'+
+      '<div class="sec"><h3>住所</h3><p>'+(I.addr ? esc(I.addr) : TODO)+'</p></div>'+
+      '<div class="act2">'+(I.tel ? '<a class="pbtn" href="tel:'+I.tel.replace(/[^0-9+]/g,"")+'">電話する</a>' : '<span class="pbtn dis">電話番号が未登録</span>')+
+      '<a class="pbtn ghostb" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q)+'" target="_blank" rel="noopener">ナビ</a></div>';
+  }
   function openCart(){ drawCart(); document.getElementById("cart").hidden = false; document.body.style.overflow = "hidden"; }
   function closeCart(){ document.getElementById("cart").hidden = true; document.body.style.overflow = ""; }
-  var CATS = ["ねじ込み継手","溶接継手","パッキン","樹脂配管","ボルト","シール材","コーティング","車両"];
+  // 材料の注文先（樹脂配管はビルドシステム、コーティングはタマダ、それ以外の材料は札幌軸受工具）
+  M.forEach(function(m){
+    var cs = Array.isArray(m.c) ? m.c : [m.c];
+    if(m.order) return;
+    if(cs.indexOf("樹脂配管") >= 0) m.order = "ビルドシステム";
+    else if(cs.indexOf("コーティング") >= 0) m.order = "タマダ株式会社";
+    else if(cs.some(function(c){ return ["ねじ込み継手","溶接継手","パッキン","ボルト","シール材"].indexOf(c) >= 0; })) m.order = "札幌軸受工具株式会社";
+  });
+  var CATS = ["ねじ込み継手","溶接継手","パッキン","樹脂配管","ボルト","シール材","コーティング","レンタル","宿","車両"];
   var cur = "ねじ込み継手", q = "";
   var esc = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  var GROUPS = [
+    {k:"材料", g:"mat", d:"継手・パッキン・ボルトなど", cats:["ねじ込み継手","溶接継手","パッキン","樹脂配管","ボルト","シール材","コーティング"]},
+    {k:"車両", g:"veh", d:"トラック・工具・機械", cats:["車両"]},
+    {k:"段取り", g:"prep", d:"レンタル・宿", cats:["レンタル","宿"]}
+  ];
+  function grpOf(c){ for(var i=0;i<GROUPS.length;i++) if(GROUPS[i].cats.indexOf(c) >= 0) return GROUPS[i]; return GROUPS[0]; }
   function drawCats(){
+    var G = grpOf(cur);
+    var gb = document.getElementById("grps");
+    gb.innerHTML = GROUPS.map(function(x){ return '<button type="button" class="grp g-'+x.g+'" data-g="'+x.k+'" aria-pressed="'+(x===G)+'"><b>'+x.k+'</b><span>'+x.d+'</span></button>'; }).join("");
+    gb.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){ var x = GROUPS.filter(function(y){ return y.k === b.dataset.g; })[0]; cur = x.cats[0]; drawCats(); drawList(); }); });
     var box = document.getElementById("cats");
-    box.innerHTML = CATS.map(function(c){ return '<button type="button" class="chip" data-c="'+c+'" aria-pressed="'+(c===cur)+'">'+c+'</button>'; }).join("");
+    box.className = "cats g-"+G.g;
+    box.hidden = G.cats.length < 2;
+    box.innerHTML = G.cats.map(function(c){ return '<button type="button" class="chip" data-c="'+c+'" aria-pressed="'+(c===cur)+'">'+c+'</button>'; }).join("");
     box.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){ cur = b.dataset.c; drawCats(); drawList(); }); });
   }
+  var FAV = []; try{ FAV = JSON.parse(localStorage.getItem("hb-fav-v1")) || []; }catch(e){}
   function drawList(){
     var key = q.trim().toLowerCase();
     var items = M.filter(function(m){
@@ -838,6 +1084,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     });
     var box = document.getElementById("list");
     if(!items.length){ box.innerHTML = '<div class="empty">見つかりませんでした。別の言葉で探してください。</div>'; return; }
+    box.className = "list" + (key ? "" : " g-"+grpOf(cur).g);
     box.innerHTML = items.map(itemHtml).join("");
   }
   function itemHtml(m){
@@ -852,28 +1099,59 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
         return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+(vval(m.n,"車番") ? '・'+esc(vval(m.n,"車番")) : '')+(function(){ var n = daysTo(m.n); return n !== null && n <= 60 ? '・<span style="color:var(--warn);font-weight:700">'+(n<0 ? '車検切れ' : '車検あと'+n+'日')+'</span>' : ''; })()+(m.eq ? '・積んでいる機械と工具' : '')+'</span></div></summary><div class="body">'+
           '<h3 class="ig" style="margin-top:0">車両の記録</h3>'+vehHtml(v)+eq+'</div></details>';
       }
+      if(m.inn) return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+innHtml(m)+'</div></details>';
+      if(m.rent) return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+rentHtml(m)+'</div></details>';
       if(m.custom) return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+m.custom+'</div></details>';
+      var W = m.warn || [];
+      var warnHtml = W.length ? '<div class="sec warn"><h3>注意・よくある間違い</h3><ul>'+W.slice(0,2).map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul>'+(W.length > 2 ? '<details class="more"><summary>もっと見る（あと'+(W.length-2)+'件）</summary><ul>'+W.slice(2).map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></details>' : '')+'</div>' : '';
+      var tblHtml = m.tbl ? '<div class="sec"><h3>サイズ表</h3>'+(typeof m.tbl==="object" ? gTable(m.tbl) : m.tbl==="G10" ? gasketTable(F10,"10K") : m.tbl==="G5" ? gasketTable(F5,"5K") : m.tbl==="FK" ? kumiTable() : jisTable(m.tbl==="F10" ? F10 : F5, m.tbl==="F10" ? "10K" : "5K"))+'</div>' : '';
+      var specHtml = (m.spec||m.spec2) ? '<div class="sec"><h3>仕様・サイズ</h3><table class="spec">'+(m.spec||[]).concat(m.spec2||[]).map(function(r){ return '<tr><td>'+esc(r[0])+'</td><td>'+(r[1] ? esc(r[1]) : TODO)+'</td></tr>'; }).join("")+'</table></div>' : '';
       return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+
         (m.fig || '')+
+        tblHtml+
+        specHtml+
+        '<div class="sec"><h3>注文する</h3>'+orderHtml(m)+'</div>'+
+        relHtml(m)+
         '<div class="sec"><h3>何に使う</h3><p>'+esc(m.use)+'</p></div>'+
         '<div class="sec place"><h3>どこにある</h3><p>'+m.place+'</p></div>'+
-        (m.spec ? '<div class="sec"><h3>仕様・使うオイルなど</h3><table class="spec">'+m.spec.map(function(r){ return '<tr><td>'+esc(r[0])+'</td><td>'+(r[1] ? esc(r[1]) : TODO)+'</td></tr>'; }).join("")+'</table></div>' : '')+
-        (m.steps ? '<div class="sec"><h3>オイル交換の手順</h3><ol style="margin:0;padding-left:1.4em">'+m.steps.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ol></div>' : '')+
-        (m.insp ? '<div class="sec"><h3>点検項目</h3><ul>'+m.insp.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></div>' : '')+
+        warnHtml+
+        (m.steps ? '<div class="sec"><h3>'+(m.stepsTitle || (m.c==="ウェルダー" ? 'オイル交換の手順' : '使い方の手順'))+'</h3><ol style="margin:0;padding-left:1.4em">'+m.steps.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ol></div>' : '')+
+        (m.insp ? '<div class="sec"><h3>'+(m.c==="樹脂配管" ? '日常点検（1日1回・使う前）' : '点検項目')+'</h3><ul>'+m.insp.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></div>' : '')+
         (m.parts !== undefined ? '<div class="sec"><h3>パーツリスト</h3>'+(m.parts ? '<a class="linkbtn" href="'+m.parts+'" target="_blank" rel="noopener">パーツリストを開く</a>' : '<p>'+TODO+'（メーカーのパーツリストのリンクを登録すると、ここから開けます）</p>')+'</div>' : '')+
-        (m.warn && m.warn.length ? '<div class="sec warn"><h3>注意・よくある間違い</h3><ul>'+m.warn.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></div>' : '')+
-        (m.tbl ? '<div class="sec"><h3>サイズ表</h3>'+(typeof m.tbl==="object" ? gTable(m.tbl) : m.tbl==="G10" ? gasketTable(F10,"10K") : m.tbl==="G5" ? gasketTable(F5,"5K") : m.tbl==="FK" ? kumiTable() : jisTable(m.tbl==="F10" ? F10 : F5, m.tbl==="F10" ? "10K" : "5K"))+'</div>' : '')+
         '<div class="sec"><h3>会社のどこから補充する</h3><p>'+(m.from ? esc(m.from) : TODO)+'</p></div>'+
-        '<div class="sec"><h3>注文先</h3>'+orderHtml(m)+'</div>'+
         '</div></details>';
   }
   document.getElementById("list").addEventListener("click", function(e){
+    var qb = e.target.closest(".qbtn");
+    if(qb){ var qi2 = qb.parentNode.querySelector("input"), mm = String(qi2.value).match(/^(\d+)(.*)$/), nv = Math.max(1, (mm ? +mm[1] : 0) + (+qb.dataset.q)); qi2.value = nv + (mm ? mm[2] : ""); return; }
+    var rg = e.target.closest(".relgo");
+    if(rg){ var qi = document.getElementById("q"); qi.value = rg.dataset.go.replace(/&amp;/g,"&"); q = qi.value; drawList(); var dd = document.querySelector("#list > details"); if(dd){ dd.open = true; } window.scrollTo(0, 0); return; }
+    var zc = e.target.closest(".zchip");
+    if(zc){ zc.parentNode.querySelectorAll(".zchip").forEach(function(x){ x.setAttribute("aria-pressed", x===zc); }); return; }
+    var tc = e.target.closest(".tchip");
+    if(tc){ tc.parentNode.querySelectorAll(".tchip").forEach(function(x){ x.setAttribute("aria-pressed", x===tc); }); return; }
     var b = e.target.closest(".addbtn"); if(!b) return;
     var f = b.closest(".addform"), ins = f.querySelectorAll("input"), m = findM(f.dataset.n);
     var qty = ins[1].value.trim();
     if(!qty){ toast("数量を入れてください"); ins[1].focus(); return; }
-    cart.items.push({n:m.n, size:ins[0].value.trim(), qty:qty, order:m.order || ""});
-    saveCart(); updateCartBtn(); ins[0].value = ""; ins[1].value = ""; toast("カートに入れました");
+    var size = ins[0].value.trim();
+    if(sizesOf(m)){
+      var zp = f.querySelector('.zchip[aria-pressed="true"]');
+      if(!zp){ toast("サイズを選んでください"); return; }
+      size = zp.dataset.z;
+      if(m.shape){
+        var tp = f.querySelector('.tchip[aria-pressed="true"]');
+        if(!tp){ toast("厚みを選んでください"); return; }
+        size += "　"+m.shape+"　厚み"+tp.dataset.t;
+        tp.setAttribute("aria-pressed","false");
+      }
+      zp.setAttribute("aria-pressed","false");
+    }
+    if(m.unit && /^[0-9]+$/.test(qty)) qty += m.unit;
+    cart.items.push({n:m.n, size:size, qty:qty, order:m.order || ""});
+    saveCart(); updateCartBtn(); ins[0].value = ""; ins[1].value = "";
+    var rl = (REL[m.n]||[]).filter(function(n, i, a){ return a.indexOf(n) === i && findM(n); });
+    toast(rl.length ? "カートに入れました。一緒に：" + rl.slice(0,2).join("・") + " も必要ですか？" : "カートに入れました");
   });
   document.getElementById("list").addEventListener("input", function(e){
     var k = e.target.dataset && e.target.dataset.vk; if(!k) return;
@@ -886,6 +1164,14 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     var v = a.dataset.vmail;
     var body = VF.map(function(f){ return f+"："+(vval(v,f) || "未登録"); }).join("\n");
     a.href = "mailto:"+TEAM_CC.join(",")+"?subject="+encodeURIComponent("【車両記録】"+v+" "+today())+"&body="+encodeURIComponent(v+" の記録です。\n\n"+body);
+  });
+  document.getElementById("list").addEventListener("click", function(e){
+    var ch = e.target.closest(".rentf .chip");
+    if(ch){ ch.parentNode.querySelectorAll(".chip").forEach(function(x){ x.setAttribute("aria-pressed", x===ch); }); return; }
+    var go = e.target.closest(".rentgo"); if(!go) return;
+    var box = go.closest(".rentf"), m = findM(box.dataset.rent.replace(/&amp;/g,"&")), url = rentMail(m, box);
+    if(!url){ e.preventDefault(); return; }
+    go.href = url;
   });
   document.getElementById("inspbtn").addEventListener("click", openInsp);
   shakenAlert();
