@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C2326">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="工事課ツール">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>PC打設量計算</title>
+<style>
+:root{
+  --bg:#ECEEEC; --surface:#FFFFFF; --ink:#1C2326; --muted:#5E676B; --line:#C9CED0;
+  --white-bg:#FFFFFF; --white-ink:#1C2326; --white-line:#AEB6BA;
+  --blue-bg:#2F6FD6; --blue-ink:#FFFFFF;
+  --field:#FFF3A6; --field-line:#D9C200; --focus:#1F4E8C; --sel:#1C2326; --sel-ink:#FFFFFF;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+    --white-bg:#EEF1F2; --white-ink:#1C2326; --white-line:#EEF1F2;
+    --blue-bg:#3D7FE6; --blue-ink:#FFFFFF;
+    --field:#3B3713; --field-line:#8F8320; --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+  --white-bg:#EEF1F2; --white-ink:#1C2326; --white-line:#EEF1F2;
+  --blue-bg:#3D7FE6; --blue-ink:#FFFFFF;
+  --field:#3B3713; --field-line:#8F8320; --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C;
+  color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"BIZ UDPGothic","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.6rem;line-height:1.25;margin:4px 0 4px;font-weight:700;letter-spacing:.02em}
+.lead{color:var(--muted);margin:0 0 16px;font-size:.95rem}
+h2{font-size:1.1rem;margin:28px 0 10px;font-weight:700}
+.num{font-variant-numeric:tabular-nums}
+
+.pipe{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--ink);border-radius:10px;padding:14px;margin-bottom:12px}
+.pipe-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.pipe-no{font-weight:700;font-size:1.15rem}
+.del{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:6px 12px;font-family:inherit;font-size:.85rem;cursor:pointer}
+.fieldname{font-size:.85rem;color:var(--muted);margin:10px 0 6px}
+.sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.chip{height:42px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.kinds{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.oils{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.lines{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.dot{display:inline-block;width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1.5px var(--muted);vertical-align:-1px;margin-right:6px;flex:none}
+.pipe-no .dot{width:16px;height:16px;vertical-align:-2px}
+.oils .chip{font-size:.92rem;padding:0 4px;white-space:nowrap}
+.stepper{display:flex;align-items:center;gap:6px}
+.stepper button{width:48px;height:48px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:1.5rem;line-height:1;cursor:pointer;font-family:inherit}
+.stepper input{flex:1;min-width:0;height:48px;text-align:right;padding:0 12px;font-size:1.4rem;font-family:inherit;border:2px solid var(--field-line);background:var(--field);color:var(--ink);border-radius:8px}
+.unit{color:var(--muted);font-size:1rem}
+
+.result{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:10px}
+.coat-name{font-weight:700;font-size:.95rem;margin-bottom:4px}
+.pair{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+.r{border-radius:8px;padding:6px 10px}
+.r span{display:block;font-size:.8rem;font-weight:700}
+.r b{display:block;font-size:1.9rem;line-height:1.15;font-weight:700}
+.r b small{font-size:.85rem;font-weight:400;margin-left:2px}
+.r.w{background:var(--white-bg);color:var(--white-ink);border:1px solid var(--white-line)}
+.r.b{background:var(--blue-bg);color:var(--blue-ink)}
+.hint{font-size:.85rem;color:var(--muted)}
+
+.add{width:100%;height:52px;border:2px dashed var(--line);background:transparent;color:var(--ink);border-radius:10px;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}
+.add:disabled{color:var(--muted);cursor:default}
+
+.totals{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{color:var(--muted);font-weight:700;font-size:.85rem}
+th:first-child,td:first-child{text-align:left}
+.actions{display:flex;justify-content:flex-end;margin-top:14px}
+.ghost{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:inherit;font-size:.9rem;cursor:pointer}
+
+button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← メニューに戻る</a>
+  <h1>PC打設量計算</h1>
+  <p class="lead">配管ごとに油種・配管の種類・サイズ・長さを入れると、その配管に投入する主剤と硬化剤の量が出ます。配管は6本まで追加できます。</p>
+
+  <div id="pipes"></div>
+  <button class="add" id="add" type="button">＋ 配管を追加</button>
+
+  <h2>全体の必要量（準備用）</h2>
+  <div class="totals" id="totals"></div>
+
+  <div class="actions"><button class="ghost" id="clear" type="button">すべての配管を消す</button></div>
+</div>
+
+<script>
+(function(){
+  var KGM = {20:0.06,25:0.07,32:0.12,40:0.12,50:0.15,65:0.2,80:0.24,100:0.6};
+  var SIZES = [20,25,32,40,50,65,80,100];
+  var SG = 1.2, MAX = 6;
+  var COATS = {
+    normal:[{name:"1回目",f:1.1},{name:"2回目",f:1.0}],
+    holed:[{name:"穴あき配管1回目",f:1.32},{name:"穴あき配管2回目",f:1.2}]
+  };
+  var KEY = "pc-resin-calc-v2";
+  var OILS = ["レギュラー","ハイオク","軽油","灯油","重油"];
+  var OILC = {"レギュラー":"#D93025","ハイオク":"#F2C200","軽油":"#2E9E4F","灯油":"#2F6FD6","重油":"#000000"};
+  function dot(o){ return '<span class="dot" style="background:'+OILC[o]+'" aria-hidden="true"></span>'; }
+  var LINES = ["通気管","注入管","吸引管","戻り管"];
+  function label(p, i){ return (p.oil || p.line) ? ((p.oil || "油種未選択") + "・" + (p.line || "種類未選択")) : ("配管" + (i+1)); }
+  var pipes;
+  function newPipe(){ return {oil:"", line:"", size:100, len:0, kind:"normal"}; }
+  try{ pipes = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  if(!Array.isArray(pipes) || !pipes.length) pipes = [newPipe()];
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(pipes)); }catch(e){} }
+
+  var num = function(v){ var n = parseFloat(String(v).replace(/[^0-9.]/g,"")); return isFinite(n) ? n : 0; };
+  var f1 = function(n){ return (Math.round(n*10)/10).toFixed(1); };
+  // 硬化剤を小数点第2位で切り上げ、主剤はその2倍（2:1を厳守）
+  var mix = function(t){ var h = Math.ceil(Math.round(t/3*1e6)/1e5 - 1e-6)/10; return {h:h, m:h*2, s:h*3}; };
+  function calcPipe(p){
+    var base = num(p.len) * KGM[p.size] * SG;
+    return COATS[p.kind].map(function(c){ var x = mix(base*c.f); return {name:c.name, m:x.m, h:x.h}; });
+  }
+
+  function render(){
+    var box = document.getElementById("pipes"); box.innerHTML = "";
+    pipes.forEach(function(p, i){
+      var el = document.createElement("section"); el.className = "pipe";
+      if(p.oil) el.style.borderLeftColor = OILC[p.oil];
+      el.setAttribute("aria-label", "配管" + (i+1));
+      el.innerHTML =
+        '<div class="pipe-head"><span class="pipe-no">' + (p.oil ? dot(p.oil) : '') + label(p, i) + '</span>' +
+        (pipes.length > 1 ? '<button class="del" type="button">この配管を消す</button>' : '') + '</div>' +
+        '<div class="fieldname">油種</div><div class="oils">' +
+        OILS.map(function(o){ return '<button type="button" class="chip" data-oil="'+o+'" aria-pressed="'+(p.oil===o)+'">'+dot(o)+o+'</button>'; }).join("") +
+        '</div>' +
+        '<div class="fieldname">配管の種類</div><div class="lines">' +
+        LINES.map(function(l){ return '<button type="button" class="chip" data-line="'+l+'" aria-pressed="'+(p.line===l)+'">'+l+'</button>'; }).join("") +
+        '</div>' +
+        '<div class="fieldname">サイズ</div><div class="sizes">' +
+        SIZES.map(function(s){ return '<button type="button" class="chip num" data-size="'+s+'" aria-pressed="'+(p.size===s)+'">'+s+'A</button>'; }).join("") +
+        '</div>' +
+        '<div class="fieldname">長さ</div><div class="stepper">' +
+          '<button type="button" data-d="-1" aria-label="1m減らす">−</button>' +
+          '<input class="num" inputmode="decimal" aria-label="配管'+(i+1)+'の長さ（m）" value="'+(p.len||0)+'">' +
+          '<button type="button" data-d="1" aria-label="1m増やす">＋</button><span class="unit">m</span>' +
+        '</div>' +
+        '<div class="fieldname">配管の状態</div><div class="kinds">' +
+          '<button type="button" class="chip" data-kind="normal" aria-pressed="'+(p.kind==="normal")+'">通常</button>' +
+          '<button type="button" class="chip" data-kind="holed" aria-pressed="'+(p.kind==="holed")+'">穴あき</button>' +
+        '</div>' +
+        '<div class="result num" aria-live="polite"></div>';
+
+      el.querySelectorAll("[data-size]").forEach(function(b){
+        b.addEventListener("click", function(){ p.size = +b.dataset.size; render(); });
+      });
+      el.querySelectorAll("[data-oil]").forEach(function(b){
+        b.addEventListener("click", function(){ p.oil = b.dataset.oil; render(); });
+      });
+      el.querySelectorAll("[data-line]").forEach(function(b){
+        b.addEventListener("click", function(){ p.line = b.dataset.line; render(); });
+      });
+      el.querySelectorAll("[data-kind]").forEach(function(b){
+        b.addEventListener("click", function(){ p.kind = b.dataset.kind; render(); });
+      });
+      var inp = el.querySelector("input");
+      inp.addEventListener("input", function(){ p.len = num(inp.value); update(); });
+      inp.addEventListener("focus", function(){ inp.select(); });
+      el.querySelectorAll("[data-d]").forEach(function(b){
+        b.addEventListener("click", function(){
+          p.len = Math.max(0, Math.round((num(p.len) + (+b.dataset.d))*10)/10);
+          inp.value = p.len; update();
+        });
+      });
+      var del = el.querySelector(".del");
+      if(del) del.addEventListener("click", function(){ pipes.splice(i,1); render(); });
+      box.appendChild(el);
+    });
+    var add = document.getElementById("add");
+    add.disabled = pipes.length >= MAX;
+    add.textContent = pipes.length >= MAX ? "配管は6本までです" : "＋ 配管を追加";
+    update();
+  }
+
+  function update(){
+    var results = document.querySelectorAll("#pipes .result");
+    var sum = {};
+    var order = ["1回目","2回目","穴あき配管1回目","穴あき配管2回目"];
+    pipes.forEach(function(p, i){
+      var r = results[i];
+      if(!(num(p.len) > 0)){ r.innerHTML = '<div class="hint">長さを入れると、投入量が出ます。</div>'; return; }
+      var rows = calcPipe(p);
+      r.innerHTML = rows.map(function(c){
+        sum[c.name] = sum[c.name] || {m:0,h:0};
+        sum[c.name].m += c.m; sum[c.name].h += c.h;
+        return '<div><div class="coat-name">'+c.name+'（'+p.size+'A・'+p.len+'m）</div><div class="pair">' +
+          '<div class="r w"><span>主剤（白）</span><b>'+f1(c.m)+'<small>kg</small></b></div>' +
+          '<div class="r b"><span>硬化剤（青）</span><b>'+f1(c.h)+'<small>kg</small></b></div></div></div>';
+      }).join("");
+    });
+    var t = document.getElementById("totals");
+    var keys = order.filter(function(k){ return sum[k]; });
+    if(!keys.length){
+      t.innerHTML = '<table><tr><td class="hint">配管の長さを入れると、全部の配管の合計が出ます。</td></tr></table>';
+    } else {
+      t.innerHTML = '<table class="num"><tr><th>塗り</th><th>主剤（白）</th><th>硬化剤（青）</th></tr>' +
+        keys.map(function(k){ return '<tr><td>'+k+'</td><td>'+f1(sum[k].m)+' kg</td><td>'+f1(sum[k].h)+' kg</td></tr>'; }).join("") +
+        '</table>';
+    }
+    save();
+  }
+
+  document.getElementById("add").addEventListener("click", function(){
+    if(pipes.length >= MAX) return;
+    var last = pipes[pipes.length-1];
+    pipes.push({oil:last ? last.oil : "", line:"", size:last ? last.size : 100, len:0, kind:"normal"});
+    render();
+    var all = document.querySelectorAll("#pipes .pipe");
+    all[all.length-1].scrollIntoView({behavior:"smooth", block:"start"});
+  });
+  document.getElementById("clear").addEventListener("click", function(){
+    if(!confirm("すべての配管を消して、最初からやり直しますか？")) return;
+    pipes = [newPipe()]; render();
+  });
+
+  render();
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>
