@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C2326">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="工事課ツール">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>未登録の記入フォーム</title>
+<style>
+:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#5E676B;--line:#C9CED0;--focus:#1F4E8C;--sel:#1C2326;--sel-ink:#FFFFFF;--done:#2E7D4F;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--done:#6BC48F;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--done:#6BC48F;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 120px}
+.back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
+h1{font-size:1.5rem;line-height:1.25;margin:4px 0 6px}
+.lead{color:var(--muted);font-size:.92rem;margin:0 0 14px}
+label.f{display:grid;gap:4px;font-size:.85rem;color:var(--muted);margin-top:10px}
+input,textarea{width:100%;min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:1rem;padding:8px 10px}
+input:not(:placeholder-shown),textarea:not(:placeholder-shown){border-color:var(--done)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-top:10px}
+summary{padding:14px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+summary span{font-weight:400;color:var(--muted);font-size:.85rem}
+.in{padding:0 14px 14px}
+.in input,.in textarea{background:var(--bg)}
+.sub{font-weight:700;margin:14px 0 2px;font-size:.95rem}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.item{border-top:1px solid var(--line);padding-top:8px;margin-top:10px}
+.item b{display:block;font-size:.92rem}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
+.bar-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bar button{min-height:48px;border-radius:10px;border:0;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
+.bar button.sub2{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.cnt{text-align:center;font-size:.8rem;color:var(--muted);grid-column:1 / 3}
+input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← メニューに戻る</a>
+  <h1>未登録の記入フォーム</h1>
+  <p class="lead">わかる所だけ書けば大丈夫です。書いた内容はこのスマホに残るので、少しずつ書き足せます。最後に「メールで送る」か「LINEで送る」を押してください。</p>
+  <label class="f">記入者の名前<input data-k="記入者" placeholder="名前"></label>
+  <label class="f">送り先のメールアドレス（取りまとめる人）<input data-k="__to" type="email" placeholder="例：taro@example.co.jp"></label>
+  <div id="form"></div>
+</div>
+<div class="bar"><div class="bar-in">
+  <button type="button" id="mail">メールで送る</button>
+  <button type="button" class="sub2" id="share">LINEで送る</button>
+  <div class="cnt" id="cnt"></div>
+</div></div>
+<script>
+(function(){
+  var D = {"mats": ["90°エルボ（ねじ込み）", "チーズ（ねじ込み）", "45°エルボ（ねじ込み）", "ソケット", "ユニオン", "溶接エルボ（ロング・ショート）", "溶接45°エルボ", "溶接チーズ", "相フランジ 10K（ねじ込み）", "相フランジ 5K（ねじ込み）", "溶接フランジ 10K（SOP）", "溶接フランジ 5K（SOP）", "メクラフランジ 10K", "メクラフランジ 5K", "組フランジ（組フラ）", "止水栓（置きゴマ）", "パッキン 10K", "パッキン 5K", "パッキン 組フラ", "バリアパイプ 直管（エスロン バリアパイプエスエス）", "EFソケット", "EFエルボ（90°）", "EF 45°エルボ", "EFチーズ", "EFキャップ", "フランジ接合用継手", "フランジ付きEFチーズ", "ねじ付きスピゴット継手・ねじ付きエルボ継手", "トランジション継手（鋼管接続用）", "ウォータープルーフ", "EFコントローラ（レッキス GEF200B-II）", "M16ボルト・ナット（55・65・80）", "W5/8ナット（インチ）", "Uボルト（50A・80A・100A）", "オールアンカー（M10・M12）", "シールテープ", "ヘルメチック", "防食テープ", "ペトロテープ", "エポキシ樹脂 主剤（白）", "エポキシ樹脂 硬化剤（青）", "アセトン", "透明ホース（太）", "透明ホース（細）"], "place": ["パッキン 5K", "バリアパイプ 直管（エスロン バリアパイプエスエス）", "EFソケット", "EFエルボ（90°）", "EF 45°エルボ", "EFチーズ", "EFキャップ", "フランジ接合用継手", "フランジ付きEFチーズ", "ねじ付きスピゴット継手・ねじ付きエルボ継手", "トランジション継手（鋼管接続用）", "ウォータープルーフ", "EFコントローラ（レッキス GEF200B-II）", "エポキシ樹脂 主剤（白）", "エポキシ樹脂 硬化剤（青）", "アセトン", "透明ホース（太）", "透明ホース（細）"], "inv": ["W5/8ナット（個）", "Uボルト 50A（本）", "Uボルト 80A（本）", "Uボルト 100A（本）", "オールアンカー M10（本）", "オールアンカー M12（本）", "80A エルボ（溶接）（個）", "40A エルボ（溶接）（個）", "防食テープ（巻）", "ペトロテープ（巻）", "パッキン 10K 25A（枚）", "パッキン 10K 32A（枚）", "パッキン 10K 40A（枚）", "パッキン 10K 50A（枚）", "パッキン 10K 65A（枚）", "パッキン 10K 80A（枚）", "パッキン 10K 100A（枚）", "パッキン 5K 25A（枚）", "パッキン 5K 32A（枚）", "パッキン 5K 40A（枚）", "パッキン 5K 50A（枚）", "パッキン 5K 65A（枚）", "パッキン 5K 80A（枚）", "パッキン 5K 100A（枚）", "パッキン 組フラ 25A（枚）", "パッキン 組フラ 32A（枚）", "パッキン 組フラ 40A（枚）", "パッキン 組フラ 50A（枚）", "パッキン 組フラ 65A（枚）", "パッキン 組フラ 80A（枚）", "パッキン 組フラ 100A（枚）", "シールテープ（個）", "ヘルメチック（本）", "使い捨て手袋（箱）"], "VF": ["車番", "車種", "次回車検日", "車検先（会社・電話）", "前回オイル交換（日付・km）", "次回オイル交換", "タイヤのサイズ", "タイヤの購入時期", "ワイパーのサイズ", "ワイパーの購入時期", "パワーゲートのメーカー・型式", "今わかっている不具合", "積んでいる機械・工具（10号車・未登録のみ）"], "mach": [["ウェルダー GAW-190ES2", "エンジンオイル（SAE 10W-30・約1.0Lで合っているか、説明書で確認）"], ["ウェルダー GAW-190ES2", "パーツリスト（URL）"], ["ねじ切り機 F80AIII", "切削油の銘柄"], ["ねじ切り機 F80AIII", "チェーザの型番（サイズごと）"], ["ねじ切り機 F80AIII", "パーツリスト（URL）"], ["ディスクグラインダ", "砥石のサイズ"], ["インパクトレンチ", "ソケットのサイズ"], ["セーバーソー", "替刃の型番"], ["充電式バンドソー", "替刃の型番"], ["バッテリー", "型番（例：BSL36A18）"], ["バッテリー", "本数"], ["マルチ充電器", "型番"], ["充電工具全部", "パーツリスト（URL）"]], "tools": ["コーナーレンチ（350・450・600・900）", "パイプレンチ（300・ライト）", "チェーントング", "ハヤウマW", "レバーブロック・ベルトスリング", "ガス濃度計", "圧力検査ジグ・ゲージ", "ポートパワー", "コンプレッサー"], "other": ["透明ホース（太・細）は何に使うか", "エルボ30個・フランジ15枚は、ねじ込みか溶接か", "ウォータープルーフの本体とロックナットはサンプのどちら側か", "ユニオンの差し引く寸法（メーカーと型式）", "溶接のすき間はいつも何mmか", "SOPフランジはフランジ面から何mm手前で止めるか", "PC打設量計算の100Aのkg/m（0.6）は正しいか", "気密試験の圧力と時間（会社の基準）"], "vehs": ["デカ（シルバー）", "キャンター（白）", "10号車", "未登録"]};
+  var KEY = "fill-form-v1", st = {};
+  try{ st = JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){}
+  if(!st.__to) st.__to = "h-watanabe@anm.co.jp";
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+  var esc = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  function inp(k, ph){ return '<input data-k="'+esc(k)+'" value="'+esc(st[k]||"")+'" placeholder="'+esc(ph||"")+'">'; }
+  function sec(title, note, inner){ return '<details><summary>'+title+'<span data-c="'+esc(title)+'"></span></summary><div class="in">'+(note ? '<p class="lead" style="margin:0">'+note+'</p>' : '')+inner+'</div></details>'; }
+  var h = "";
+  var m = ""; for(var i=1;i<=6;i++) m += '<div class="item"><b>メンバー'+i+'</b><div class="row2">'+inp("メンバー"+i+"|名前","名前")+inp("メンバー"+i+"|メール","メールアドレス")+'</div></div>';
+  h += sec("メンバーの連絡先","注文メールのCCや、点検の送り先に使います。",m);
+  var s = ""; for(var j=1;j<=5;j++) s += '<div class="item"><b>注文先'+j+'</b><div class="row2">'+inp("注文先"+j+"|会社名","会社名")+inp("注文先"+j+"|メール","メールアドレス")+'</div><div class="row2" style="margin-top:6px">'+inp("注文先"+j+"|担当者","担当者")+inp("注文先"+j+"|材料","主に頼む材料")+'</div></div>';
+  h += sec("注文先","",s);
+  D.vehs.forEach(function(v){ h += sec("車両："+v,"車検証、整備の記録、タイヤの側面などを見て書いてください。", D.VF.map(function(f){ return '<label class="f">'+esc(f)+inp("車両|"+v+"|"+f,"")+'</label>'; }).join("")); });
+  h += sec("ウェルダー・ねじ切り機・充電工具","本体のラベルや取扱説明書を見て書いてください。", D.mach.map(function(r){ return '<label class="f">'+esc(r[0])+'：'+esc(r[1])+inp("機械|"+r[0]+"|"+r[1],"")+'</label>'; }).join(""));
+  h += sec("工具のパーツリスト","メーカー名・型式と、パーツリストのURL（わかれば）。", D.tools.map(function(t){ return '<div class="item"><b>'+esc(t)+'</b><div class="row2">'+inp("工具|"+t+"|メーカー・型式","メーカー・型式")+inp("工具|"+t+"|URL","パーツリストURL")+'</div></div>'; }).join(""));
+  h += sec("材料の補充元と注文先","補充元は会社のどこから持ってくるか（例：倉庫の2番棚）、注文先は会社名だけで大丈夫です。", D.mats.map(function(t){ return '<div class="item"><b>'+esc(t)+'</b><div class="row2">'+inp("材料|"+t+"|補充元","補充元")+inp("材料|"+t+"|注文先","注文先")+'</div></div>'; }).join(""));
+  h += sec("置き場所が未登録の材料","どの車両のどこ、または会社のどこに置くか。", D.place.map(function(t){ return '<label class="f">'+esc(t)+inp("置き場所|"+t,"置き場所")+'</label>'; }).join(""));
+  h += sec("棚卸しの定数","デカ・キャンターに、それぞれいくつ積んでおくか（数字だけでOK）。", D.inv.map(function(t){ return '<label class="f">'+esc(t)+inp("定数|"+t,"数")+'</label>'; }).join(""));
+  h += sec("その他の確認事項","", D.other.map(function(t){ return '<label class="f">'+esc(t)+inp("確認|"+t,"")+'</label>'; }).join(""));
+  document.getElementById("form").innerHTML = h;
+  document.querySelectorAll("[data-k]").forEach(function(el){
+    if(el.closest("#form") === null) el.value = st[el.dataset.k] || "";
+    el.addEventListener("input", function(){ var v = el.value.trim(); if(v) st[el.dataset.k] = el.value; else delete st[el.dataset.k]; save(); count(); });
+  });
+  function filled(){ return Object.keys(st).filter(function(k){ return k !== "__to" && k !== "記入者"; }); }
+  function count(){
+    document.getElementById("cnt").textContent = "記入済み "+filled().length+" か所（このスマホに保存されています）";
+    document.querySelectorAll("[data-c]").forEach(function(sp){
+      var n = sp.closest("details").querySelectorAll("input:not(:placeholder-shown)").length;
+      sp.textContent = n ? n+"か所 記入" : "";
+    });
+  }
+  function report(){
+    var ks = filled();
+    if(!ks.length) return "";
+    return "記入者："+(st["記入者"]||"")+"\n\n"+ks.map(function(k){ return "【"+k.split("|").join("／")+"】"+st[k]; }).join("\n");
+  }
+  document.getElementById("mail").onclick = function(){
+    var r = report(); if(!r){ alert("まだ何も書かれていません。"); return; }
+    location.href = "mailto:"+(st.__to||"")+"?subject="+encodeURIComponent("【Zファイル記入】"+(st["記入者"]||""))+"&body="+encodeURIComponent(r);
+  };
+  document.getElementById("share").onclick = function(){
+    var r = report(); if(!r){ alert("まだ何も書かれていません。"); return; }
+    if(navigator.share) navigator.share({title:"Zファイル記入", text:"【Zファイル記入】\n"+r}).catch(function(){});
+    else alert("この端末では共有できません。メールで送ってください。");
+  };
+  count();
+})();
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>
