@@ -1,6 +1,6 @@
 {
-  "name": "工事課ツール",
-  "short_name": "工事課ツール",
+  "name": "ANM",
+  "short_name": "ANM",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

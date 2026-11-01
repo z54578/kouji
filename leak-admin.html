@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C2326">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANM">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>漏洩検査 現場データ作成</title>
+<style>
+:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#5E676B;--line:#C9CED0;--focus:#1F4E8C;--sel:#1C2326;--sel-ink:#FFFFFF;--err:#B42318;--err-soft:#FDECEA;--ok:#2E7D4F;--info:#1F4E8C;--info-soft:#DCE6F3;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 140px}
+.back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
+h1{font-size:1.45rem;line-height:1.25;margin:4px 0 6px}
+h2{font-size:1.05rem;margin:0 0 6px}
+.lead{color:var(--muted);font-size:.9rem;margin:0 0 12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:12px}
+.card.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
+label.f{display:grid;gap:4px;font-size:.85rem;color:var(--muted);margin-top:10px}
+label.f:first-of-type{margin-top:4px}
+input,textarea,select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1.05rem;padding:8px 10px}
+input.bad,textarea.bad{border-color:var(--err);background:var(--err-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chip{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:22px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.chips.bad .chip{border-color:var(--err)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.sub{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+.sub b{display:block}
+.msg{font-size:.82rem;color:var(--err);margin-top:4px}
+.info{background:var(--info-soft);color:var(--info);border-radius:8px;padding:10px 12px;font-size:.9rem}
+.kv{display:grid;grid-template-columns:7em 1fr;gap:2px 10px;font-size:.9rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
+.bar-in{max-width:640px;margin:0 auto}
+.bar button,.btn{width:100%;min-height:50px;border-radius:10px;border:0;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer}
+.bar button[aria-disabled="true"]{background:var(--line);color:var(--muted)}
+.ghost{background:transparent!important;color:var(--ink)!important;border:1px solid var(--line)!important}
+.state{text-align:center;font-size:.85rem;margin-bottom:6px}
+.state.ng{color:var(--err)} .state.ok{color:var(--ok)}
+.miss{margin:6px 0 0;padding-left:1.2em;font-size:.85rem;color:var(--err)}
+.add{width:100%;min-height:44px;margin-top:10px;border:1px dashed var(--line);border-radius:8px;background:transparent;color:var(--ink);font-family:inherit;font-weight:700;cursor:pointer}
+.del{min-height:36px;padding:0 10px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--muted);font-family:inherit;cursor:pointer;float:right}
+.chk{display:flex;gap:10px;align-items:center;min-height:46px;font-size:1rem}
+.chk input{width:24px;height:24px;min-height:0}
+input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← メニューに戻る</a>
+  <h1>漏洩検査 現場データ作成（事務所用）</h1>
+  <p class="lead">今まで紙に印刷していた内容を入れて「リンクを作る」を押すと、作業員に送る記録用紙のリンクができます。入力はこのスマホに残ります。</p>
+  <div id="form"></div>
+</div>
+<script>
+(function(){
+  var KEY = "leak-admin-v1";
+  var blank = function(){ return {id:"", site:"", fac:"", addr:"", req:"", ship:"", copies:"", cycle:"", attn:"", tel:"", pos:"", sub:"", people:"", hours:"", tdate:"", mat:"", d_in:"", d_meas:"", d_suc:"", d_ret:"", d_feed:"", d_vent:"", prevDate:"", prevNo:"", wells:"4", tanks:[{no:"1",oil:"",kl:""}], hasMob:false, mob:[], note:""}; };
+  var s; try{ s = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  if(!s) s = blank();
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(s)); }catch(e){} }
+  var esc = function(t){ return String(t==null?"":t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  function f(k, label, ph, type){ return '<label class="f">'+label+'<input data-k="'+k+'" value="'+esc(s[k])+'" placeholder="'+esc(ph||"")+'"'+(type?' inputmode="'+type+'"':'')+'></label>'; }
+  function draw(){
+    var h = '';
+    h += '<div class="card"><h2>現場の基本情報</h2>'+f("site","現場名（必須）","例：栗林石油株式会社")+f("fac","施設名","例：Dr.Driveセルフ西帯広店")+f("addr","現場住所","")+
+      '<div class="g2">'+f("req","依頼先名","同上")+f("ship","発送先","同上")+'</div>'+
+      '<div class="g2">'+f("attn","様宛（担当者）","")+f("tel","TEL/FAX","")+'</div>'+
+      '<div class="g3">'+f("copies","部数","2","numeric")+f("cycle","周期","1年")+f("people","検査人数","")+'</div>'+
+      '<div class="g2">'+f("pos","POS認定番号","")+f("sub","補助金","")+'</div>'+
+      '<div class="g2">'+f("hours","営業時間・定休日","")+f("tdate","タンク年月日","")+'</div>'+f("mat","タンク材質","FRP")+'</div>';
+    h += '<div class="card"><h2>配管の口径</h2><div class="g3">'+f("d_in","注入","100","numeric")+f("d_meas","計量","50","numeric")+f("d_suc","吸引","40","numeric")+f("d_ret","戻り","15","numeric")+f("d_feed","送油","","numeric")+f("d_vent","通気","50","numeric")+'</div></div>';
+    h += '<div class="card"><h2>前回の検査</h2><div class="g2">'+f("prevDate","前回の日付","2025年12月16日")+f("prevNo","前回No.","L-084654〜657")+'</div></div>';
+    h += '<div class="card"><h2>タンク</h2>'+s.tanks.map(function(t,i){ return '<div class="sub"><button type="button" class="del" data-tdel="'+i+'">消す</button><b>タンク'+(i+1)+'</b><div class="g3">'+
+      '<label class="f">No.<input data-t="'+i+'|no" value="'+esc(t.no)+'" inputmode="numeric"></label><label class="f">油種<input data-t="'+i+'|oil" value="'+esc(t.oil)+'" placeholder="H・R・D・K・W"></label><label class="f">容量KL<input data-t="'+i+'|kl" value="'+esc(t.kl)+'" inputmode="decimal"></label></div></div>'; }).join("")+
+      '<button type="button" class="add" id="tadd">＋ タンクを追加</button></div>';
+    h += '<div class="card"><h2>漏洩検知管</h2>'+f("wells","検知管の本数","4","numeric")+'</div>';
+    h += '<div class="card"><h2>移動タンク</h2><label class="chk"><input type="checkbox" id="hasMob"'+(s.hasMob?' checked':'')+'>この現場には移動タンクがある</label>'+
+      (s.hasMob ? s.mob.map(function(v,i){ return '<div class="sub"><button type="button" class="del" data-mdel="'+i+'">消す</button><b>車両'+(i+1)+'</b>'+
+        ["車番","メーカー","製造番号","油種・容量","検査済証（号・日付・地区）","前回ステッカーNo."].map(function(lb){ return '<label class="f">'+lb+'<input data-m="'+i+'|'+lb+'" value="'+esc(v[lb])+'"></label>'; }).join("")+'</div>'; }).join("")+'<button type="button" class="add" id="madd">＋ 車両を追加</button>' : '')+'</div>';
+    h += '<div class="card"><h2>特記事項（事務所から）</h2><label class="f">常置場所・担当者など<textarea data-k="note" rows="3">'+esc(s.note)+'</textarea></label></div>';
+    h += '<div class="card"><h2>リンクを作る</h2><p class="lead">作業員にこのリンクを送ると、上の内容が入った状態で記録用紙が開きます。</p><button type="button" class="btn" id="mk">リンクを作る</button><div id="out"></div><button type="button" class="btn ghost" id="clr" style="margin-top:10px">次の現場用にすべて消す</button></div>';
+    document.getElementById("form").innerHTML = h;
+    document.querySelectorAll("[data-k]").forEach(function(el){ el.oninput = function(){ s[el.dataset.k] = el.value; save(); }; });
+    document.querySelectorAll("[data-t]").forEach(function(el){ el.oninput = function(){ var p = el.dataset.t.split("|"); s.tanks[+p[0]][p[1]] = el.value; save(); }; });
+    document.querySelectorAll("[data-m]").forEach(function(el){ el.oninput = function(){ var p = el.dataset.m.split("|"); s.mob[+p[0]][p[1]] = el.value; save(); }; });
+    document.querySelectorAll("[data-tdel]").forEach(function(b){ b.onclick = function(){ s.tanks.splice(+b.dataset.tdel,1); save(); draw(); }; });
+    document.querySelectorAll("[data-mdel]").forEach(function(b){ b.onclick = function(){ s.mob.splice(+b.dataset.mdel,1); save(); draw(); }; });
+    document.getElementById("tadd").onclick = function(){ s.tanks.push({no:String(s.tanks.length+1),oil:"",kl:""}); save(); draw(); };
+    var ma = document.getElementById("madd"); if(ma) ma.onclick = function(){ s.mob.push({}); save(); draw(); };
+    document.getElementById("hasMob").onchange = function(){ s.hasMob = this.checked; if(s.hasMob && !s.mob.length) s.mob.push({}); save(); draw(); };
+    document.getElementById("mk").onclick = makeLink;
+    document.getElementById("clr").onclick = function(){ if(confirm("入力した内容をすべて消しますか？")){ s = blank(); save(); draw(); } };
+  }
+  function enc(o){ var b = btoa(unescape(encodeURIComponent(JSON.stringify(o)))); return b.replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+  function makeLink(){
+    if(!s.site.trim()){ alert("現場名を入れてください。"); return; }
+    if(!s.tanks.filter(function(t){ return t.no; }).length){ alert("タンクを1つ以上入れてください。"); return; }
+    s.id = s.site.trim()+"|"+(s.fac||"").trim();
+    var url = location.href.replace(/leak-admin\.html.*$/,"")+"leak.html?d="+enc(s);
+    var out = document.getElementById("out");
+    out.innerHTML = '<p class="info" style="word-break:break-all;margin-top:10px">'+esc(url)+'</p><div class="g2" style="margin-top:8px"><button type="button" class="btn" id="share">LINEなどで送る</button><button type="button" class="btn ghost" id="copy">リンクをコピー</button></div><a class="btn ghost" style="display:flex;align-items:center;justify-content:center;margin-top:8px;text-decoration:none" href="'+esc(url)+'">自分で開いて確認する</a>';
+    document.getElementById("share").onclick = function(){ if(navigator.share) navigator.share({title:"漏洩検査 "+s.site, text:"漏洩検査の記録用紙です（"+s.site+"）\n"+url}).catch(function(){}); else alert("この端末では共有できません。コピーして送ってください。"); };
+    document.getElementById("copy").onclick = function(){ if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){ alert("コピーしました"); }); };
+  }
+  draw();
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>

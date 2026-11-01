@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C2326">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANM">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>漏洩検査 記録</title>
+<style>
+:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#5E676B;--line:#C9CED0;--focus:#1F4E8C;--sel:#1C2326;--sel-ink:#FFFFFF;--err:#B42318;--err-soft:#FDECEA;--ok:#2E7D4F;--info:#1F4E8C;--info-soft:#DCE6F3;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 140px}
+.back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
+h1{font-size:1.45rem;line-height:1.25;margin:4px 0 6px}
+h2{font-size:1.05rem;margin:0 0 6px}
+.lead{color:var(--muted);font-size:.9rem;margin:0 0 12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:12px}
+.card.bad{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
+label.f{display:grid;gap:4px;font-size:.85rem;color:var(--muted);margin-top:10px}
+label.f:first-of-type{margin-top:4px}
+input,textarea,select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1.05rem;padding:8px 10px}
+input.bad,textarea.bad{border-color:var(--err);background:var(--err-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chip{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:22px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.chips.bad .chip{border-color:var(--err)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.sub{border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+.sub b{display:block}
+.msg{font-size:.82rem;color:var(--err);margin-top:4px}
+.info{background:var(--info-soft);color:var(--info);border-radius:8px;padding:10px 12px;font-size:.9rem}
+.kv{display:grid;grid-template-columns:7em 1fr;gap:2px 10px;font-size:.9rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
+.bar-in{max-width:640px;margin:0 auto}
+.bar button,.btn{width:100%;min-height:50px;border-radius:10px;border:0;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer}
+.bar button[aria-disabled="true"]{background:var(--line);color:var(--muted)}
+.ghost{background:transparent!important;color:var(--ink)!important;border:1px solid var(--line)!important}
+.state{text-align:center;font-size:.85rem;margin-bottom:6px}
+.state.ng{color:var(--err)} .state.ok{color:var(--ok)}
+.miss{margin:6px 0 0;padding-left:1.2em;font-size:.85rem;color:var(--err)}
+.add{width:100%;min-height:44px;margin-top:10px;border:1px dashed var(--line);border-radius:8px;background:transparent;color:var(--ink);font-family:inherit;font-weight:700;cursor:pointer}
+.del{min-height:36px;padding:0 10px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--muted);font-family:inherit;cursor:pointer;float:right}
+.chk{display:flex;gap:10px;align-items:center;min-height:46px;font-size:1rem}
+.chk input{width:24px;height:24px;min-height:0}
+input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.addr{margin-top:10px;border-top:1px solid var(--line);padding-top:8px;font-size:.92rem}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.act{display:inline-flex;align-items:center;min-height:42px;padding:0 14px;border-radius:8px;background:var(--sel);color:var(--sel-ink);text-decoration:none;font-weight:700;font-size:.9rem}
+.act.ghost2{background:transparent;color:var(--ink);border:1px solid var(--line)}
+img.map{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;margin-top:6px;background:#fff}
+.pv{font-weight:400;font-size:.82rem;color:var(--muted);margin-left:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← メニューに戻る</a>
+  <h1>地下タンク漏洩検査 記録</h1>
+  <p class="lead">全部の項目が埋まると送信できます。入力した内容はこのスマホに残るので、途中で閉じても大丈夫です。</p>
+  <div id="app"></div>
+</div>
+<div class="bar" id="bar"><div class="bar-in">
+  <div class="state" id="state"></div>
+  <button type="button" id="send" aria-disabled="true">事務員さんに送信</button>
+  <ul class="miss" id="miss"></ul>
+</div></div>
+<script>
+(function(){
+  var CLERK = ""; // 事務員さんのメールアドレス（決まったら入れる）
+  var esc = function(t){ return String(t==null?"":t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  function dec(b){ b = b.replace(/-/g,"+").replace(/_/g,"/"); while(b.length % 4) b += "="; return JSON.parse(decodeURIComponent(escape(atob(b)))); }
+  var SK = "leak-sites-v1", sites = {};
+  try{ sites = JSON.parse(localStorage.getItem(SK)) || {}; }catch(e){}
+  var site = null, m = location.search.match(/[?&]d=([^&]+)/);
+  if(m){ try{ site = dec(m[1]); sites[site.id] = site; localStorage.setItem(SK, JSON.stringify(sites)); }catch(e){ site = null; } }
+  var app = document.getElementById("app");
+  var idm = location.search.match(/[?&]id=([^&]+)/);
+  if(!site && idm){
+    var want = decodeURIComponent(idm[1]);
+    var fail = function(t, d){ app.innerHTML = '<div class="card"><h2>'+t+'</h2><p class="lead" style="margin:0">'+d+'</p></div>'; document.getElementById("bar").hidden = true; };
+    fetch("sites.json", {cache:"no-cache"}).then(function(res){ return res.json(); }).then(function(list){
+      site = list.filter(function(x){ return x.id === want; })[0] || sites[want] || null;
+      if(site){ sites[site.id] = site; try{ localStorage.setItem(SK, JSON.stringify(sites)); }catch(e){} start(); }
+      else fail("現場が見つかりません","台帳から開き直してください。");
+    }).catch(function(){ if(sites[want]){ site = sites[want]; start(); } else fail("台帳を読み込めません","電波のある所で一度開いてください。"); });
+    return;
+  }
+  if(!site){
+    var ids = Object.keys(sites);
+    app.innerHTML = '<div class="card"><h2>現場を選んでください</h2><p class="lead">漏洩検査の台帳から現場を選ぶと、その現場の記録用紙が開きます。</p><a class="btn" style="display:flex;align-items:center;justify-content:center;text-decoration:none" href="./leak-list.html">漏洩検査の台帳を開く</a></div>'+
+      (ids.length ? '<div class="card"><h2>前に開いた現場</h2>'+ids.map(function(id){ return '<button type="button" class="btn ghost" style="margin-top:8px" data-open="'+esc(id)+'">'+esc(sites[id].site)+(sites[id].fac ? '　'+esc(sites[id].fac) : '')+'</button>'; }).join("")+'</div>' : '');
+    app.querySelectorAll("[data-open]").forEach(function(b){ b.onclick = function(){ site = sites[b.dataset.open]; start(); }; });
+    document.getElementById("bar").hidden = true;
+    return;
+  }
+  start();
+  function start(){
+    document.getElementById("bar").hidden = false;
+    var done = {}; try{ done = JSON.parse(localStorage.getItem("leak-done-v1")) || {}; }catch(e){}
+    var o = done[site.id];
+    if(o && (!site.last || o.last > site.last)){ site.last = o.last; site.prevDate = o.prevDate; site.prevNo = o.prevNo; }
+    var RK = "leak-rec-v1|"+site.id, r;
+    try{ r = JSON.parse(localStorage.getItem(RK)); }catch(e){}
+    var nw = Math.max(0, parseInt(site.wells,10) || 0);
+    if(!r){ var d = new Date(); r = {date:d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2), weather:"", writer:"", kind:"", nowNo:"", gw:"", pump:"", pumpNA:false, lorry:"", lorryNA:false, wells:[], tanks:[], mob:[], note:"", noteNone:false, photo:false}; }
+    (function(){ var d = new Date(); r.date = d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); })();
+    while(r.wells.length < nw) r.wells.push({st:"", depth:"", water:""}); r.wells.length = nw;
+    while(r.tanks.length < site.tanks.length) r.tanks.push({rest:"", level:"", kensui:"", wnote:""}); r.tanks.length = site.tanks.length;
+    var mobs = site.hasMob ? site.mob : [];
+    while(r.mob.length < mobs.length) r.mob.push({done:"", sticker:""}); r.mob.length = mobs.length;
+    var to = localStorage.getItem("leak-to") || CLERK;
+    var tried = false;
+    function save(){ try{ localStorage.setItem(RK, JSON.stringify(r)); }catch(e){} }
+    function chips(key, opts, cur){ return '<div class="chips" data-ck="'+key+'">'+opts.map(function(o){ return '<button type="button" class="chip" data-v="'+esc(o)+'" aria-pressed="'+(cur===o)+'">'+esc(o)+'</button>'; }).join("")+'</div>'; }
+    function inp(key, val, ph, mode){ return '<input data-ik="'+key+'" value="'+esc(val)+'" placeholder="'+esc(ph||"")+'"'+(mode ? ' inputmode="'+mode+'"' : '')+'>'; }
+    var isNum = function(v){ return /^[0-9]+(\.[0-9]+)?$/.test(String(v).trim()); };
+    function get(key){ var p = key.split("."), o = r; for(var i=0;i<p.length-1;i++) o = o[p[i]]; return [o, p[p.length-1]]; }
+    function check(){
+      var e = {}, add = function(k, msg){ e[k] = msg; };
+      if(!r.date) add("date","日付を入れてください");
+      if(!r.weather) add("weather","天候を選んでください");
+      if(!r.writer.trim()) add("writer","記入者を入れてください");
+      if(!r.kind) add("kind","検査か資料のどちらかを選んでください");
+      if(!r.nowNo.trim()) add("nowNo","今回No.を入れてください");
+      var meas = r.kind !== "資料のみ";
+      if(meas){
+        if(!r.gw) add("gw","地下水の有無を選んでください");
+        if(!r.pumpNA && !isNum(r.pump)) add("pump","ポンプΩを数字で入れるか「該当なし」を選んでください");
+        if(!r.lorryNA && !isNum(r.lorry)) add("lorry","ローリーΩを数字で入れるか「該当なし」を選んでください");
+        r.wells.forEach(function(w, i){
+          if(!w.st) add("wells."+i+".st","検知管"+(i+1)+"の状態を選んでください");
+          else if(w.st === "測定"){
+            if(!isNum(w.depth)) add("wells."+i+".depth","検知管"+(i+1)+"：管の深さを数字で");
+            if(!isNum(w.water)) add("wells."+i+".water","検知管"+(i+1)+"：地下水の高さを数字で");
+            if(isNum(w.depth) && isNum(w.water) && +w.water > +w.depth) add("wells."+i+".water","検知管"+(i+1)+"：地下水の高さが管の深さより大きくなっています");
+          }
+        });
+        r.tanks.forEach(function(t, i){
+          var nm = "タンクNo."+site.tanks[i].no;
+          if(!isNum(t.rest)) add("tanks."+i+".rest", nm+"：残量を数字で");
+          else if(isNum(site.tanks[i].kl) && +t.rest > +site.tanks[i].kl*1000) add("tanks."+i+".rest", nm+"：残量が容量（"+site.tanks[i].kl+"KL）を超えています");
+          if(!isNum(t.level)) add("tanks."+i+".level", nm+"：油面高を数字で");
+          if(!t.kensui) add("tanks."+i+".kensui", nm+"：検水（タンク内の水の混入）のなし・ありを選んでください");
+          else if(t.kensui === "あり" && !String(t.wnote||"").trim()) add("tanks."+i+".wnote", nm+"：混入している水の量・状況を書いてください");
+        });
+        r.mob.forEach(function(v, i){
+          if(!v.done) add("mob."+i+".done","車両"+(i+1)+"：検査の実施を選んでください");
+          if(v.done === "実施" && !v.sticker.trim()) add("mob."+i+".sticker","車両"+(i+1)+"：今回のステッカーNo.を入れてください");
+        });
+      }
+      if(!r.noteNone && !r.note.trim()) add("note","特記事項を書くか「特記事項なし」にチェックしてください");
+      if(!r.photo) add("photo","写真をクラウドにアップロードしてからチェックしてください");
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to)) add("to","送り先（事務員さん）のメールアドレスを入れてください");
+      return e;
+    }
+    function contactsHtml(){
+      var cs = (site.contacts||[]).filter(function(c){ return c.tel; });
+      if(!cs.length && site.tel) cs = [{name:"TEL", tel:site.tel}];
+      if(!cs.length) return "";
+      var msg = (site.site||"")+" "+(site.attn||"ご担当者様")+"\nいつもお世話になっております。地下タンク漏洩検査の日程のご相談です。\n〇月〇日（〇）〇時ごろに伺いたいのですが、ご都合はいかがでしょうか。";
+      return '<div class="addr">'+cs.map(function(c){ var n = c.tel.replace(/[^0-9+]/g,""); return '<div>'+esc(c.name)+'　'+esc(c.tel)+'</div><div class="acts"><a class="act" href="tel:'+n+'">電話する</a>'+(/^0[789]0/.test(n) ? '<a class="act ghost2" href="sms:'+n+'?&body='+encodeURIComponent(msg)+'">日程をSMSで連絡</a>' : '')+'</div>'; }).join("")+'</div>';
+    }
+    function draw(){
+      var e = tried ? check() : {};
+      var bad = function(k){ return e[k] ? ' bad' : ''; }, msg = function(k){ return e[k] ? '<div class="msg">'+esc(e[k])+'</div>' : ''; };
+      var h = '<div class="card"><h2>'+esc(site.site)+'</h2><p class="lead" style="margin:0 0 6px">'+esc(site.fac||"")+'</p><dl class="kv">'+
+        [["依頼先",site.req],["発送先",site.ship],["部数",site.copies],["周期",site.cycle],["配管","注入"+(site.d_in||"−")+"・計量"+(site.d_meas||"−")+"・吸引"+(site.d_suc||"−")+"・戻り"+(site.d_ret||"−")+"・送油"+(site.d_feed||"−")+"・通気"+(site.d_vent||"−")],["前回",(site.prevDate||"")+"　"+(site.prevNo||"")]].map(function(x){ return '<dt>'+x[0]+'</dt><dd>'+esc(x[1]||"−")+'</dd>'; }).join("")+'</dl>'+(site.note ? '<p class="info" style="margin:8px 0 0">'+esc(site.note)+'</p>' : '')+
+        (site.addr ? '<div class="addr"><div>'+esc(site.addr)+'</div><div class="acts"><a class="act" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.addr)+'" target="_blank" rel="noopener">ナビ（Googleマップ）</a><a class="act ghost2" href="https://maps.apple.com/?q='+encodeURIComponent(site.addr)+'">Appleマップ</a></div></div>' : '')+
+        contactsHtml()+'</div>';
+      h += '<div class="card"><h2>基本</h2><label class="f">日付<input type="date" data-ik="date" value="'+esc(r.date)+'" class="'+bad("date")+'"></label>'+msg("date")+
+        '<label class="f">天候</label>'+chips("weather",["晴","曇","雨","雪"],r.weather).replace('class="chips"','class="chips'+bad("weather")+'"')+msg("weather")+
+        '<label class="f">記入者'+inp("writer",r.writer,"名前").replace('<input','<input class="'+bad("writer")+'"')+'</label>'+msg("writer")+
+        '<label class="f">区分</label>'+chips("kind",["検査","資料のみ"],r.kind).replace('class="chips"','class="chips'+bad("kind")+'"')+msg("kind")+
+        '<div class="info" style="margin-top:12px">前回No.：<b>'+esc(site.prevNo||"不明")+'</b>'+(site.prevDate ? '（'+esc(site.prevDate)+'）' : '')+'</div>'+
+        '<label class="f">今回No.'+inp("nowNo",r.nowNo,"例：L-229261〜264").replace('<input','<input class="'+bad("nowNo")+'"')+'</label>'+msg("nowNo")+'</div>';
+      if(r.kind !== "資料のみ"){
+        h += '<div class="card"><h2>地下水・絶縁抵抗</h2><label class="f">地下水</label>'+chips("gw",["有","無"],r.gw).replace('class="chips"','class="chips'+bad("gw")+'"')+msg("gw")+
+          '<label class="f">ポンプΩ</label><div class="g2">'+inp("pump",r.pump,"数値","decimal").replace('<input','<input class="'+bad("pump")+'"'+(r.pumpNA?' disabled':''))+'<label class="chk"><input type="checkbox" data-cb="pumpNA"'+(r.pumpNA?' checked':'')+'>該当なし</label></div>'+msg("pump")+
+          '<label class="f">ローリーΩ</label><div class="g2">'+inp("lorry",r.lorry,"数値","decimal").replace('<input','<input class="'+bad("lorry")+'"'+(r.lorryNA?' disabled':''))+'<label class="chk"><input type="checkbox" data-cb="lorryNA"'+(r.lorryNA?' checked':'')+'>該当なし</label></div>'+msg("lorry")+'</div>';
+        if(r.wells.length) h += '<div class="card"><h2>漏洩検知管</h2>'+(site.map ? '<a href="'+esc(site.map)+'" target="_blank" rel="noopener"><img class="map" src="'+esc(site.map)+'" alt="'+esc(site.site)+'の配置図（検知管の番号つき）"></a><p class="lead" style="margin:4px 0 8px">図をタップすると大きく表示します。丸数字が検知管の番号です。</p>' : '')+'<p class="lead" style="margin:0">管の深さと地下水の高さ（mm）。開けられない・詰まっているときは状態を選んでください。</p>'+r.wells.map(function(w,i){
+          var k = "wells."+i;
+          var pv = (site.prevWells||[])[i];
+          return '<div class="sub"><b>検知管 '+(i+1)+(pv ? '<span class="pv">前回 '+esc(pv)+'</span>' : '')+'</b>'+chips(k+".st",["測定","開閉不可","つまり"],w.st).replace('class="chips"','class="chips'+bad(k+".st")+'"')+msg(k+".st")+
+            (w.st === "測定" ? '<div class="g2"><label class="f">管の深さmm'+inp(k+".depth",w.depth,"例：2200","numeric").replace('<input','<input class="'+bad(k+".depth")+'"')+'</label><label class="f">地下水の高さmm'+inp(k+".water",w.water,"例：1500","numeric").replace('<input','<input class="'+bad(k+".water")+'"')+'</label></div>'+msg(k+".depth")+msg(k+".water") : '')+'</div>';
+        }).join("")+'</div>';
+        h += '<div class="card"><h2>タンク</h2>'+r.tanks.map(function(t,i){
+          var k = "tanks."+i, st = site.tanks[i];
+          return '<div class="sub"><b>No.'+esc(st.no)+'　'+esc(st.oil)+'　'+esc(st.kl)+'KL</b><div class="g2"><label class="f">残量ℓ'+inp(k+".rest",t.rest,"","numeric").replace('<input','<input class="'+bad(k+".rest")+'"')+'</label><label class="f">油面高mm'+inp(k+".level",t.level,"","numeric").replace('<input','<input class="'+bad(k+".level")+'"')+'</label></div>'+msg(k+".rest")+msg(k+".level")+
+            '<label class="f">検水（タンク内に水が混入しているか）</label>'+chips(k+".kensui",["なし","あり"],t.kensui).replace('class="chips"','class="chips'+bad(k+".kensui")+'"')+msg(k+".kensui")+
+            (t.kensui === "あり" ? '<label class="f">混入している水の量・状況'+inp(k+".wnote",t.wnote||"","例：水位10mm").replace('<input','<input class="'+bad(k+".wnote")+'"')+'</label>'+msg(k+".wnote") : '')+'</div>';
+        }).join("")+'</div>';
+        if(r.mob.length) h += '<div class="card"><h2>移動タンク</h2>'+r.mob.map(function(v,i){
+          var k = "mob."+i, mv = mobs[i] || {};
+          return '<div class="sub"><b>'+esc(mv["車番"]||("車両"+(i+1)))+'</b><p class="lead" style="margin:0">'+esc([mv["メーカー"],mv["製造番号"],mv["油種・容量"]].filter(Boolean).join("・"))+(mv["前回ステッカーNo."] ? '　前回 '+esc(mv["前回ステッカーNo."]) : '')+'</p>'+
+            chips(k+".done",["実施","未実施"],v.done).replace('class="chips"','class="chips'+bad(k+".done")+'"')+msg(k+".done")+
+            (v.done === "実施" ? '<label class="f">今回のステッカーNo.'+inp(k+".sticker",v.sticker,"").replace('<input','<input class="'+bad(k+".sticker")+'"')+'</label>'+msg(k+".sticker") : '')+'</div>';
+        }).join("")+'</div>';
+      }
+      h += '<div class="card"><h2>特記事項</h2><label class="chk"><input type="checkbox" data-cb="noteNone"'+(r.noteNone?' checked':'')+'>特記事項なし</label>'+(r.noteNone ? '' : '<textarea data-ik="note" rows="4" class="'+bad("note")+'" placeholder="気づいたこと、異常、伝えたいこと">'+esc(r.note)+'</textarea>')+msg("note")+'</div>';
+      h += '<div class="card'+(e.photo?' bad':'')+'"><h2>写真</h2><label class="chk"><input type="checkbox" data-cb="photo"'+(r.photo?' checked':'')+'>写真をクラウドにアップロードした</label>'+msg("photo")+'</div>';
+      h += '<div class="card"><h2>送り先</h2><label class="f">事務員さんのメールアドレス<input data-to="1" type="email" value="'+esc(to)+'" class="'+bad("to")+'" placeholder="例：jimu@example.co.jp"></label>'+msg("to")+'</div>';
+      h += '<button type="button" class="btn ghost" id="reset" style="margin-top:14px">送信が終わった（前回No.を今回の番号に更新）</button>';
+      app.innerHTML = h;
+      wire(); status();
+    }
+    function status(){
+      var e = check(), n = Object.keys(e).length, el = document.getElementById("state"), sb = document.getElementById("send");
+      el.className = "state " + (n ? "ng" : "ok");
+      el.textContent = n ? "未記入・確認が必要な所が "+n+" か所あります" : "すべて記入できました。送信できます。";
+      sb.setAttribute("aria-disabled", n ? "true" : "false");
+      var ul = document.getElementById("miss");
+      ul.innerHTML = tried && n ? Object.keys(e).slice(0,6).map(function(k){ return '<li>'+esc(e[k])+'</li>'; }).join("")+(n>6?'<li>ほか '+(n-6)+' か所</li>':'') : '';
+    }
+    function wire(){
+      app.querySelectorAll("[data-ck]").forEach(function(box){ box.querySelectorAll(".chip").forEach(function(b){ b.onclick = function(){ var g = get(box.dataset.ck); g[0][g[1]] = b.dataset.v; save(); var y = window.scrollY; draw(); window.scrollTo(0,y); }; }); });
+      app.querySelectorAll("[data-ik]").forEach(function(el){ el.oninput = function(){ var g = get(el.dataset.ik); g[0][g[1]] = el.value; save(); status(); }; el.onblur = function(){ if(tried){ var y = window.scrollY; draw(); window.scrollTo(0,y); } }; });
+      app.querySelectorAll("[data-cb]").forEach(function(el){ el.onchange = function(){ r[el.dataset.cb] = el.checked; save(); var y = window.scrollY; draw(); window.scrollTo(0,y); }; });
+      var t = app.querySelector("[data-to]"); t.oninput = function(){ to = t.value.trim(); try{ localStorage.setItem("leak-to", to); }catch(e){} status(); };
+      document.getElementById("reset").onclick = function(){
+        if(!r.nowNo.trim()){ alert("今回No.が入っていません。"); return; }
+        if(!confirm("送信は終わりましたか？\n前回No.を「"+r.nowNo+"」、前回の日付を「"+fmtJ(r.date)+"」に更新して、入力を消します。")) return;
+        done[site.id] = {last:r.date, prevDate:fmtJ(r.date), prevNo:r.nowNo};
+        try{ localStorage.setItem("leak-done-v1", JSON.stringify(done)); }catch(e){}
+        localStorage.removeItem(RK); start(); window.scrollTo(0,0);
+      };
+    }
+    function fmtJ(d){ var p = String(d).split("-"); return p.length===3 ? p[0]+"年"+(+p[1])+"月"+(+p[2])+"日" : d; }
+    function body(){
+      var L = [];
+      L.push("■現場"); L.push("現場名："+site.site); if(site.fac) L.push("施設名："+site.fac); if(site.addr) L.push("住所："+site.addr);
+      L.push("依頼先："+(site.req||"")+"／発送先："+(site.ship||"")+"／部数："+(site.copies||"")+"／周期："+(site.cycle||""));
+      L.push("前回："+(site.prevDate||"")+"　No."+(site.prevNo||""));
+      L.push(""); L.push("■今回"); L.push("日付："+r.date+"　天候："+r.weather); L.push("記入者："+r.writer+"　区分："+r.kind); L.push("今回No.："+r.nowNo);
+      if(r.kind !== "資料のみ"){
+        L.push("地下水："+r.gw+"　ポンプΩ："+(r.pumpNA?"該当なし":r.pump)+"　ローリーΩ："+(r.lorryNA?"該当なし":r.lorry));
+        if(r.wells.length){ L.push(""); L.push("■漏洩検知管（管の深さ／地下水の高さ mm）"); r.wells.forEach(function(w,i){ L.push((i+1)+"："+(w.st==="測定" ? w.depth+"／"+w.water : w.st)); }); }
+        L.push(""); L.push("■タンク（残量ℓ・油面高mm・検水＝タンク内の水の混入）"); r.tanks.forEach(function(t,i){ var st = site.tanks[i]; L.push("No."+st.no+" "+st.oil+" "+st.kl+"KL："+t.rest+"ℓ・"+t.level+"mm・タンク内の水"+t.kensui+(t.kensui==="あり" ? "（"+t.wnote+"）" : "")); });
+        if(r.mob.length){ L.push(""); L.push("■移動タンク"); r.mob.forEach(function(v,i){ var mv = mobs[i]||{}; L.push((mv["車番"]||("車両"+(i+1)))+"："+v.done+(v.done==="実施" ? "　ステッカーNo."+v.sticker : "")); }); }
+      }
+      L.push(""); L.push("■特記事項"); L.push(r.noteNone ? "なし" : r.note);
+      L.push(""); L.push("写真：クラウドにアップロード済み");
+      L.push(""); L.push("■台帳の更新"); L.push("前回の日付 → "+fmtJ(r.date)+"／前回No. → "+r.nowNo);
+      return L.join("\n");
+    }
+    document.getElementById("send").onclick = function(){
+      tried = true;
+      var e = check();
+      if(Object.keys(e).length){ draw(); var first = app.querySelector(".bad"); if(first) first.scrollIntoView({behavior:"smooth", block:"center"}); return; }
+      location.href = "mailto:"+to+"?subject="+encodeURIComponent("【漏洩検査】"+site.site+(site.fac?" "+site.fac:"")+" "+r.date)+"&body="+encodeURIComponent(body());
+    };
+    draw();
+  }
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>
