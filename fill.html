@@ -97,11 +97,11 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-vi
   }
   document.getElementById("mail").onclick = function(){
     var r = report(); if(!r){ alert("まだ何も書かれていません。"); return; }
-    location.href = "mailto:"+(st.__to||"")+"?subject="+encodeURIComponent("【Zファイル記入】"+(st["記入者"]||""))+"&body="+encodeURIComponent(r);
+    location.href = "mailto:"+(st.__to||"")+"?subject="+encodeURIComponent("【工事課ハンドブック記入】"+(st["記入者"]||""))+"&body="+encodeURIComponent(r);
   };
   document.getElementById("share").onclick = function(){
     var r = report(); if(!r){ alert("まだ何も書かれていません。"); return; }
-    if(navigator.share) navigator.share({title:"Zファイル記入", text:"【Zファイル記入】\n"+r}).catch(function(){});
+    if(navigator.share) navigator.share({title:"工事課ハンドブック記入", text:"【工事課ハンドブック記入】\n"+r}).catch(function(){});
     else alert("この端末では共有できません。メールで送ってください。");
   };
   count();
