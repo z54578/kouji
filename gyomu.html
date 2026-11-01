@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C2326">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANM">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>業務課ハンドブック</title>
+<style>
+:root{
+  --bg:#ECEEEC; --surface:#FFFFFF; --ink:#1C2326; --muted:#5E676B; --line:#C9CED0;
+  --focus:#1F4E8C; --sel:#1C2326; --sel-ink:#FFFFFF; --warn:#9A3412; --warn-soft:#FDEBDD;
+  --todo:#8A6D00; --todo-soft:#FFF3C4; --place:#1F4E8C; --place-soft:#DCE6F3;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+    --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C; --warn:#F5A97F; --warn-soft:#3A2418;
+    --todo:#E8C95A; --todo-soft:#3A3213; --place:#9DBDEB; --place-soft:#24344A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+  --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C; --warn:#F5A97F; --warn-soft:#3A2418;
+  --todo:#E8C95A; --todo-soft:#3A3213; --place:#9DBDEB; --place-soft:#24344A; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+.back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
+h1{font-size:1.5rem;line-height:1.25;margin:4px 0 12px}
+.search{width:100%;height:48px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:1.05rem;padding:0 14px}
+.cats{display:flex;gap:6px;overflow-x:auto;margin:10px 0 14px;padding-bottom:2px}
+.chip{flex:none;min-height:40px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;font-family:inherit;font-size:.92rem;font-weight:700;padding:0 14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.list{display:grid;gap:8px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+summary{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:12px;cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary svg{width:56px;height:38px}
+summary b{display:block;font-size:1.05rem;line-height:1.3}
+summary span{font-size:.85rem;color:var(--muted)}
+summary::after{content:"＋";color:var(--muted);font-size:1.2rem}
+details[open] summary::after{content:"−"}
+.body{padding:0 14px 14px;display:grid;gap:10px}
+.sec h3{font-size:.8rem;color:var(--muted);margin:0 0 2px;font-weight:700}
+.sec p{margin:0}
+.sec ul{margin:0;padding-left:1.2em}
+.place{background:var(--place-soft);color:var(--place);border-radius:8px;padding:8px 10px}
+.place h3{color:var(--place)}
+.warn{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 10px}
+.warn h3{color:var(--warn)}
+.todo{background:var(--todo-soft);color:var(--todo);border-radius:6px;padding:0 6px;font-size:.9rem}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{color:var(--muted);font-weight:700;font-size:.78rem}
+th:first-child,td:first-child{text-align:left;font-weight:700}
+.tnote{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.act a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:8px;background:var(--sel);color:var(--sel-ink);text-decoration:none;font-weight:700;font-size:.95rem}
+.act a.sub{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.addform{display:grid;grid-template-columns:1fr 96px;gap:6px;margin-top:8px}
+.addform input,.cartpanel input{height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1rem;padding:0 10px;min-width:0}
+.addform button{grid-column:1 / 3}
+.pbtn{min-height:46px;border:0;border-radius:8px;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;padding:0 14px}
+.gbtn{min-height:44px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);font-family:inherit;font-size:.9rem;cursor:pointer;padding:0 14px}
+.cartbtn{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;min-height:52px;padding:0 20px;border-radius:26px;border:0;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.cartpanel{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(28px + env(safe-area-inset-bottom,0px))}
+.cartin{max-width:640px;margin:0 auto}
+.carthead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.carthead h2{margin:0;font-size:1.3rem}
+.citem{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.citem b{display:block}
+.citem span{font-size:.85rem;color:var(--muted)}
+.cfield{display:grid;gap:4px;margin-top:10px;font-size:.85rem;color:var(--muted)}
+.group{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px}
+.group h3{margin:0 0 4px;font-size:1rem}
+.group p{margin:0 0 8px;font-size:.85rem;color:var(--muted)}
+.group a{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:8px;background:var(--sel);color:var(--sel-ink);text-decoration:none;font-weight:700}
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;background:var(--sel);color:var(--sel-ink);padding:10px 16px;border-radius:20px;font-size:.92rem;font-weight:700}
+.wrap{padding-bottom:96px}
+.ig{font-size:.9rem;margin:16px 0 6px;color:var(--muted)}
+.irow{display:grid;grid-template-columns:1fr 70px 70px 64px;gap:6px;align-items:end;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px;margin-bottom:6px}
+.iname{font-weight:700;font-size:.92rem;line-height:1.3;align-self:center}
+.iname span{display:block;font-weight:400;font-size:.78rem;color:var(--muted)}
+.irow label{display:grid;gap:2px;font-size:.72rem;color:var(--muted)}
+.irow input{height:40px;text-align:right;padding:0 8px}
+.ishort{align-self:center;text-align:center;font-size:.82rem;font-weight:700;border-radius:6px;padding:4px 2px}
+.ishort.on{background:var(--warn-soft);color:var(--warn)}
+.toolbar{display:flex;gap:8px;margin:0 0 10px}
+.toolbar button{flex:1}
+.lead2{color:var(--muted);font-size:.9rem;margin:-6px 0 12px}
+.linkbtn{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:8px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:700;margin-top:8px}
+.spec{width:100%;border-collapse:collapse;font-size:.9rem}
+.spec td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;white-space:normal}
+.spec td:first-child{color:var(--muted);width:45%}
+.cfield textarea{border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1rem;padding:8px 10px}
+.body .cfield input{height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1rem;padding:0 10px}
+.prow{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.pt{font-size:.92rem;margin-bottom:6px}
+.pb{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pb button{min-height:42px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-weight:700;cursor:pointer}
+.pb .okb[aria-pressed="true"]{background:#2E7D4F;border-color:#2E7D4F;color:#fff}
+.pb .ngb[aria-pressed="true"]{background:#C2410C;border-color:#C2410C;color:#fff}
+.pnote{width:100%;margin-top:6px}
+.shaken{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn);border-radius:10px;padding:10px 12px;margin:0 0 10px;font-size:.92rem}
+.shaken b{display:block;margin-bottom:2px}
+.shk{display:inline-block;margin-top:4px;font-size:.82rem;color:var(--muted)}
+.shk.on{color:var(--warn);font-weight:700}
+.empty{color:var(--muted);text-align:center;padding:20px}
+.foot{font-size:.8rem;color:var(--muted);margin-top:18px}
+input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← メニューに戻る</a>
+  <h1>業務課ハンドブック</h1>
+  <p class="lead2">車両・検査機器・検査の手順の説明と、車両の月次点検ができます。</p>
+  <div class="shaken" id="shaken" hidden></div>
+  <div class="toolbar"><button type="button" class="gbtn" id="inspbtn">月次点検をする</button><button type="button" class="gbtn" id="invbtn" hidden>棚卸しをする</button></div>
+  <input class="search" id="q" type="search" placeholder="名前で探す（全部の種類から探します）" aria-label="材料を名前で探す">
+  <div class="cats" id="cats" role="group" aria-label="種類で絞り込む"></div>
+  <div class="list" id="list"></div>
+  <button class="cartbtn" id="cartbtn" type="button">カート 0</button>
+  <div class="cartpanel" id="cart" hidden></div>
+  <div class="cartpanel" id="inv" hidden></div>
+  <div class="cartpanel" id="insp" hidden></div>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <p class="foot">車両の記録と点検の結果は、この端末に保存されます。共有はメールで行います。「未登録」は、会社の補充場所や注文先がまだ入っていない所です。わかったら追加します。</p>
+</div>
+<script>
+(function(){
+  var sv = function(inner){ return '<svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-linejoin="round">'+inner+'</svg>'; };
+  var IC = {
+    el: sv('<path d="M4 11 H27 V27" stroke-width="9"/><path d="M4 4.5 V17.5 M20.5 27 H33.5" stroke-width="2.5"/>'),
+    tee: sv('<path d="M3 11 H45 M24 11 V27" stroke-width="9"/><path d="M3 4.5 V17.5 M45 4.5 V17.5 M17.5 27 H30.5" stroke-width="2.5"/>'),
+    so: sv('<path d="M2 16 H46" stroke-width="3"/><rect x="14" y="9" width="20" height="14" rx="2" fill="currentColor" stroke="none"/>'),
+    un: sv('<path d="M2 16 H46" stroke-width="3"/><rect x="7" y="10" width="9" height="12" rx="1.5" fill="currentColor" stroke="none"/><rect x="32" y="10" width="9" height="12" rx="1.5" fill="currentColor" stroke="none"/><path d="M19 6 H29 L32.5 16 L29 26 H19 L15.5 16 Z" stroke-width="2.5"/>'),
+    wel: sv('<path d="M4 11 H12 A15 15 0 0 1 27 26 V28" stroke-width="9"/><path d="M4 4.5 V17.5 M20.5 28 H33.5" stroke-width="2.5"/>'),
+    fl: sv('<rect x="20" y="2" width="8" height="28" rx="1" fill="currentColor" stroke="none"/><path d="M4 16 H20" stroke-width="7"/><circle cx="24" cy="6" r="1.6" fill="#fff" stroke="none"/><circle cx="24" cy="26" r="1.6" fill="#fff" stroke="none"/>'),
+    flT: sv('<rect x="20" y="2" width="8" height="28" rx="1" fill="currentColor" stroke="none"/><path d="M4 16 H20" stroke-width="7"/><path d="M8 12 V20 M12 12 V20 M16 12 V20" stroke-width="1.5"/>'),
+    flW: sv('<rect x="22" y="2" width="8" height="28" rx="1" fill="currentColor" stroke="none"/><path d="M2 16 H26" stroke-width="7"/><path d="M18 10 L22 12.5 M18 22 L22 19.5" stroke-width="2.5"/>'),
+    flB: sv('<circle cx="24" cy="16" r="14" fill="currentColor" stroke="none"/><circle cx="24" cy="6" r="2" fill="#fff" stroke="none"/><circle cx="24" cy="26" r="2" fill="#fff" stroke="none"/><circle cx="14" cy="16" r="2" fill="#fff" stroke="none"/><circle cx="34" cy="16" r="2" fill="#fff" stroke="none"/>'),
+    flK: sv('<path d="M2 16 H18 M30 16 H46" stroke-width="6"/><rect x="17" y="5" width="6" height="22" rx="1" fill="currentColor" stroke="none"/><rect x="25" y="5" width="6" height="22" rx="1" fill="currentColor" stroke="none"/><path d="M15 9 H33 M15 23 H33" stroke-width="1.5"/>'),
+    rp: sv('<rect x="2" y="10" width="44" height="12" rx="2" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/><path d="M2 16 H46" stroke="#7A6200" stroke-width="1" stroke-dasharray="3 3"/>'),
+    rs: sv('<rect x="2" y="12" width="44" height="8" fill="#F2C200" stroke="none" opacity=".5"/><rect x="12" y="8" width="24" height="16" rx="3" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/><path d="M17 8 V3 M31 8 V3" stroke="currentColor" stroke-width="3"/>'),
+    rl: sv('<path d="M4 11 H27 V28" stroke="#7A6200" stroke-width="11" stroke-linejoin="round"/><path d="M4 11 H27 V28" stroke="#F2C200" stroke-width="8" stroke-linejoin="round"/>'),
+    r45: sv('<path d="M4 23 H18 L31 10" stroke="#7A6200" stroke-width="11"/><path d="M4 23 H18 L31 10" stroke="#F2C200" stroke-width="8"/>'),
+    rt: sv('<path d="M3 11 H45 M24 11 V28" stroke="#7A6200" stroke-width="11"/><path d="M3 11 H45 M24 11 V28" stroke="#F2C200" stroke-width="8"/>'),
+    rc: sv('<path d="M4 16 H26" stroke="#7A6200" stroke-width="11"/><path d="M4 16 H26" stroke="#F2C200" stroke-width="8"/><rect x="24" y="8" width="16" height="16" rx="6" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/>'),
+    rf: sv('<rect x="2" y="11" width="26" height="10" rx="2" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/><rect x="28" y="2" width="7" height="28" rx="1" fill="#8A9499" stroke="none"/>'),
+    rft: sv('<path d="M3 20 H45" stroke="#7A6200" stroke-width="11"/><path d="M3 20 H45" stroke="#F2C200" stroke-width="8"/><path d="M24 20 V8" stroke="#7A6200" stroke-width="11"/><path d="M24 20 V8" stroke="#F2C200" stroke-width="8"/><rect x="14" y="2" width="20" height="6" rx="1" fill="#8A9499" stroke="none"/>'),
+    rn: sv('<rect x="2" y="11" width="24" height="10" rx="2" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/><rect x="26" y="9" width="10" height="14" rx="1" fill="#B08D57" stroke="none"/><path d="M36 16 H46" stroke="#8A9499" stroke-width="6"/>'),
+    rtr: sv('<rect x="2" y="11" width="22" height="10" fill="#555B5E" stroke="none"/><rect x="24" y="11" width="22" height="10" rx="2" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/>'),
+    wp: sv('<circle cx="24" cy="16" r="13" fill="#8A9499" stroke="none"/><circle cx="24" cy="16" r="7" fill="#F2C200" stroke="#7A6200" stroke-width="1.5"/>'),
+    efc: sv('<rect x="8" y="6" width="32" height="22" rx="3" fill="#E04A2F" stroke="none"/><rect x="13" y="10" width="22" height="7" rx="1" fill="#fff" stroke="none"/><path d="M40 20 H46" stroke="currentColor" stroke-width="3"/>'),
+    e45t: sv('<path d="M4 23 H18 L31 10" stroke-width="9"/><path d="M4 16.5 V29.5 M26.5 5.5 L35.5 14.5" stroke-width="2.5"/>'),
+    w45: sv('<path d="M4 23 H14 Q20 23 24 19 L31 12" stroke-width="9"/><path d="M4 16.5 V29.5 M26.5 7.5 L35.5 16.5" stroke-width="2.5"/>'),
+    wte: sv('<path d="M3 11 H45 M24 11 V27" stroke-width="9"/><path d="M3 4.5 V17.5 M45 4.5 V17.5 M17.5 27 H30.5" stroke-width="2.5"/><circle cx="24" cy="11" r="2" fill="currentColor" stroke="none"/>'),
+    act: sv('<path d="M17 2 H31 V7 L35 11 V30 H13 V11 L17 7 Z" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M13 17 H35 V25 H13 Z" fill="#E04A2F" stroke="none"/>'),
+    hoseB: sv('<circle cx="22" cy="16" r="12" fill="none" stroke="#7FB6D9" stroke-width="5"/><circle cx="22" cy="16" r="6" fill="none" stroke="#7FB6D9" stroke-width="5" opacity=".6"/><path d="M34 16 H46" stroke="#7FB6D9" stroke-width="5"/>'),
+    hoseS: sv('<circle cx="22" cy="16" r="12" fill="none" stroke="#7FB6D9" stroke-width="2.5"/><circle cx="22" cy="16" r="7" fill="none" stroke="#7FB6D9" stroke-width="2.5" opacity=".6"/><path d="M34 16 H46" stroke="#7FB6D9" stroke-width="2.5"/>'),
+    wr: sv('<path d="M6 26 L26 8" stroke-width="5"/><path d="M24 4 H36 V10 H30 L26 14" stroke-width="3"/><path d="M28 16 L34 12" stroke-width="3"/>'),
+    stand: sv('<path d="M6 30 L24 10 L42 30" stroke-width="3"/><circle cx="24" cy="8" r="4" stroke-width="2.5"/><path d="M14 22 H34" stroke-width="2"/>'),
+    hoist: sv('<path d="M24 2 V8" stroke-width="3"/><rect x="16" y="8" width="16" height="10" rx="2" fill="currentColor" stroke="none"/><path d="M24 18 V26 A3 3 0 1 1 20 28" stroke-width="2.5"/>'),
+    meter: sv('<rect x="12" y="2" width="24" height="28" rx="4" stroke-width="2.5"/><rect x="16" y="7" width="16" height="9" rx="1" fill="currentColor" stroke="none"/><circle cx="20" cy="23" r="2" fill="currentColor" stroke="none"/><circle cx="28" cy="23" r="2" fill="currentColor" stroke="none"/>'),
+    box: sv('<rect x="6" y="8" width="36" height="20" rx="3" stroke-width="2.5"/><circle cx="16" cy="18" r="5" stroke-width="2.5"/><path d="M26 14 H38 M26 20 H38" stroke-width="2"/>'),
+    cordless: sv('<path d="M8 8 H32 L36 14 H28 V18 H16 V8" fill="currentColor" stroke="none"/><rect x="16" y="18" width="10" height="7" fill="currentColor" stroke="none"/><rect x="13" y="25" width="16" height="6" rx="1" fill="#2E9E4F" stroke="none"/><path d="M36 11 H44" stroke-width="3"/>'),
+    batt: sv('<rect x="8" y="10" width="30" height="16" rx="2" fill="#2E9E4F" stroke="none"/><rect x="38" y="15" width="4" height="6" fill="#2E9E4F" stroke="none"/><path d="M18 14 L14 19 H20 L16 24" stroke="#fff" stroke-width="2"/>'),
+    welder: sv('<rect x="6" y="6" width="36" height="22" rx="3" fill="#2F5FB3" stroke="none"/><rect x="10" y="10" width="16" height="7" rx="1" fill="#fff" stroke="none"/><circle cx="12" cy="30" r="2" fill="currentColor" stroke="none"/><circle cx="36" cy="30" r="2" fill="currentColor" stroke="none"/>'),
+    threader: sv('<rect x="4" y="16" width="40" height="10" rx="2" fill="#B9C0C4" stroke="none"/><rect x="8" y="6" width="12" height="12" rx="2" fill="#D93025" stroke="none"/><rect x="26" y="8" width="8" height="10" rx="1" fill="#D93025" stroke="none"/><path d="M2 12 H46" stroke-width="2.5"/>'),
+    truck: sv('<rect x="4" y="10" width="26" height="14" rx="1" stroke-width="2.5"/><path d="M30 14 H38 L44 20 V24 H30 Z" stroke-width="2.5"/><circle cx="12" cy="27" r="3" fill="currentColor" stroke="none"/><circle cx="37" cy="27" r="3" fill="currentColor" stroke="none"/>'),
+    truckS: sv('<rect x="4" y="10" width="26" height="14" rx="1" fill="#B9C0C4" stroke="#555B5E" stroke-width="1.5"/><path d="M30 14 H38 L44 20 V24 H30 Z" fill="#B9C0C4" stroke="#555B5E" stroke-width="1.5"/><circle cx="12" cy="27" r="3" fill="#333" stroke="none"/><circle cx="37" cy="27" r="3" fill="#333" stroke="none"/>'),
+    truckW: sv('<rect x="4" y="10" width="26" height="14" rx="1" fill="#FFFFFF" stroke="#555B5E" stroke-width="1.5"/><path d="M30 14 H38 L44 20 V24 H30 Z" fill="#FFFFFF" stroke="#555B5E" stroke-width="1.5"/><circle cx="12" cy="27" r="3" fill="#333" stroke="none"/><circle cx="37" cy="27" r="3" fill="#333" stroke="none"/>'),
+    valve: sv('<path d="M4 20 H44" stroke-width="7"/><path d="M18 14 H30 V26 H18 Z" fill="currentColor" stroke="none"/><path d="M24 14 V6 M17 5 H31" stroke-width="3"/>'),
+    gasket: sv('<circle cx="24" cy="16" r="13" stroke-width="2.5"/><circle cx="24" cy="16" r="6.5" stroke-width="2.5"/>'),
+    gasketF: sv('<circle cx="24" cy="16" r="14" stroke-width="2"/><circle cx="24" cy="16" r="6" stroke-width="2"/><circle cx="24" cy="5.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="24" cy="26.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="13.5" cy="16" r="1.8" fill="currentColor" stroke="none"/><circle cx="34.5" cy="16" r="1.8" fill="currentColor" stroke="none"/>'),
+    bolt: sv('<path d="M6 9 H14 V23 H6 Z" fill="currentColor" stroke="none"/><path d="M14 16 H44" stroke-width="6"/><path d="M22 12 V20 M27 12 V20 M32 12 V20 M37 12 V20" stroke="#fff" stroke-width="1"/><path d="M34 8 H40 V24 H34 Z" stroke-width="2.5"/>'),
+    nut: sv('<path d="M16 4 H32 L40 16 L32 28 H16 L8 16 Z" stroke-width="3"/><circle cx="24" cy="16" r="6" stroke-width="2.5"/>'),
+    ubolt: sv('<path d="M12 4 V16 A12 12 0 0 0 36 16 V4" stroke-width="3.5"/><path d="M8 8 H16 M32 8 H40" stroke-width="3"/>'),
+    anchor: sv('<path d="M4 16 H40" stroke-width="5"/><path d="M30 11 L40 16 L30 21" stroke-width="2.5"/><path d="M8 10 H12 V22 H8 Z" fill="currentColor" stroke="none"/><path d="M16 12 V20" stroke-width="2"/>'),
+    tape: sv('<circle cx="18" cy="16" r="12" stroke-width="2.5"/><circle cx="18" cy="16" r="5" stroke-width="2.5"/><path d="M18 4 H44" stroke-width="2.5"/>'),
+    tube: sv('<path d="M6 10 H32 L38 13 V19 L32 22 H6 Z" stroke-width="2.5"/><path d="M38 14 H44 V18 H38" stroke-width="2.5"/>'),
+    wrap: sv('<path d="M4 16 H44" stroke-width="9"/><path d="M12 9 L18 23 M20 9 L26 23 M28 9 L34 23" stroke="#fff" stroke-width="2"/>'),
+    canW: sv('<rect x="12" y="6" width="24" height="24" rx="2" fill="#FFFFFF" stroke="#8A9499" stroke-width="2"/><rect x="18" y="2" width="12" height="5" rx="1" fill="#8A9499" stroke="none"/>'),
+    canB: sv('<rect x="12" y="6" width="24" height="24" rx="2" fill="#2F6FD6" stroke="#1E4E9E" stroke-width="2"/><rect x="18" y="2" width="12" height="5" rx="1" fill="#1E4E9E" stroke="none"/>')
+  };
+  var F10 = [[15,"1/2",95,70,4,15,"M12",12],[20,"3/4",100,75,4,15,"M12",14],[25,"1",125,90,4,19,"M16",14],[32,"1 1/4",135,100,4,19,"M16",16],[40,"1 1/2",140,105,4,19,"M16",16],[50,"2",155,120,4,19,"M16",16],[65,"2 1/2",175,140,4,19,"M16",18],[80,"3",185,150,8,19,"M16",18],[100,"4",210,175,8,19,"M16",18]];
+  var F5 = [[15,"1/2",80,60,4,12,"M10",9],[20,"3/4",85,65,4,12,"M10",10],[25,"1",95,75,4,12,"M10",10],[32,"1 1/4",115,90,4,15,"M12",12],[40,"1 1/2",120,95,4,15,"M12",12],[50,"2",130,105,4,15,"M12",14],[65,"2 1/2",155,130,4,15,"M12",14],[80,"3",180,145,4,19,"M16",14],[100,"4",200,165,8,19,"M16",16]];
+  var FK = [[15,"1/2",73,48,3,12,"M10"],[20,"3/4",79,54,3,12,"M10"],[25,"1",87,62,4,12,"M10"],[32,"1 1/4",107,76,4,15,"M12"],[40,"1 1/2",112,82,4,15,"M12"],[50,"2",126,95,4,15,"M12"],[65,"2 1/2",155,118,4,19,"M16"]];
+  function jisTable(rows, k){
+    return '<div class="tbl"><table><tr><th>呼び</th><th>外径</th><th>PCD</th><th>穴</th><th>ボルト</th><th>厚さ</th></tr>'+
+      rows.map(function(r){ return '<tr><td>'+r[0]+'A('+r[1]+')</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'×φ'+r[5]+'</td><td>'+r[6]+'×'+r[4]+'本</td><td>'+r[7]+'</td></tr>'; }).join("")+
+      '</table></div><p class="tnote">JIS B 2220 '+k+'（単位mm）。厚さは鋼製の値で、鋳鉄製は厚くなります。</p>';
+  }
+  function gTable(t){
+    return '<div class="tbl"><table><tr>'+t.h.map(function(h){ return '<th>'+h+'</th>'; }).join("")+'</tr>'+
+      t.r.map(function(r){ return '<tr>'+r.map(function(c){ return '<td>'+c+'</td>'; }).join("")+'</tr>'; }).join("")+'</table></div>'+(t.n ? '<p class="tnote">'+t.n+'</p>' : '');
+  }
+  var GID = [22,28,35,43,49,61,77,90,115];
+  function gasketTable(rows, k){
+    return '<div class="tbl"><table><tr><th>呼び</th><th>内径</th><th>外径</th></tr>'+
+      rows.map(function(r, i){ var bolt = parseInt(r[6].slice(1),10); return '<tr><td>'+r[0]+'A('+r[1]+')</td><td>'+GID[i]+'</td><td>'+(r[3]-bolt)+'</td></tr>'; }).join("")+
+      '</table></div><p class="tnote">JIS '+k+' リング形パッキン（単位mm）。内径はメーカーで少し違うことがあります。</p>';
+  }
+  function kumiTable(){
+    return '<div class="tbl"><table><tr><th>呼び</th><th>外径</th><th>PCD</th><th>穴</th><th>ボルト</th></tr>'+
+      FK.map(function(r){ return '<tr><td>'+r[0]+'A('+r[1]+')</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'×φ'+r[5]+'</td><td>'+r[6]+'×'+r[4]+'本</td></tr>'; }).join("")+
+      '</table></div><p class="tnote">ねじ込み式可鍛鋳鉄製の組フランジの一例（単位mm）。80A・100Aやメーカーによって寸法が違うので、カタログで確認してください。</p>';
+  }
+  var TODO = '<span class="todo">未登録</span>';
+  // 材料データ（補充元・注文先は会社の情報がわかったら入れる）
+  var M = [
+    {c:"車両", ic:IC.truckW, n:"1号車", s:"ハイエース", veh:true},
+    {c:"車両", ic:IC.truckW, n:"2号車", s:"ハイエース", veh:true},
+    {c:"車両", ic:IC.truckW, n:"3号車", s:"ハイエース", veh:true},
+    {c:"車両", ic:IC.truckW, n:"5号車", s:"ハイエース", veh:true},
+    {c:"車両", ic:IC.truckW, n:"6号車", s:"ハイエース", veh:true},
+    {c:"車両", ic:IC.truckW, n:"7号車", s:"ハイエース", veh:true},
+    {c:"車両", ic:IC.truckW, n:"8号車", s:"ハイエース", veh:true},
+    {c:"車両", ic:IC.truckS, n:"エルフ", s:"ユニック車", veh:true},
+    {c:"車両", ic:IC.truckS, n:"ダブ", s:"ユニック車", veh:true},
+    {c:"車両", ic:IC.truckS, n:"トヨ", s:"ユニック車", veh:true},
+    {c:"車両", ic:IC.truck, n:"サクシード", s:"移動車", veh:true},
+    {c:"車両", ic:IC.truckS, n:"高所作業車", s:"高所作業車", veh:true},
+    {c:"車両", ic:IC.truckS, n:"タンクローリー", s:"タンクローリー", veh:true},
+    {c:"検査機器", ic:IC.meter, n:"漏洩検査装置 プレックス", s:"地下タンク・配管の漏洩検査に使う",
+     use:"地下タンクや配管の漏洩検査に使う検査装置。",
+     place:"置き場所は"+TODO,
+     warn:["校正の期限が切れた装置で検査しない","可燃性の蒸気がある場所で使うので、取扱説明書の安全上の注意を守る","使い終わったらホース・継手の汚れを落として片付ける"],
+     spec:[["メーカー・型式",null],["製造番号",null],["台数",null],["校正の期限",null]],
+     insp:["電源・バッテリーの残量","本体・表示部の割れ","ホース・継手の傷と漏れ","圧力計・センサーの0点","校正の期限"],
+     parts:null, from:null, order:null},
+    {c:"検査の手順", ic:IC.meter, n:"地下タンク漏洩検査", s:"周期：毎年または3年ごと",
+     custom:'<div class="sec place"><h3>周期</h3><p>毎年または3年ごと</p></div><div class="sec"><h3>手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div><div class="sec warn"><h3>注意・よくある間違い</h3><p>'+TODO+'</p></div>'},
+    {c:"検査の手順", ic:IC.meter, n:"タンクローリーの検査・検定", s:"周期：5年ごと",
+     custom:'<div class="sec place"><h3>周期</h3><p>5年ごと</p></div><div class="sec"><h3>手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div><div class="sec warn"><h3>注意・よくある間違い</h3><p>'+TODO+'</p></div>'},
+    {c:"検査の手順", ic:IC.meter, n:"安全弁検査", s:"周期：毎年",
+     custom:'<div class="sec place"><h3>周期</h3><p>毎年</p></div><div class="sec"><h3>手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div><div class="sec warn"><h3>注意・よくある間違い</h3><p>'+TODO+'</p></div>'},
+    {c:"検査の手順", ic:IC.meter, n:"計量器の検定", s:"周期：7年ごと",
+     custom:'<div class="sec place"><h3>周期</h3><p>7年ごと</p></div><div class="sec"><h3>手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div><div class="sec warn"><h3>注意・よくある間違い</h3><p>'+TODO+'</p></div>'}
+  ];
+  // 注文先の一覧（会社名・電話・メール）。材料の order に、ここの名前を入れると電話・メールのボタンが出る
+  // 注文メールをCCで送るメンバー全員のメールアドレス
+  var TEAM_CC = [
+    "h-watanabe@anm.co.jp"
+    // 他のメンバーは記入フォームで集めてから追加
+  ];
+  var SUP = {
+    // 例："〇〇商会": {mail:"order@example.co.jp", memo:"担当：〇〇さん"}
+  };
+  function orderHtml(m){
+    var sp = m.order ? SUP[m.order] : null;
+    return '<p>'+(m.order ? esc(m.order)+(sp && sp.memo ? '（'+esc(sp.memo)+'）' : '') : TODO)+'</p>'+
+      '<div class="addform" data-n="'+esc(m.n)+'">'+
+        '<input type="text" placeholder="サイズ（例：50A）" aria-label="サイズ">'+
+        '<input type="text" inputmode="numeric" placeholder="数量" aria-label="数量">'+
+        '<button type="button" class="pbtn addbtn">カートに入れる</button>'+
+      '</div>';
+  }
+  // カート
+  var CKEY = "gyomu-cart-v1";
+  var cart = {items:[], who:"", site:"", due:""};
+  try{ var cs = JSON.parse(localStorage.getItem(CKEY)); if(cs && Array.isArray(cs.items)) cart = cs; }catch(e){}
+  function saveCart(){ try{ localStorage.setItem(CKEY, JSON.stringify(cart)); }catch(e){} }
+  function findM(n){ for(var i=0;i<M.length;i++) if(M[i].n===n) return M[i]; return null; }
+  function toast(t){ var el = document.getElementById("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.tm); toast.tm = setTimeout(function(){ el.hidden = true; }, 1800); }
+  function updateCartBtn(){ document.getElementById("cartbtn").textContent = "カート " + cart.items.length; }
+  function groups(){
+    var g = {}, order = [];
+    cart.items.forEach(function(it){ var k = it.order || ""; if(!g[k]){ g[k] = []; order.push(k); } g[k].push(it); });
+    return {g:g, order:order};
+  }
+  function mailFor(k, items, quote){
+    var sp = k ? SUP[k] : null, reg = !!(sp && sp.mail);
+    var lines = items.map(function(it){ return "・"+it.n+(it.size ? "　"+it.size : "")+"　"+it.qty; }).join("\n");
+    var title = items[0].n + (items.length > 1 ? " ほか"+(items.length-1)+"点" : "");
+    var subject = (quote ? "【見積・納期のお問い合わせ】" : reg ? "【注文】" : "【注文依頼】") + title;
+    var body = (quote ? k+" ご担当者様\n\nいつもお世話になっております。\n以下の材料の見積と納期を教えてください。" : reg ? k+" ご担当者様\n\nいつもお世話になっております。\n以下の材料を注文します。" : "注文先が未登録の材料です。担当の方は注文をお願いします。") +
+      "\n\n"+lines+"\n\n希望納期："+(cart.due||"")+"\n納品場所："+(cart.site||"")+"\n注文者："+(cart.who||"")+(reg ? "\n\nよろしくお願いいたします。" : "");
+    var to = reg ? sp.mail : TEAM_CC.join(",");
+    var cc = reg && TEAM_CC.length ? "cc="+TEAM_CC.join(",")+"&" : "";
+    return "mailto:"+to+"?"+cc+"subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+  }
+  function drawCart(){
+    var box = document.getElementById("cart");
+    var h = '<div class="cartin"><div class="carthead"><h2>カート</h2><button type="button" class="gbtn" id="cclose">閉じる</button></div>';
+    if(!cart.items.length){
+      h += '<p class="empty">カートは空です。材料を開いて「カートに入れる」を押してください。</p></div>';
+      box.innerHTML = h; document.getElementById("cclose").onclick = closeCart; return;
+    }
+    h += cart.items.map(function(it, i){ return '<div class="citem"><div><b>'+esc(it.n)+'</b><span>'+(it.size ? esc(it.size)+'・' : '')+esc(it.qty)+'・'+(it.order ? esc(it.order) : '注文先未登録')+'</span></div><button type="button" class="gbtn" data-del="'+i+'" aria-label="'+esc(it.n)+'をカートから外す">外す</button></div>'; }).join("");
+    h += '<label class="cfield">注文者<input id="c-who" value="'+esc(cart.who)+'" placeholder="名前"></label>'+
+         '<label class="cfield">納品場所（現場名）<input id="c-site" value="'+esc(cart.site)+'" placeholder="例：〇〇SS"></label>'+
+         '<label class="cfield">希望納期<input id="c-due" value="'+esc(cart.due)+'" placeholder="例：11月10日"></label>';
+    var gr = groups();
+    gr.order.forEach(function(k){
+      var sp = k ? SUP[k] : null, reg = !!(sp && sp.mail);
+      h += '<div class="group"><h3>'+(k ? esc(k) : '注文先が未登録の材料')+'（'+gr.g[k].length+'点）</h3>'+
+        '<p>'+(reg ? '注文先に送り、メンバー全員にCCします。' : 'メンバー全員に注文依頼として送ります。')+'</p>'+
+        '<a href="#" data-mail="'+esc(k)+'">'+(reg ? 'この内容で注文メールを作る' : '注文依頼メールを作る')+'</a>'+
+        (reg ? '<a href="#" data-quote="'+esc(k)+'" style="margin-top:8px;background:transparent;color:var(--ink);border:1px solid var(--line)">見積・納期の問い合わせメールを作る</a>' : '')+'</div>';
+    });
+    h += '<p class="tnote" style="margin-top:14px">メールを送ったら、下のボタンでカートを空にしてください。</p><button type="button" class="gbtn" id="cdone" style="width:100%;margin-top:6px">注文済み・カートを空にする</button></div>';
+    box.innerHTML = h;
+    document.getElementById("cclose").onclick = closeCart;
+    [["c-who","who"],["c-site","site"],["c-due","due"]].forEach(function(p){ var el = document.getElementById(p[0]); el.oninput = function(){ cart[p[1]] = el.value; saveCart(); }; });
+    box.querySelectorAll("[data-del]").forEach(function(b){ b.onclick = function(){ cart.items.splice(+b.dataset.del,1); saveCart(); updateCartBtn(); drawCart(); }; });
+    box.querySelectorAll("[data-mail]").forEach(function(a){ a.onclick = function(){ var k = a.dataset.mail; a.href = mailFor(k, groups().g[k]); }; });
+    box.querySelectorAll("[data-quote]").forEach(function(a){ a.onclick = function(){ var k = a.dataset.quote; a.href = mailFor(k, groups().g[k], true); }; });
+    document.getElementById("cdone").onclick = function(){ if(!confirm("注文済みにして、カートを空にしますか？")) return; cart.items = []; saveCart(); updateCartBtn(); drawCart(); };
+  }
+  // 棚卸し：トラックに積んでおく数（定数）と今の数を比べる
+  var INV = [];
+  var VEH = ["会社の倉庫"];
+  var IKEY = "gyomu-inv-v1";
+  var inv = {veh:"デカ", std:{}, now:{}, date:{}};
+  try{ var is = JSON.parse(localStorage.getItem(IKEY)); if(is && is.std) inv = is; }catch(e){}
+  if(VEH.indexOf(inv.veh) < 0) inv.veh = VEH[0];
+  function saveInv(){ try{ localStorage.setItem(IKEY, JSON.stringify(inv)); }catch(e){} }
+  function stdOf(r){ var v = inv.std[r.n]; return v === undefined || v === "" ? (r.std == null ? "" : String(r.std)) : v; }
+  function nowOf(r){ var v = (inv.now[inv.veh] || {})[r.n]; return v === undefined ? "" : v; }
+  function shortOf(r){ var s = parseInt(stdOf(r),10), n = parseInt(nowOf(r),10); if(isNaN(s) || isNaN(n)) return 0; return Math.max(0, s-n); }
+  function today(){ var d = new Date(); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日"; }
+  function drawInv(){
+    var box = document.getElementById("inv");
+    var h = '<div class="cartin"><div class="carthead"><h2>棚卸し</h2><button type="button" class="gbtn" id="iclose">閉じる</button></div>'+
+      '<div class="cats" style="margin-top:0">'+VEH.map(function(v){ return '<button type="button" class="chip" data-veh="'+v+'" aria-pressed="'+(v===inv.veh)+'">'+v+'</button>'; }).join("")+'</div>'+
+      '<p class="tnote">「定数」は積んでおく数、「今」は数えた数です。定数は全車共通で、この端末に保存されます。'+(inv.date[inv.veh] ? '前回：'+inv.date[inv.veh] : '')+'</p>';
+    var g = "";
+    INV.forEach(function(r, i){
+      if(r.g !== g){ g = r.g; h += '<h3 class="ig">'+g+'</h3>'; }
+      var sh = shortOf(r);
+      h += '<div class="irow"><div class="iname">'+esc(r.n)+'<span>'+r.u+'</span></div>'+
+        '<label>定数<input inputmode="numeric" data-std="'+i+'" value="'+esc(stdOf(r))+'"></label>'+
+        '<label>今<input inputmode="numeric" data-now="'+i+'" value="'+esc(nowOf(r))+'"></label>'+
+        '<div class="ishort'+(sh ? ' on' : '')+'" id="sh'+i+'">'+(sh ? '不足 '+sh : '')+'</div></div>';
+    });
+    var cnt = INV.filter(function(r){ return shortOf(r) > 0; }).length;
+    h += '<div class="group"><h3 id="isum">不足 '+cnt+'品目</h3><p>不足分はそのままカートに入れて、注文できます。</p>'+
+      '<button type="button" class="pbtn" id="itocart" style="width:100%">不足分をカートに入れる</button>'+
+      '<a href="#" id="imail" style="margin-top:8px">棚卸しの結果をメンバーにメール</a></div></div>';
+    box.innerHTML = h;
+    document.getElementById("iclose").onclick = closeInv;
+    box.querySelectorAll("[data-veh]").forEach(function(b){ b.onclick = function(){ inv.veh = b.dataset.veh; saveInv(); drawInv(); }; });
+    function refresh(i){
+      var r = INV[i], sh = shortOf(r), el = document.getElementById("sh"+i);
+      el.textContent = sh ? '不足 '+sh : ''; el.className = 'ishort'+(sh ? ' on' : '');
+      document.getElementById("isum").textContent = '不足 '+INV.filter(function(x){ return shortOf(x) > 0; }).length+'品目';
+    }
+    box.querySelectorAll("[data-std]").forEach(function(el){ el.oninput = function(){ inv.std[INV[+el.dataset.std].n] = el.value.replace(/[^0-9]/g,""); saveInv(); refresh(+el.dataset.std); }; });
+    box.querySelectorAll("[data-now]").forEach(function(el){ el.oninput = function(){ (inv.now[inv.veh] = inv.now[inv.veh] || {})[INV[+el.dataset.now].n] = el.value.replace(/[^0-9]/g,""); inv.date[inv.veh] = today(); saveInv(); refresh(+el.dataset.now); }; });
+    document.getElementById("itocart").onclick = function(){
+      var n = 0;
+      INV.forEach(function(r){ var sh = shortOf(r); if(!sh) return; var m = r.of ? findM(r.of) : null; cart.items.push({n:r.n, size:"", qty:sh+r.u, order:(m && m.order) || ""}); n++; });
+      saveCart(); updateCartBtn(); toast(n ? n+'品目をカートに入れました' : '不足はありません');
+    };
+    document.getElementById("imail").onclick = function(){
+      var lines = INV.filter(function(r){ return nowOf(r) !== ""; }).map(function(r){ var sh = shortOf(r); return "・"+r.n+"　今 "+nowOf(r)+r.u+(stdOf(r) !== "" ? "／定数 "+stdOf(r)+r.u : "")+(sh ? "　→ 不足 "+sh+r.u : ""); }).join("\n");
+      var subject = "【棚卸し】"+inv.veh+" "+(inv.date[inv.veh] || today());
+      var body = inv.veh+" の棚卸し結果です。\n\n"+(lines || "（数えた材料がありません）")+"\n\n担当：";
+      this.href = "mailto:"+TEAM_CC.join(",")+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+    };
+  }
+  function openInv(){ drawInv(); document.getElementById("inv").hidden = false; document.body.style.overflow = "hidden"; }
+  function closeInv(){ document.getElementById("inv").hidden = true; document.body.style.overflow = ""; }
+  // 車両：記録はこの端末に保存（共有は「メールで共有」）
+  var VEHS = [
+    {n:"1号車", d:"ハイエース"},
+    {n:"2号車", d:"ハイエース"},
+    {n:"3号車", d:"ハイエース"},
+    {n:"5号車", d:"ハイエース"},
+    {n:"6号車", d:"ハイエース"},
+    {n:"7号車", d:"ハイエース"},
+    {n:"8号車", d:"ハイエース"},
+    {n:"エルフ", d:"ユニック車"},
+    {n:"ダブ", d:"ユニック車"},
+    {n:"トヨ", d:"ユニック車"},
+    {n:"サクシード", d:"移動車"},
+    {n:"高所作業車", d:"高所作業車"},
+    {n:"タンクローリー", d:"タンクローリー"}
+  ];
+  var VF = ["車番","車種","次回車検日","車検先（会社・電話）","前回オイル交換（日付・km）","次回オイル交換","タイヤのサイズ","タイヤの購入時期","ワイパーのサイズ","ワイパーの購入時期","クレーンの年次自主検査（ユニック車のみ）","不具合・メモ"];
+  var VKEY = "gyomu-veh-v1", vrec = {};
+  try{ vrec = JSON.parse(localStorage.getItem(VKEY)) || {}; }catch(e){}
+  function vval(v, f){ return (vrec[v] && vrec[v][f]) || ""; }
+  function daysTo(v){ var d = vval(v,"次回車検日"); if(!/^\d{4}-\d{2}-\d{2}$/.test(d)) return null; var p = d.split("-"), t = new Date(), a = new Date(+p[0],+p[1]-1,+p[2]), b = new Date(t.getFullYear(),t.getMonth(),t.getDate()); return Math.round((a-b)/86400000); }
+  function shakenNote(v){ var n = daysTo(v); if(n === null) return ""; return '<span class="'+(n<0||n<=60 ? 'shk on' : 'shk')+'">'+(n<0 ? '車検が '+(-n)+'日 切れています' : '車検まで あと'+n+'日')+'</span>'; }
+  function shakenAlert(){
+    var list = VEHS.map(function(v){ return {n:v.n, d:daysTo(v.n)}; }).filter(function(x){ return x.d !== null && x.d <= 60; }).sort(function(a,b){ return a.d-b.d; });
+    var el = document.getElementById("shaken");
+    if(!list.length){ el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = '<b>車検が近い車両があります</b>'+list.map(function(x){ return '<div>'+esc(x.n)+'：'+(x.d<0 ? '<strong>'+(-x.d)+'日 切れています</strong>' : 'あと'+x.d+'日（'+esc(vval(x.n,"次回車検日"))+'）')+'</div>'; }).join("");
+  }
+  function vehHtml(v){
+    return VF.map(function(f){ return '<label class="cfield">'+f+(f==="次回車検日" ? '<input type="date" data-vk="'+v.n+'|'+f+'" value="'+esc(vval(v.n,f))+'">'+shakenNote(v.n) : f==="不具合・メモ" ? '<textarea data-vk="'+v.n+'|'+f+'" rows="3">'+esc(vval(v.n,f))+'</textarea>' : '<input data-vk="'+v.n+'|'+f+'" value="'+esc(vval(v.n,f))+'" placeholder="未登録">')+'</label>'; }).join("")+
+      '<a class="linkbtn" href="#" data-vmail="'+v.n+'">この車両の記録をメンバーに共有</a>';
+  }
+  // 月次点検（全員に全項目、リーダーに異常だけ＋稟議書）
+  var LEADER = [
+    "h-watanabe@anm.co.jp"
+  ];
+  var INSPS = {
+    "ハイエース":[["安全","平らな所に止め、エンジンを切り、サイドブレーキをかけた"],["液類・ライト","ウォッシャー液を補充した"],["液類・ライト","エンジンオイルの量"],["液類・ライト","ヘッドライト（ロー・ハイ）"],["液類・ライト","ウインカー・ハザード"],["液類・ライト","ブレーキランプ・バックランプ"],["車体","タイヤの空気圧"],["車体","タイヤの溝・傷・ひび割れ"],["車体","フロントガラスに飛び石の欠け・ヒビがない"],["車体","ワイパーのゴムに切れ・拭きムラがない"],["荷室","消火器の圧力が緑の範囲・固定されている"],["荷室","救急箱の中身がそろっている"],["荷室","積み荷・機器が固定されている"],["検査機器","プレックスの電源・バッテリー"],["検査機器","プレックスのホース・継手に傷や漏れがない"],["検査機器","プレックスの校正の期限が切れていない"]],
+    "ユニック車":[["安全","平らな所に止め、エンジンを切り、サイドブレーキをかけた"],["液類・ライト","ウォッシャー液を補充した"],["液類・ライト","エンジンオイルの量"],["液類・ライト","ヘッドライト（ロー・ハイ）"],["液類・ライト","ウインカー・ハザード"],["液類・ライト","ブレーキランプ・バックランプ"],["車体","タイヤの空気圧"],["車体","タイヤの溝・傷・ひび割れ"],["車体","フロントガラスに飛び石の欠け・ヒビがない"],["車体","ワイパーのゴムに切れ・拭きムラがない"],["荷室","消火器の圧力が緑の範囲・固定されている"],["荷室","救急箱の中身がそろっている"],["荷室","積み荷・機器が固定されている"],["クレーン","ワイヤーロープに素線切れ・キンク・つぶれがない"],["クレーン","フックの外れ止めが効く"],["クレーン","巻過防止装置が作動する"],["クレーン","過負荷防止装置（モーメントリミッター）が作動する"],["クレーン","アウトリガーが正常に出し入れでき、油漏れがない"],["クレーン","作動油の量・油漏れ"],["クレーン","ブームの伸縮・旋回に異音がない"],["クレーン","操作レバーが中立に戻る"]],
+    "高所作業車":[["安全","平らな所に止め、エンジンを切り、サイドブレーキをかけた"],["液類・ライト","エンジンオイルの量"],["液類・ライト","ライト・ウインカー・ブレーキランプ"],["車体","タイヤの空気圧・溝・傷"],["作業装置","ブーム・バケット（作業床）に変形・亀裂がない"],["作業装置","伸縮・起伏・旋回に異音や引っかかりがない"],["作業装置","ワイヤロープ・チェーンに損傷がない"],["作業装置","作動油の量・油漏れ"],["安全装置","過負荷防止・傾斜警報などの安全装置が作動する"],["安全装置","非常停止・緊急降下装置が作動する"],["安全装置","アウトリガーの作動とインターロック"],["安全装置","バケットの手すり・安全帯（フルハーネス）取付設備"],["操作装置","下部・上部の操作レバーが中立に戻る"]],
+    "タンクローリー":[["安全","平らな所に止め、エンジンを切り、サイドブレーキをかけた"],["液類・ライト","エンジンオイルの量"],["液類・ライト","ライト・ウインカー・ブレーキランプ"],["車体","タイヤの空気圧・溝・傷"],["タンク","タンク・マンホール・配管からにじみや漏れがない"],["タンク","底弁・緊急遮断装置が作動する"],["タンク","吐出口のバルブが閉まり、キャップが付いている"],["タンク","マンホールのふたが確実に閉まっている"],["危険物の安全","接地導線（アース）に切れ・腐食がない"],["危険物の安全","「危」の標識と消火器が付いている"],["危険物の安全","給油ホース・ノズルに傷や亀裂がない"]],
+    "移動車":[["安全","平らな所に止め、エンジンを切り、サイドブレーキをかけた"],["液類・ライト","ウォッシャー液を補充した"],["液類・ライト","エンジンオイルの量"],["液類・ライト","ヘッドライト（ロー・ハイ）"],["液類・ライト","ウインカー・ハザード"],["液類・ライト","ブレーキランプ・バックランプ"],["車体","タイヤの空気圧"],["車体","タイヤの溝・傷・ひび割れ"],["車体","フロントガラスに飛び石の欠け・ヒビがない"],["車体","ワイパーのゴムに切れ・拭きムラがない"],["荷室","消火器の圧力が緑の範囲・固定されている"],["荷室","救急箱の中身がそろっている"],["荷室","積み荷・機器が固定されている"]]
+  };
+  function typeOf(v){ for(var i=0;i<VEHS.length;i++) if(VEHS[i].n===v) return VEHS[i].d; return "ハイエース"; }
+  var INSP = INSPS["ハイエース"];
+  var PKEY = "gyomu-insp-v1";
+  var ps = {veh:"1号車", p1:"", p2:"", r:{}};
+  try{ var p0 = JSON.parse(localStorage.getItem(PKEY)); if(p0 && p0.r) ps = p0; }catch(e){}
+  if(!VEHS.some(function(v){ return v.n === ps.veh; })) ps.veh = VEHS[0].n;
+  if(ps.p1 === undefined){ ps.p1 = ps.boss || ""; ps.p2 = ps.staff || ""; }
+  function savePs(){ try{ localStorage.setItem(PKEY, JSON.stringify(ps)); }catch(e){} }
+  function month(){ var d = new Date(); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"; }
+  function rk(i){ return ps.veh+"|"+month()+"|"+i; }
+  function drawInsp(){
+    INSP = INSPS[typeOf(ps.veh)] || INSPS["ハイエース"];
+    var box = document.getElementById("insp");
+    var h = '<div class="cartin"><div class="carthead"><h2>月次点検 '+month()+'</h2><button type="button" class="gbtn" id="pclose">閉じる</button></div>'+
+      '<div class="cats" style="margin-top:0">'+VEHS.map(function(v){ return '<button type="button" class="chip" data-pveh="'+v.n+'" aria-pressed="'+(v.n===ps.veh)+'">'+v.n+('（'+v.d+'）')+'</button>'; }).join("")+'</div>'+
+      '<label class="cfield">点検者1<input id="p-1" value="'+esc(ps.p1)+'" placeholder="名前"></label>'+
+      '<label class="cfield">点検者2<input id="p-2" value="'+esc(ps.p2)+'" placeholder="名前"></label>';
+    var g = "";
+    INSP.forEach(function(it, i){
+      if(it[0] !== g){ g = it[0]; h += '<h3 class="ig">'+g+'</h3>'; }
+      var r = ps.r[rk(i)] || {};
+      h += '<div class="prow"><div class="pt">'+esc(it[1])+'</div><div class="pb">'+
+        '<button type="button" class="okb" data-p="'+i+'" data-v="ok" aria-pressed="'+(r.v==="ok")+'">異常なし</button>'+
+        '<button type="button" class="ngb" data-p="'+i+'" data-v="ng" aria-pressed="'+(r.v==="ng")+'">異常あり</button></div>'+
+        (r.v==="ng" ? '<input class="pnote" data-pn="'+i+'" value="'+esc(r.note||"")+'" placeholder="どんな異常か（例：右後ろタイヤの溝が少ない）">' : '')+'</div>';
+    });
+    var done = INSP.filter(function(x,i){ return (ps.r[rk(i)]||{}).v; }).length, ng = INSP.filter(function(x,i){ return (ps.r[rk(i)]||{}).v==="ng"; }).length;
+    h += '<div class="group"><h3>'+done+' / '+INSP.length+' 項目 点検済み（異常あり '+ng+'）</h3>'+
+      '<p>「全員に送る」は全項目を全員に、「報告する」は異常ありの項目と稟議書のひな形をリーダーに送ります。</p>'+
+      '<button type="button" class="pbtn" id="psendall" style="width:100%">全員に送る（全項目）</button>'+
+      '<button type="button" class="pbtn" id="psendlead" style="width:100%;margin-top:8px">報告する</button>'+
+      '<button type="button" class="gbtn" id="pshare" style="width:100%;margin-top:8px">全項目をLINEなどで共有</button></div></div>';
+    box.innerHTML = h;
+    document.getElementById("pclose").onclick = function(){ box.hidden = true; document.body.style.overflow = ""; };
+    box.querySelectorAll("[data-pveh]").forEach(function(b){ b.onclick = function(){ ps.veh = b.dataset.pveh; savePs(); drawInsp(); }; });
+    document.getElementById("p-1").oninput = function(){ ps.p1 = this.value; savePs(); };
+    document.getElementById("p-2").oninput = function(){ ps.p2 = this.value; savePs(); };
+    box.querySelectorAll("[data-p]").forEach(function(b){ b.onclick = function(){ var k = rk(+b.dataset.p); var r = ps.r[k] || {}; r.v = b.dataset.v; ps.r[k] = r; savePs(); var y = box.scrollTop; drawInsp(); box.scrollTop = y; }; });
+    box.querySelectorAll("[data-pn]").forEach(function(el){ el.oninput = function(){ var k = rk(+el.dataset.pn); ps.r[k] = ps.r[k] || {v:"ng"}; ps.r[k].note = el.value; savePs(); }; });
+    document.getElementById("psendall").onclick = function(){ sendText(allReport(), "【月次点検】"+ps.veh+" "+month(), TEAM_CC); };
+    document.getElementById("pshare").onclick = function(){ shareText(allReport(), "【月次点検】"+ps.veh+" "+month()); };
+    document.getElementById("psendlead").onclick = function(){ sendText(leadReport(), "【月次点検・異常報告】"+ps.veh+" "+month(), LEADER); };
+  }
+  function head(){ return "車両："+ps.veh+"\n点検月："+month()+"\n点検者1："+(ps.p1||"")+"\n点検者2："+(ps.p2||""); }
+  function allReport(){
+    var g = "", out = [head(), ""];
+    INSP.forEach(function(it, i){ if(it[0] !== g){ g = it[0]; out.push("■"+g); } var r = ps.r[rk(i)] || {}; out.push((r.v==="ok" ? "○" : r.v==="ng" ? "×" : "未")+" "+it[1]+(r.v==="ng" && r.note ? "（"+r.note+"）" : "")); });
+    return out.join("\n");
+  }
+  function leadReport(){
+    var ng = []; INSP.forEach(function(it, i){ var r = ps.r[rk(i)] || {}; if(r.v==="ng") ng.push("・"+it[0]+"："+it[1]+(r.note ? "（"+r.note+"）" : "")); });
+    if(!ng.length) return head()+"\n\n今月の点検は、すべて異常なしでした。";
+    return head()+"\n\n【異常ありの項目】\n"+ng.join("\n")+
+      "\n\n――――――――――――\n稟　議　書\n――――――――――――\n起案日："+today()+"\n起案者："+(ps.p1||"")+"\n件名："+ps.veh+" 月次点検で見つかった不具合の修理\n対象："+ps.veh+
+      "\n\n内容：\n"+ng.join("\n")+"\n\n理由：安全に作業・走行するため、修理・交換が必要です。\n修理先：\n概算費用：\n修理希望日：\n\n決裁：　部長　　　課長　　　リーダー";
+  }
+  function sendText(text, subject, to){
+    location.href = "mailto:"+to.join(",")+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(text);
+  }
+  function shareText(text, subject){
+    if(navigator.share){ navigator.share({title:subject, text:subject+"\n\n"+text}).catch(function(){}); }
+    else { toast("この端末では共有できません。メールで送ってください。"); }
+  }
+  function openInsp(){ drawInsp(); document.getElementById("insp").hidden = false; document.body.style.overflow = "hidden"; }
+  function openCart(){ drawCart(); document.getElementById("cart").hidden = false; document.body.style.overflow = "hidden"; }
+  function closeCart(){ document.getElementById("cart").hidden = true; document.body.style.overflow = ""; }
+  var CATS = ["車両","検査機器","検査の手順"];
+  var cur = "車両", q = "";
+  var esc = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  function drawCats(){
+    var box = document.getElementById("cats");
+    box.innerHTML = CATS.map(function(c){ return '<button type="button" class="chip" data-c="'+c+'" aria-pressed="'+(c===cur)+'">'+c+'</button>'; }).join("");
+    box.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){ cur = b.dataset.c; drawCats(); drawList(); }); });
+  }
+  function drawList(){
+    var key = q.trim().toLowerCase();
+    var items = M.filter(function(m){
+      if(!key){ var cs = Array.isArray(m.c) ? m.c : [m.c]; return cs.indexOf(cur) >= 0; }
+      return (m.n + m.s + (m.use||'') + (m.custom||'')).toLowerCase().indexOf(key) >= 0;
+    });
+    var box = document.getElementById("list");
+    if(!items.length){ box.innerHTML = '<div class="empty">見つかりませんでした。別の言葉で探してください。</div>'; return; }
+    box.innerHTML = items.map(itemHtml).join("");
+  }
+  function itemHtml(m){
+      if(m.veh){
+        var v = {n:m.n}, eq = "";
+        if(m.eq){
+          ["ウェルダー","ねじ切り機","工具","充電工具"].forEach(function(g){
+            var list = M.filter(function(x){ return x.c === g; });
+            if(list.length) eq += '<h3 class="ig">'+g+'（'+list.length+'）</h3><div class="list">'+list.map(itemHtml).join("")+'</div>';
+          });
+        }
+        return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+(vval(m.n,"車番") ? '・'+esc(vval(m.n,"車番")) : '')+(function(){ var n = daysTo(m.n); return n !== null && n <= 60 ? '・<span style="color:var(--warn);font-weight:700">'+(n<0 ? '車検切れ' : '車検あと'+n+'日')+'</span>' : ''; })()+(m.eq ? '・積んでいる機械と工具' : '')+'</span></div></summary><div class="body">'+
+          '<h3 class="ig" style="margin-top:0">車両の記録</h3>'+vehHtml(v)+eq+'</div></details>';
+      }
+      if(m.custom) return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+m.custom+'</div></details>';
+      return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+
+        (m.fig || '')+
+        '<div class="sec"><h3>何に使う</h3><p>'+esc(m.use)+'</p></div>'+
+        '<div class="sec place"><h3>どこにある</h3><p>'+m.place+'</p></div>'+
+        (m.spec ? '<div class="sec"><h3>仕様・使うオイルなど</h3><table class="spec">'+m.spec.map(function(r){ return '<tr><td>'+esc(r[0])+'</td><td>'+(r[1] ? esc(r[1]) : TODO)+'</td></tr>'; }).join("")+'</table></div>' : '')+
+        (m.steps ? '<div class="sec"><h3>オイル交換の手順</h3><ol style="margin:0;padding-left:1.4em">'+m.steps.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ol></div>' : '')+
+        (m.insp ? '<div class="sec"><h3>点検項目</h3><ul>'+m.insp.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></div>' : '')+
+        (m.parts !== undefined ? '<div class="sec"><h3>パーツリスト</h3>'+(m.parts ? '<a class="linkbtn" href="'+m.parts+'" target="_blank" rel="noopener">パーツリストを開く</a>' : '<p>'+TODO+'（メーカーのパーツリストのリンクを登録すると、ここから開けます）</p>')+'</div>' : '')+
+        (m.warn && m.warn.length ? '<div class="sec warn"><h3>注意・よくある間違い</h3><ul>'+m.warn.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></div>' : '')+
+        (m.tbl ? '<div class="sec"><h3>サイズ表</h3>'+(typeof m.tbl==="object" ? gTable(m.tbl) : m.tbl==="G10" ? gasketTable(F10,"10K") : m.tbl==="G5" ? gasketTable(F5,"5K") : m.tbl==="FK" ? kumiTable() : jisTable(m.tbl==="F10" ? F10 : F5, m.tbl==="F10" ? "10K" : "5K"))+'</div>' : '')+
+        '<div class="sec"><h3>会社のどこから補充する</h3><p>'+(m.from ? esc(m.from) : TODO)+'</p></div>'+
+        '<div class="sec"><h3>注文先</h3>'+orderHtml(m)+'</div>'+
+        '</div></details>';
+  }
+  document.getElementById("list").addEventListener("click", function(e){
+    var b = e.target.closest(".addbtn"); if(!b) return;
+    var f = b.closest(".addform"), ins = f.querySelectorAll("input"), m = findM(f.dataset.n);
+    var qty = ins[1].value.trim();
+    if(!qty){ toast("数量を入れてください"); ins[1].focus(); return; }
+    cart.items.push({n:m.n, size:ins[0].value.trim(), qty:qty, order:m.order || ""});
+    saveCart(); updateCartBtn(); ins[0].value = ""; ins[1].value = ""; toast("カートに入れました");
+  });
+  document.getElementById("list").addEventListener("input", function(e){
+    var k = e.target.dataset && e.target.dataset.vk; if(!k) return;
+    var p = k.split("|"); vrec[p[0]] = vrec[p[0]] || {}; vrec[p[0]][p[1]] = e.target.value;
+    try{ localStorage.setItem(VKEY, JSON.stringify(vrec)); }catch(err){}
+    if(p[1] === "次回車検日"){ shakenAlert(); var sn = e.target.parentNode.querySelector(".shk"); var nn = document.createElement("span"); nn.innerHTML = shakenNote(p[0]); if(sn) sn.remove(); if(nn.firstChild) e.target.after(nn.firstChild); }
+  });
+  document.getElementById("list").addEventListener("click", function(e){
+    var a = e.target.closest("[data-vmail]"); if(!a) return;
+    var v = a.dataset.vmail;
+    var body = VF.map(function(f){ return f+"："+(vval(v,f) || "未登録"); }).join("\n");
+    a.href = "mailto:"+TEAM_CC.join(",")+"?subject="+encodeURIComponent("【車両記録】"+v+" "+today())+"&body="+encodeURIComponent(v+" の記録です。\n\n"+body);
+  });
+  document.getElementById("inspbtn").addEventListener("click", openInsp);
+  shakenAlert();
+  document.getElementById("cartbtn").addEventListener("click", openCart);
+  document.getElementById("invbtn").addEventListener("click", openInv);
+  updateCartBtn();
+  document.getElementById("q").addEventListener("input", function(e){ q = e.target.value; drawList(); });
+  drawCats(); drawList();
+})();
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>

@@ -114,6 +114,10 @@ th:first-child,td:first-child{text-align:left;font-weight:700}
 .pb .okb[aria-pressed="true"]{background:#2E7D4F;border-color:#2E7D4F;color:#fff}
 .pb .ngb[aria-pressed="true"]{background:#C2410C;border-color:#C2410C;color:#fff}
 .pnote{width:100%;margin-top:6px}
+.shaken{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn);border-radius:10px;padding:10px 12px;margin:0 0 10px;font-size:.92rem}
+.shaken b{display:block;margin-bottom:2px}
+.shk{display:inline-block;margin-top:4px;font-size:.82rem;color:var(--muted)}
+.shk.on{color:var(--warn);font-weight:700}
 .empty{color:var(--muted);text-align:center;padding:20px}
 .foot{font-size:.8rem;color:var(--muted);margin-top:18px}
 input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
@@ -124,6 +128,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   <a class="back" href="./index.html">← メニューに戻る</a>
   <h1>工事課ハンドブック</h1>
   <p class="lead2">材料・工具・機械・車両の説明、点検、棚卸し、注文がこれ1つでできます。</p>
+  <div class="shaken" id="shaken" hidden></div>
   <div class="toolbar"><button type="button" class="gbtn" id="inspbtn">月次点検をする</button><button type="button" class="gbtn" id="invbtn">棚卸しをする</button></div>
   <input class="search" id="q" type="search" placeholder="名前で探す（全部の種類から探します）" aria-label="材料を名前で探す">
   <div class="cats" id="cats" role="group" aria-label="種類で絞り込む"></div>
@@ -727,8 +732,17 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   var VKEY = "zfile-veh-v1", vrec = {};
   try{ vrec = JSON.parse(localStorage.getItem(VKEY)) || {}; }catch(e){}
   function vval(v, f){ return (vrec[v] && vrec[v][f]) || ""; }
+  function daysTo(v){ var d = vval(v,"次回車検日"); if(!/^\d{4}-\d{2}-\d{2}$/.test(d)) return null; var p = d.split("-"), t = new Date(), a = new Date(+p[0],+p[1]-1,+p[2]), b = new Date(t.getFullYear(),t.getMonth(),t.getDate()); return Math.round((a-b)/86400000); }
+  function shakenNote(v){ var n = daysTo(v); if(n === null) return ""; return '<span class="'+(n<0||n<=60 ? 'shk on' : 'shk')+'">'+(n<0 ? '車検が '+(-n)+'日 切れています' : '車検まで あと'+n+'日')+'</span>'; }
+  function shakenAlert(){
+    var list = VEHS.map(function(v){ return {n:v.n, d:daysTo(v.n)}; }).filter(function(x){ return x.d !== null && x.d <= 60; }).sort(function(a,b){ return a.d-b.d; });
+    var el = document.getElementById("shaken");
+    if(!list.length){ el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = '<b>車検が近い車両があります</b>'+list.map(function(x){ return '<div>'+esc(x.n)+'：'+(x.d<0 ? '<strong>'+(-x.d)+'日 切れています</strong>' : 'あと'+x.d+'日（'+esc(vval(x.n,"次回車検日"))+'）')+'</div>'; }).join("");
+  }
   function vehHtml(v){
-    return VF.map(function(f){ return '<label class="cfield">'+f+(f==="不具合・メモ" ? '<textarea data-vk="'+v.n+'|'+f+'" rows="3">'+esc(vval(v.n,f))+'</textarea>' : '<input data-vk="'+v.n+'|'+f+'" value="'+esc(vval(v.n,f))+'" placeholder="未登録">')+'</label>'; }).join("")+
+    return VF.map(function(f){ return '<label class="cfield">'+f+(f==="次回車検日" ? '<input type="date" data-vk="'+v.n+'|'+f+'" value="'+esc(vval(v.n,f))+'">'+shakenNote(v.n) : f==="不具合・メモ" ? '<textarea data-vk="'+v.n+'|'+f+'" rows="3">'+esc(vval(v.n,f))+'</textarea>' : '<input data-vk="'+v.n+'|'+f+'" value="'+esc(vval(v.n,f))+'" placeholder="未登録">')+'</label>'; }).join("")+
       '<a class="linkbtn" href="#" data-vmail="'+v.n+'">この車両の記録をメンバーに共有</a>';
   }
   // 月次点検（全員に全項目、リーダーに異常だけ＋稟議書）
@@ -835,7 +849,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
             if(list.length) eq += '<h3 class="ig">'+g+'（'+list.length+'）</h3><div class="list">'+list.map(itemHtml).join("")+'</div>';
           });
         }
-        return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+(vval(m.n,"車番") ? '・'+esc(vval(m.n,"車番")) : '')+(m.eq ? '・積んでいる機械と工具' : '')+'</span></div></summary><div class="body">'+
+        return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+(vval(m.n,"車番") ? '・'+esc(vval(m.n,"車番")) : '')+(function(){ var n = daysTo(m.n); return n !== null && n <= 60 ? '・<span style="color:var(--warn);font-weight:700">'+(n<0 ? '車検切れ' : '車検あと'+n+'日')+'</span>' : ''; })()+(m.eq ? '・積んでいる機械と工具' : '')+'</span></div></summary><div class="body">'+
           '<h3 class="ig" style="margin-top:0">車両の記録</h3>'+vehHtml(v)+eq+'</div></details>';
       }
       if(m.custom) return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+m.custom+'</div></details>';
@@ -865,6 +879,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     var k = e.target.dataset && e.target.dataset.vk; if(!k) return;
     var p = k.split("|"); vrec[p[0]] = vrec[p[0]] || {}; vrec[p[0]][p[1]] = e.target.value;
     try{ localStorage.setItem(VKEY, JSON.stringify(vrec)); }catch(err){}
+    if(p[1] === "次回車検日"){ shakenAlert(); var sn = e.target.parentNode.querySelector(".shk"); var nn = document.createElement("span"); nn.innerHTML = shakenNote(p[0]); if(sn) sn.remove(); if(nn.firstChild) e.target.after(nn.firstChild); }
   });
   document.getElementById("list").addEventListener("click", function(e){
     var a = e.target.closest("[data-vmail]"); if(!a) return;
@@ -873,6 +888,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     a.href = "mailto:"+TEAM_CC.join(",")+"?subject="+encodeURIComponent("【車両記録】"+v+" "+today())+"&body="+encodeURIComponent(v+" の記録です。\n\n"+body);
   });
   document.getElementById("inspbtn").addEventListener("click", openInsp);
+  shakenAlert();
   document.getElementById("cartbtn").addEventListener("click", openCart);
   document.getElementById("invbtn").addEventListener("click", openInv);
   updateCartBtn();
