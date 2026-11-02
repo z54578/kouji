@@ -1,5 +1,5 @@
 // アプリを更新したときは、この番号を1つ上げてください（例：v1 → v2）
-const CACHE = "koujika-tools-v62";
+const CACHE = "koujika-tools-v64";
 const FILES = ["./", "./index.html", "./pc.html", "./thread.html", "./weld.html", "./materials.html", "./zfile.html", "./gyomu.html", "./fill.html", "./leak.html", "./leak-admin.html", "./leak-list.html", "./sites.json", "./map-kuribayashi.jpg", "./map-igarashi.jpg", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
