@@ -79,15 +79,18 @@ details.more summary{cursor:pointer;color:var(--muted);font-size:.85rem;padding:
 .stage{font-size:.9rem;font-weight:700;color:var(--muted)}
 .todo{display:grid;grid-template-columns:1fr 136px;gap:10px;align-items:center;margin:6px 0 12px}
 .todo .say{font-size:1.25rem;font-weight:700;line-height:1.4}
-.todo .say big{display:block;font-size:2.6rem;line-height:1.1;margin:4px 0}
+.todo .say big{display:block;font-size:2.5rem;line-height:1.1;margin:0 0 6px}
+.todo .say > span{display:block;font-size:1rem}
 .todo .say big i{font-style:normal;font-size:1.1rem;margin-left:2px}
 .blue{color:#2F6FD6}
 .go{width:100%;min-height:62px;border:0;border-radius:14px;background:var(--sel);color:var(--sel-ink);font:inherit;font-size:1.25rem;font-weight:700;cursor:pointer}
 .times{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
-.times .chip{min-height:56px;font-size:1rem}
+.times .chip{min-height:56px;font-size:.95rem;white-space:nowrap;padding:0 2px}
 .count{text-align:center;margin:8px 0 12px}
 .count b{display:block;font-size:3rem;line-height:1.1}
 .subbtns{display:flex;justify-content:space-between;gap:8px;margin-top:10px}
+.lnk.armed{color:#B42318;font-weight:700;text-decoration:none}
+.del.armed{border-color:#B42318;color:#B42318;font-weight:700}
 .lnk{background:none;border:0;color:var(--muted);font:inherit;font-size:.85rem;text-decoration:underline;cursor:pointer;padding:6px 0}
 .hint{color:var(--muted);font-size:.9rem;margin:4px 0}
 .note{font-size:.78rem;color:var(--muted);margin-top:4px}
@@ -121,7 +124,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
   var OILC = {"レギュラー":"#D93025","ハイオク":"#F2C200","軽油":"#2E9E4F","灯油":"#2F6FD6","重油":"#000000"};
   function dot(o){ return '<span class="dot" style="background:'+OILC[o]+'" aria-hidden="true"></span>'; }
   var KEY = "pc-guide-v1";
-  function newPipe(){ return {size:100, len:0, kind:"normal", nMan:0, oil:"", line:"", flow:{c:0, st:"h", k:0}}; }
+  function newPipe(){ return {size:100, len:0, kind:"normal", nMan:0, oil:"", line:"", flow:{c:0, st:"mix"}}; }
   var st;
   try{ st = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
   if(!st || !Array.isArray(st.pipes) || !st.pipes.length) st = {cur:0, pipes:[newPipe()]};
@@ -183,11 +186,11 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
     inp.addEventListener("change", function(){ drawInput(); });
     inp.addEventListener("focus", function(){ inp.select(); });
     box.querySelectorAll("[data-d]").forEach(function(b){ b.onclick = function(){ p.len = Math.max(0, Math.round((num(p.len) + (+b.dataset.d))*10)/10); save(); drawAll(); }; });
-    var d = document.getElementById("delp"); if(d) d.onclick = function(){ if(!confirm("この配管を消しますか？")) return; st.pipes.splice(st.cur,1); st.cur = 0; save(); drawAll(); };
+    var d = document.getElementById("delp"); if(d) twice(d, "もう一度押すと消します", function(){ st.pipes.splice(st.cur,1); st.cur = 0; save(); drawAll(); });
   }
   function progress(f){
-    var items = [["c0h","1回目 青"],["c0s","白"],["c0p","打設"],["c0w","⏱"],["c1h","2回目 青"],["c1s","白"],["c1p","打設"],["c1w","⏱"]];
-    var cur = "c"+f.c+(f.st==="pour" ? "p" : f.st==="wait" ? "w" : f.st), idx = f.st==="done" ? 99 : items.findIndex(function(x){ return x[0]===cur; });
+    var items = [["c0m","1回目の打設"],["c0w","⏱ 待ち"],["c1m","2回目の打設"],["c1w","⏱ 待ち"]];
+    var cur = "c"+f.c+(f.st==="wait" ? "w" : "m"), idx = f.st==="done" ? 99 : items.findIndex(function(x){ return x[0]===cur; });
     return '<div class="prog">'+items.map(function(x, i){ return '<span class="'+(i===idx ? "now" : i<idx ? "ok" : "")+'">'+x[1]+'</span>'; }).join("")+'</div>';
   }
   function drawGuide(){
@@ -195,12 +198,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
     if(!(num(p.len) > 0)){ g.innerHTML = '<div class="say" style="font-size:1.1rem;font-weight:700">サイズと長さを入れると、やることが出ます。</div>'; return; }
     var a = amt(p, f.c), coat = (f.c+1)+"回目の打設", h = '';
     h += progress(f);
-    if(f.st === "h" || f.st === "s"){
-      h += '<div class="stage">'+coat+(a.n > 1 ? '　容器 '+(f.k+1)+' / '+a.n : '')+'</div>';
-      h += '<div class="todo"><div class="say">'+(f.st==="h" ? '<span class="blue">青（硬化剤）</span>を<big class="num blue">'+f1(a.h)+'<i>kg</i></big>入れる' : '<span>白（主剤）</span>を足して<big class="num">'+f1(a.s)+'<i>kg</i></big>にする')+'</div>'+bucket(a.h, a.s, f.st)+'</div>';
-      h += '<button type="button" class="go" id="go">'+(f.st==="h" ? "入れた →" : "できた →")+'</button>';
-    } else if(f.st === "pour"){
-      h += '<div class="stage">'+coat+'</div><div class="todo" style="grid-template-columns:1fr"><div class="say">混ぜたら、'+coat+'をする<br><span class="hint">打設が終わったら、'+(f.c===0 ? '2回目までの' : 'アラームまでの')+'時間を押してください</span></div></div>';
+    if(f.st !== "wait" && f.st !== "done"){
+      h += '<div class="stage">'+coat+(a.n > 1 ? '　容器'+a.n+'個（どれも同じ量）' : '')+'</div>';
+      h += '<div class="todo"><div class="say"><span class="blue">① 青（硬化剤）</span><big class="num blue">'+f1(a.h)+'<i>kg</i></big><span>② 白を足して合計</span><big class="num">'+f1(a.s)+'<i>kg</i></big></div>'+bucket(a.h, a.s, "s")+'</div>';
+      h += '<div class="hint" style="margin-bottom:6px">'+(f.c===0 ? '打設が終わったら、2回目までの時間を押す' : '打設が終わったら、アラームまでの時間を押す')+'</div>';
       h += '<div class="times">'+TMINS.map(function(m){ return '<button type="button" class="chip" data-min="'+m+'">'+m+'分</button>'; }).join("")+'</div>';
     } else if(f.st === "wait"){
       h += '<div class="stage">'+(f.c===0 ? '2回目の打設まで' : '2回目の打設から'+f.mins+'分まで')+'</div><div class="count"><b class="num" id="left">'+mmss(f.end-Date.now())+'</b></div>';
@@ -208,17 +209,21 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
     } else {
       h += '<div class="todo" style="grid-template-columns:1fr"><div class="say">この配管はおわりました</div></div><button type="button" class="go" id="restart">もう一度はじめから</button>';
     }
-    if(f.st !== "done") h += '<div class="subbtns"><button type="button" class="lnk" id="backstep">← 1つ戻る</button><button type="button" class="lnk" id="reset">はじめからやり直す</button></div>';
+    if(f.st !== "done") h += '<div class="subbtns">'+(f.st==="wait" || f.c===1 ? '<button type="button" class="lnk" id="backstep">← 1つ戻る</button>' : '<span></span>')+'<button type="button" class="lnk" id="reset">はじめからやり直す</button></div>';
     g.innerHTML = h;
-    var go = document.getElementById("go");
-    if(go) go.onclick = function(){ unlockAudio(); if(f.st==="h"){ f.st = "s"; } else { if(f.k+1 < a.n){ f.k++; f.st = "h"; } else { f.st = "pour"; f.k = 0; } } save(); drawGuide(); };
     g.querySelectorAll("[data-min]").forEach(function(b){ b.onclick = function(){ unlockAudio(); f.st = "wait"; f.mins = +b.dataset.min; f.end = Date.now() + f.mins*60000; save(); drawAll(); keepAwake(true); }; });
-    var bk = document.getElementById("backstep"); if(bk) bk.onclick = function(){
-      if(f.st==="s"){ f.st="h"; } else if(f.st==="h"){ if(f.k>0){ f.k--; f.st="s"; } else if(f.c===1){ f.c=0; f.st="pour"; } }
-      else if(f.st==="pour"){ f.st="s"; f.k=a.n-1; } else if(f.st==="wait"){ if(!confirm("タイマーをやめて、打設の画面に戻りますか？")) return; f.st="pour"; }
-      save(); drawAll(); };
-    var rs = document.getElementById("reset"); if(rs) rs.onclick = function(){ if(!confirm("この配管を、はじめからやり直しますか？")) return; p.flow = {c:0, st:"h", k:0}; save(); drawAll(); };
-    var re = document.getElementById("restart"); if(re) re.onclick = function(){ p.flow = {c:0, st:"h", k:0}; save(); drawAll(); };
+    var bk = document.getElementById("backstep");
+    if(bk){ if(f.st==="wait") twice(bk, "もう一度押すとタイマーをやめます", function(){ f.st="mix"; save(); drawAll(); });
+            else bk.onclick = function(){ if(f.c===1){ f.c=0; f.st="mix"; } save(); drawAll(); }; }
+    var rs = document.getElementById("reset"); if(rs) twice(rs, "もう一度押すと、長さとタイマーを消して最初に戻ります", function(){ p.flow = {c:0, st:"mix"}; p.len = 0; save(); drawAll(); });
+    var re = document.getElementById("restart"); if(re) re.onclick = function(){ p.flow = {c:0, st:"mix"}; save(); drawAll(); };
+  }
+  function twice(btn, msg, act){
+    btn.onclick = function(){
+      if(btn.dataset.armed){ act(); return; }
+      btn.dataset.armed = "1"; var old = btn.textContent; btn.textContent = msg; btn.classList.add("armed");
+      setTimeout(function(){ if(btn.isConnected){ delete btn.dataset.armed; btn.textContent = old; btn.classList.remove("armed"); } }, 3000);
+    };
   }
   function drawAll(){ drawTabs(); drawInput(); drawGuide(); keepAwake(st.pipes.some(function(p){ return p.flow.st==="wait"; })); }
 
@@ -238,7 +243,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
   document.getElementById("alstop").addEventListener("click", function(){
     var i = ringing; ringing = null; if(beepTimer){ clearInterval(beepTimer); beepTimer = null; }
     document.getElementById("alarm").hidden = true;
-    if(i !== null && st.pipes[i]){ var f = st.pipes[i].flow; if(f.c===0){ st.pipes[i].flow = {c:1, st:"h", k:0}; } else { f.st = "done"; } st.cur = i; save(); }
+    if(i !== null && st.pipes[i]){ var f = st.pipes[i].flow; if(f.c===0){ st.pipes[i].flow = {c:1, st:"mix"}; } else { f.st = "done"; } st.cur = i; save(); }
     drawAll();
   });
   setInterval(function(){
