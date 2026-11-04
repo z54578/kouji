@@ -232,6 +232,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     prot: sv('<path d="M10 6 H38 V28 H10 Z" stroke-width="2.5"/><path d="M10 6 L16 2 H44 L38 6 M38 28 L44 24 V2" stroke-width="2"/>'),
     mhc: sv('<rect x="8" y="4" width="32" height="24" rx="3" stroke-width="2.5"/><path d="M14 10 H34 M14 16 H34 M14 22 H34" stroke-width="2"/><circle cx="12" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="36" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="24" r="1.5" fill="currentColor" stroke="none"/><circle cx="36" cy="24" r="1.5" fill="currentColor" stroke="none"/>'),
     disp: sv('<rect x="14" y="2" width="20" height="28" rx="2" stroke-width="2.5"/><rect x="18" y="6" width="12" height="7" rx="1" stroke-width="2"/><path d="M34 12 H40 V24 H36" stroke-width="2.5"/><path d="M10 30 H38" stroke-width="2.5"/>'),
+    cd: sv('<path d="M4 20 Q14 8 24 16 T44 12" stroke="#E07B2E" stroke-width="7" fill="none"/><path d="M4 20 Q14 8 24 16 T44 12" stroke="#B85A15" stroke-width="1.5" stroke-dasharray="2 3" fill="none"/>'),
+    cdp: sv('<rect x="8" y="10" width="14" height="12" rx="2" fill="#E07B2E" stroke="none"/><rect x="26" y="10" width="14" height="12" rx="2" fill="#E07B2E" stroke="none"/><rect x="20" y="8" width="8" height="16" rx="1" fill="#B85A15" stroke="none"/>'),
     valve: sv('<path d="M4 20 H44" stroke-width="7"/><path d="M18 14 H30 V26 H18 Z" fill="currentColor" stroke="none"/><path d="M24 14 V6 M17 5 H31" stroke-width="3"/>'),
     gasket: sv('<circle cx="24" cy="16" r="13" stroke-width="2.5"/><circle cx="24" cy="16" r="6.5" stroke-width="2.5"/>'),
     gasketF: sv('<circle cx="24" cy="16" r="14" stroke-width="2"/><circle cx="24" cy="16" r="6" stroke-width="2"/><circle cx="24" cy="5.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="24" cy="26.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="13.5" cy="16" r="1.8" fill="currentColor" stroke="none"/><circle cx="34.5" cy="16" r="1.8" fill="currentColor" stroke="none"/>'),
@@ -695,6 +697,71 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      spec:[["外形（フレーム）","606 × 563 mm"],["重さ","47.4 kg"],["適用荷重","T-20"],["ふたのボルト","六角ボルト M12（SUS304）×4・平座金×4"],["防水","パッキン（NBR）×4・Oリング（NBR φ14）×1"],["材質","フレーム・カバーとも FCD600（防錆塗装）"]],
      from:null, order:null},
     {c:"プロテクター", ic:IC.prot, n:"SKK プロテクター", s:"カタログ未登録", custom:'<div class="sec"><p>SKKのプロテクターは、まだ登録されていません。カタログや図面のPDFを送ってもらえれば、型番・寸法を入れます。</p></div>'},
+    {nosize:true, c:"電材", ic:IC.cd, n:"CD管 パナフレキCD 呼び28", s:"パナソニック・オレンジの合成樹脂可とう電線管",
+     use:"コンクリートに埋め込む電線の配管に使う、オレンジ色の合成樹脂製可とう電線管（CD管）。",
+     place:"置き場所は"+TODO,
+     warn:["CD管はコンクリート埋設用。露出配管には使わない","付属品は同じ呼び28（CD用）を使う","管の端は、管端キャップでふさいでゴミや水を入れない"],
+     spec:[["メーカー","パナソニック"],["呼び","28"],["1巻の長さ・品番",null]],
+     from:null, order:null},
+    {nosize:true, c:"電材", ic:IC.cdp, n:"パナフレキCD付属品 管端キャップ 呼び28", s:"管の端をふさぐ（緑）",
+     use:"CD管の端にかぶせて、ゴミや水、コンクリートが入らないようにする。",
+     place:"置き場所は"+TODO,
+     warn:["コンクリートを打つ前に、必ず管の端に付ける"],
+     spec:[["メーカー","パナソニック"],["呼び","28（CD用）"],["参考価格","希望小売 105円（税抜95円）※変わることがあります"]],
+     from:null, order:null},
+    {nosize:true, c:"電材", ic:IC.cdp, n:"パナフレキCD付属品 速結カップリング 呼び28", s:"CD管どうしをつなぐ（オレンジ）",
+     use:"CD管どうしを差し込むだけでつなぐ継手。",
+     place:"置き場所は"+TODO,
+     warn:["奥まで確実に差し込み、抜けないか引っぱって確認する"],
+     spec:[["メーカー","パナソニック"],["呼び","28（CD用）"],["参考価格","希望小売 429円（税抜390円）※変わることがあります"]],
+     from:null, order:null},
+    {nosize:true, c:"電材", ic:IC.cdp, n:"パナフレキCD付属品 Eパイプアダプタ 呼び2831", s:"CD管28と鋼製電線管（E31）をつなぐ",
+     use:"CD管（呼び28）と、ねじなし鋼製電線管（E31）をつなぐアダプタ。鋼管側は止めねじで固定する。",
+     place:"置き場所は"+TODO,
+     warn:["鋼管側の止めねじは、ねじ切れるまで確実に締める","CD管側は奥まで差し込む"],
+     spec:[["メーカー","パナソニック"],["呼び","2831（CD28 × E31）"],["参考価格","希望小売 715円（税抜650円）※変わることがあります"]],
+     from:null, order:null},
+    {c:"泡消火", ic:IC.foam, open:true, n:"【寸法図】QS-Guard（すぐ見る）", s:"ユニット・アンカー・配管・泡放出口の寸法", custom:'<p class=\"tnote\">図をタップすると大きく表示します。寸法は必ず取扱説明書で確認してください。</p><div class=\"sec\"><h3>よく使う寸法</h3><table class=\"spec\"><tr><td>消火ユニットの大きさ</td><td>幅775 × 高さ1785 × 奥行615 mm（約370 kg）</td></tr><tr><td>アンカー</td><td>4 − φ14.5、ピッチ 700 × 510 mm、M10ボルトで固定</td></tr><tr><td>配管の穴</td><td>φ40 を放射区画数の1/2の数だけ（ノックアウト・ポンチ位置）</td></tr><tr><td>電線管の穴</td><td>上 φ28（信号用）・下 φ22（電源用）</td></tr><tr><td>泡放出口の高さ</td><td>床面から中心まで 60〜70 mm</td></tr><tr><td>泡ヘッドの間隔</td><td>1500〜2000 mm が目安</td></tr><tr><td>ユニット内の配管</td><td>20A SGP 白（表16の寸法はねじ部を含む）</td></tr></table></div><div class=\"sec\"><h3>消火ユニット 配管・電線管の穴あけ位置（図16）</h3><a href=\"foam-dim-unit.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-unit.jpg\" alt=\"消火ユニット 配管・電線管の穴あけ位置（図16）\"></a><p class=\"tnote\">正面の幅775・奥行583、穴は上から230の所。配管の穴は104×3ピッチ（正面）・60×3ピッチ（側面）。</p></div><div class=\"sec\"><h3>消火ユニット 固定アンカー位置（図17）</h3><a href=\"foam-dim-anchor.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-anchor.jpg\" alt=\"消火ユニット 固定アンカー位置（図17）\"></a><p class=\"tnote\">4 − φ14.5、700 × 510。M10で固定。</p></div><div class=\"sec\"><h3>消火ユニット 配管寸法（表16）・配管上面図（図18）・配管例（図19）</h3><a href=\"foam-dim-piping.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-piping.jpg\" alt=\"消火ユニット 配管寸法（表16）・配管上面図（図18）・配管例（図19）\"></a><p class=\"tnote\">右出し・左出し・後出しの上段／下段ラインの寸法。使用配管20A SGP白。</p></div><div class=\"sec\"><h3>泡放出口 取付断面図（図10）・アイランド周辺配管（図11）</h3><a href=\"foam-dim-head.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-head.jpg\" alt=\"泡放出口 取付断面図（図10）・アイランド周辺配管（図11）\"></a><p class=\"tnote\">床から中心まで60〜70。分岐配管の長さ（L1・L2）はそれぞれ等しく。</p></div><div class=\"sec\"><h3>ヘッドケースの取付（図12〜15）</h3><a href=\"foam-dim-headcase.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-headcase.jpg\" alt=\"ヘッドケースの取付（図12〜15）\"></a><p class=\"tnote\">コンクリート製アイランド・スチール型枠製アイランドの場合。</p></div>'},
+    {c:"泡消火", ic:IC.foam, n:"QS-Guard 仕様（ヤマトプロテック YGS-180NP）", s:"セルフSS用 パッケージ型固定泡消火設備", custom:'<div class=\"sec\"><h3>仕様</h3><table class=\"spec\"><tr><td>名称</td><td>セルフサービス方式給油取扱所用 パッケージ型固定泡消火設備</td></tr><tr><td>機種</td><td>YGS-180NP（QS-Guard）</td></tr><tr><td>確認番号</td><td>第 YP-E-02号</td></tr><tr><td>消火薬剤</td><td>水成膜泡 7L</td></tr><tr><td>不凍液</td><td>173L</td></tr><tr><td>泡消火薬剤貯蔵容器</td><td>7.7L（SUS304）</td></tr><tr><td>不凍液貯蔵容器</td><td>198L（SS400）</td></tr><tr><td>加圧用ガス容器</td><td>13.4L（窒素）</td></tr><tr><td>放射圧力</td><td>0.25〜0.50 MPa</td></tr><tr><td>放射量</td><td>11.0〜18.8 L/分</td></tr><tr><td>発泡倍率</td><td>2〜6倍</td></tr><tr><td>配管</td><td>架橋ポリエチレン管 または SGP、20A・25A</td></tr><tr><td>放射区画選択弁</td><td>電気式、4放射区画ごとに1個</td></tr><tr><td>泡放出口</td><td>C3604B、1放射区画ごとに2個</td></tr><tr><td>制御盤</td><td>幅265 × 高さ165 × 奥行100 mm</td></tr><tr><td>操作箱</td><td>卓上型 240 × 70 × 205、壁掛型 240 × 205 × 70 mm</td></tr></table></div><div class=\"sec\"><h3>機種と区画数</h3><table class=\"spec\"><tr><td>YGS-180NP-01</td><td>1〜4区画・選択弁1個</td></tr><tr><td>YGS-180NP-02</td><td>1〜8区画・選択弁2個</td></tr><tr><td>YGS-180NP-03</td><td>1〜12区画・選択弁3個</td></tr><tr><td>YGS-180NP-04</td><td>1〜16区画・選択弁4個</td></tr><tr><td>YGS-180NP-05</td><td>1〜20区画・選択弁5個</td></tr><tr><td>YGS-180NP-06</td><td>1〜24区画・選択弁6個</td></tr></table></div>'},
+    {c:"泡消火", ic:IC.foam, n:"QS-Guard 据付・配管・泡放出口の手順", s:"取扱説明書のポイント", custom:'<div class=\"sec\"><h3>消火ユニットの据付</h3><ol style=\"margin:0;padding-left:1.4em\"><li>配管を出す方向（左・右・背面）を現場に合わせて決める</li><li>配管の穴 φ40 を放射区画数の1/2だけ、電線管の穴を上 φ28・下 φ22 であける（ノックアウト・ポンチ位置）</li><li>穴のバリを取り、配管の穴にゴムブッシュを付ける</li><li>設置場所が水平で平らか確認し、アンカーの穴をあける（4 − φ14.5、700 × 510）</li><li>アンカーを打ち、ユニットを据え付け、水平を確認してM10ボルトで固定する</li></ol></div><div class=\"sec\"><h3>ユニットの配管</h3><ul><li>主配管とユニットは、絶縁のため<b>ユニオン</b>でつなぐ</li><li>ユニオンは隣の配管に当たらないよう、垂直部分で<b>千鳥</b>に配置する</li><li>立ち上がり・立ち下がりに<b>フレキ</b>を使うと合わせ作業が楽</li><li>ユニット内の配管は20A SGP白（寸法表はねじ部込み）</li></ul></div><div class=\"sec\"><h3>泡放出口までの配管</h3><ul><li>使える配管：<b>GSガードユカロンエクセルパイプ</b>（埋設◎・架空×）、<b>SGP または SGP-PD</b>（埋設○・架空◎）、管径20A、全損失0.25 MPa</li><li>樹脂の配管・継手は<b>GSガードユカロンエクセルパイプだけ</b>。ほかは使えない</li><li>ユニットからの配管1本で2区画（泡放出口4個）に同時に出る。<b>アイランドごとに1系統</b>で、必ず両側に同時に出るように配管する</li><li>シール剤は<b>日本ヘルメチック製 ヘルメシール55</b>を推奨</li></ul></div><div class=\"sec\"><h3>泡放出口の取付</h3><ul><li>床から中心まで60〜70 mm、ヘッドの間隔は1500〜2000 mmが目安</li><li>分岐配管の長さは、それぞれ等しくする</li><li><b>コンクリートのアイランド</b>：型枠にφ30の円を書き、中心にφ12の穴 → ヘッドケース内側にグリス → 継手に接続し六角ボルトで型枠を挟む → 防食テープを巻く → 打設 → 硬化後ボルトを外し、入ったコンクリートをウエスで取る</li><li>モルタルで後から仕上げるときは、ヘッドキャップ部（φ40以上）をよける</li><li><b>スチール型枠のアイランド</b>：φ32の穴 → ヘッドケースが型枠より出ないように、ティグ溶接（2点以上）で固定</li></ul></div>'},
+    {nosize:true, unit:"m", c:"エアー配管", ic:IC.air, n:"セルフィット ホース SPL06", s:"ブリヂストン・内径9.5mm（3/8）",
+     use:"エアー配管に使う、ブリヂストンのセルフィット用ホース。口金具にワンプッシュで差し込むだけでつなげる（加締め機いらず）。",
+     place:"置き場所は"+TODO,
+     warn:["必要な長さに、ホースカッターで軸に対して垂直に切る（10°以上傾くと漏れ・抜けの原因）","口金具は必ずセルフィット用（FT06・FS06・FU06）を使う。他社品と組み合わせない","加圧すると口金具からホースが約15mm出てくる。その分を見込んで長さを決める","金具の間のまっすぐな配管で、ホースの長さ500mm以下は避ける（U字に逃がす）","ねじったり、引っぱったり、折ったりしない。最小曲げ半径は55mm","カタログの適応流体は「鉱物性一般作動油」。エアーで使う条件は会社のやり方とメーカーの確認に従う","ホースと金具の再使用はしない"],
+     spec:[["内径・外径","9.5 mm ・ 15.2 mm"],["最高使用圧力","FT金具で14.0 MPa、FS・FU金具で10.5 MPa"],["最小破壊圧力","56.0 MPa"],["最小曲げ半径","55 mm（ホースの内側）"],["重さ","120 g/m"],["使える温度","流体 −30〜＋80℃、まわり −30〜＋70℃"],["構造","内管：ポリエステル樹脂、補強層：2C、外被：ポリウレタン"]],
+     steps:["必要な長さを決める（加圧で約15mm出てくる分を見込む）","ホースカッターで垂直に切る","金具のVノッチから測って、差し込む長さの位置にホワイトペンで印を付ける（FT06は33mm、FS06・FU06は45mm）","印が金具の端に重なるまで差し込む","引っぱって抜けないことを確認する"],
+     stepsTitle:"ホースのつなぎ方",
+     from:null, order:null},
+    {nosize:true, c:"エアー配管", ic:IC.air, n:"セルフィット 口金具 FT06R（テーパねじ）", s:"R3/8・一度差したら抜けない",
+     use:"機器や配管のねじ（R3/8）にねじ込み、SPL06ホースを差し込む口金具。",
+     place:"置き場所は"+TODO,
+     warn:["ねじにシールテープを巻く","締付トルクは34 N·m（インパクトレンチも使える）","一度差し込んだホースは抜けない。差す前に長さを確認"],
+     spec:[["ねじ","R3/8（PT）"],["六角・十二角の対辺","22 mm・22 mm"],["長さ","58 mm"],["締付トルク","34 N·m"],["ホースを差す長さ","33 mm"],["重さ","90 g"]],
+     from:null, order:null},
+    {nosize:true, c:"エアー配管", ic:IC.air, n:"セルフィット 口金具 FT06F（ユニオンナット）", s:"G3/8メスシート・エルボ配管用",
+     use:"エルボアダプタなどに、ユニオンナットでつなぐ口金具。SPL06ホースを差し込む。",
+     place:"置き場所は"+TODO,
+     warn:["エルボを使う配管は、このFタイプ（ユニオンナット）でつなぐ","締付トルクは34 N·m","一度差し込んだホースは抜けない"],
+     spec:[["ねじ","G3/8（PF）メスシート"],["外径","φ24 mm"],["六角の対辺","22 mm"],["長さ","62 mm"],["締付トルク","34 N·m"],["ホースを差す長さ","33 mm"],["重さ","105 g"]],
+     from:null, order:null},
+    {sizes:["FS06R（テーパねじ）","FU06F（ユニオンナット）"], c:"エアー配管", ic:IC.air, n:"セルフィット 口金具 FS06R・FU06F（加圧前なら抜ける）", s:"R3/8・G3/8・やり直しができる",
+     use:"加圧する前なら、ホースを抜いてやり直せるタイプの口金具。FS06Rはテーパねじ、FU06Fはユニオンナット。",
+     place:"置き場所は"+TODO,
+     warn:["最高使用圧力は10.5 MPaに下がる","ホースを差す長さは45 mm（FTより長い）","差すときに解放リングが押し込まれたら、手で引き出しておく","抜くときは、ホースを一度押し込み、解放リングを金具に押し付けたまま引き抜く（加圧前だけ）"],
+     spec:[["FS06R","R3/8・対辺22／22 mm・C 12 mm・長さ70 mm・95 g"],["FU06F","G3/8・φ24・対辺22 mm・C 12 mm・長さ74 mm・115 g"],["締付トルク","34 N·m"],["ホースを差す長さ","45 mm"]],
+     from:null, order:null},
+    {sizes:["8021RG06（90°）","8023RG06（45°）"], c:"エアー配管", ic:IC.air, n:"エルボアダプタ 8021RG06（90°）・8023RG06（45°）", s:"R3/8 × G3/8",
+     use:"配管の向きを変えるアダプタ。Fタイプ（ユニオンナット）の口金具とつなぐ。",
+     place:"置き場所は"+TODO,
+     warn:["相手の口金具はFタイプ（FT06F・FU06F）を使う","R側にはシールテープを巻く"],
+     spec:[["8021RG06","90°・R3/8 × G3/8・100 g"],["8023RG06","45°・R3/8 × G3/8・80 g"]],
+     from:null, order:null},
+    {sizes:["61HC04","61HC05"], c:"エアー配管", ic:IC.air, n:"ホースカッター 61HC04・61HC05", s:"セルフィットのホースを切る",
+     use:"SPL06ホースをまっすぐ切るための専用カッター。",
+     place:"置き場所は"+TODO,
+     warn:["軸に対して垂直に切る（傾き10°以内）","切れ味が落ちると切り口がつぶれて漏れの原因になる"],
+     spec:[["61HC04","04・06用"],["61HC05","大きいタイプ"]],
+     from:null, order:null},
     {c:"計量器立上がり", ic:IC.disp, n:"トキコ GAシリーズ 外設搭載機（3L-05785）", s:"GA26・24・W1・W2・13・12・WT用", custom:'<div class="sec"><a href="tokico-ga-1.jpg" target="_blank" rel="noopener"><img class="dwg" src="tokico-ga-1.jpg" alt="トキコ GAシリーズ 外設搭載機 設置寸法図"></a><p class="tnote">図をタップすると大きく表示します。寸法は必ず図面で確認してください。</p></div><div class="sec"><h3>主な寸法</h3><table class="spec"><tr><td>外形</td><td>1246 × 510 mm</td></tr><tr><td>設置面の開口スペース</td><td>1242 × 396 mm</td></tr><tr><td>アンカーボルト</td><td>4 − φ20、ピッチ 936 × 454 mm（中心から左290・右390）</td></tr><tr><td>吸い込み配管</td><td>R1½（ポンプ1・2・3）</td></tr><tr><td>ポンプの間隔</td><td>340 mm（ポンプ2は中心から50 mmずれる）</td></tr><tr><td>ポンプの列</td><td>DEF側の外形から180 mm</td></tr><tr><td>本体の高さ</td><td>275 mm</td></tr></table></div><div class="sec"><h3>機種ごとの吸い込み配管（ポンプの位置）</h3><table class="spec"><tr><td>GA26</td><td>ポンプ1・2・3</td></tr><tr><td>GA24</td><td>ポンプ1・3</td></tr><tr><td>GAW1</td><td>ポンプ2</td></tr><tr><td>GAW2</td><td>ポンプ2</td></tr><tr><td>GA13</td><td>ポンプ1・2・3</td></tr><tr><td>GA12</td><td>ポンプ1・3</td></tr><tr><td>GAWT</td><td>ポンプ1・2</td></tr></table></div><div class="sec warn"><h3>注意</h3><ul><li>立ち上げた配管の上端は、設置面のレベルに合わせる</li><li>アンカーボルトの穴は、計量機を据え付ける前に施工しておく</li><li>コーキングのとき、水抜き穴をふさがない</li><li>防水仕様は、コンパウンド・パワージェルでジャンクションBOXを防水処置する</li><li>ベーパーリカバリ（蒸気回収・タンクリターン）式は、地下タンクへの戻し配管（チューブ径φ10＋R1/2オス）が付く。現地でR1/2（メス）を施工し、戻しはレギュラータンクにつなぐ</li><li>配線の穴：インターホン・POS・計量機200V・計量機100V・外設100V・イーサネット（予備通信線ありは1か所ずつ左へ）</li></ul></div>'},
     {c:"計量器立上がり", ic:IC.disp, n:"トキコ GAシリーズ 標準用・POS外設なし（3L-05786）", s:"GA26・24・13・12・44・Q4用", custom:'<div class="sec"><a href="tokico-ga-2.jpg" target="_blank" rel="noopener"><img class="dwg" src="tokico-ga-2.jpg" alt="トキコ GAシリーズ 標準用 設置寸法図"></a><p class="tnote">図をタップすると大きく表示します。寸法は必ず図面で確認してください。</p></div><div class="sec"><h3>主な寸法</h3><table class="spec"><tr><td>外形</td><td>1246 × 510 mm</td></tr><tr><td>設置面の開口スペース</td><td>1242 × 396 mm</td></tr><tr><td>アンカーボルト</td><td>4 − φ20、ピッチ 936 × 454 mm（中心から左290・右390）</td></tr><tr><td>吸い込み配管</td><td>R1½（ポンプ1・2・3）</td></tr><tr><td>ポンプの間隔</td><td>340 mm（ポンプ2は中心から50 mmずれる）</td></tr><tr><td>ポンプの列</td><td>DEF側の外形から180 mm</td></tr><tr><td>本体の高さ</td><td>275 mm</td></tr></table></div><div class="sec"><h3>機種ごとの吸い込み配管（ポンプの位置）</h3><table class="spec"><tr><td>GA26</td><td>ポンプ1・2・3</td></tr><tr><td>GA24</td><td>ポンプ1・3</td></tr><tr><td>GA13</td><td>ポンプ1・2・3</td></tr><tr><td>GA12</td><td>ポンプ1・3</td></tr><tr><td>GA44</td><td>ポンプ1・2・3</td></tr><tr><td>GAQ4</td><td>ポンプ1・3</td></tr></table></div><div class="sec warn"><h3>注意</h3><ul><li>立ち上げた配管の上端は、設置面のレベルに合わせる</li><li>アンカーボルトの穴は、計量機を据え付ける前に施工しておく</li><li>コーキングのとき、水抜き穴をふさがない</li><li>防水仕様は、コンパウンド・パワージェルでジャンクションBOXを防水処置する</li><li>配線の穴：POS・100V／200V</li></ul></div>'},
     {c:"計量器立上がり", ic:IC.disp, n:"タツノ 6本マルチ（AAAJ・3油種2台同時給油）", s:"ルミナス・トップケースなし（3m型）", custom:'<div class="sec"><a href="tatsuno-6m-foot.jpg" target="_blank" rel="noopener"><img class="dwg" src="tatsuno-6m-foot.jpg" alt="タツノ 6本マルチ 施工寸法図"></a><p class="tnote">施工寸法図（ベッド上面図）。タップで拡大。全体の図面は下のボタンから。</p><a class="linkbtn" href="tatsuno-6m.jpg" target="_blank" rel="noopener">図面の全体を開く</a></div><div class="sec"><h3>主な寸法</h3><table class="spec"><tr><td>ベッドの外形</td><td>1280 × 530 mm</td></tr><tr><td>アンカーボルト</td><td>4 − φ18（M12 特殊用途鋼）、ピッチ 900 × 410 mm（左のアンカーから中心まで435）</td></tr><tr><td>吸入管（ポンプ）</td><td>3か所、間隔 285 mm（中心の列に並ぶ）</td></tr><tr><td>ジョイントボックス</td><td>POS・AC200V・AC100V・LAN・オプション</td></tr><tr><td>本体</td><td>幅1280・高さ約1480 mm、ホース3m（トップケースなし）</td></tr></table></div><div class="sec"><h3>機種</h3><table class="spec"><tr><td>AAAJA</td><td>ノズル A-B・C-D・E-F すべて標準</td></tr><tr><td>AAAJD</td><td>A-B が高速、C-D・E-F は標準</td></tr><tr><td>型式</td><td>ルミナス計量機（型式番号 第21TA-DB-01-002号）／セルフ用ルミナス計量機（第21TA-SDB-01-001号）</td></tr></table></div><div class="sec warn"><h3>注意</h3><ul><li>3油種・2台同時給油型（ポンプ3・メーター6・ノズル6）</li><li>ベーパーリカバリーシステム付きの場合は、ベーパー回収配管が付く</li><li>寸法は必ず図面で確認する</li></ul></div>'},
@@ -735,6 +802,11 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   relAdd(["Uボルト（50A・80A・100A）"], ["オールアンカー（M10・M12）"]);
   relAdd(["エポキシ樹脂（主剤・硬化剤 1セット）"], ["アセトン","洗剤","透明ホース（太）","透明ホース（細）"]);
   relAdd(["ドレンタイト"], ["アルミテープ"]);
+  relAdd(["CD管 パナフレキCD 呼び28"], ["パナフレキCD付属品 管端キャップ 呼び28","パナフレキCD付属品 速結カップリング 呼び28","パナフレキCD付属品 Eパイプアダプタ 呼び2831"]);
+  relAdd(["パナフレキCD付属品 管端キャップ 呼び28","パナフレキCD付属品 速結カップリング 呼び28","パナフレキCD付属品 Eパイプアダプタ 呼び2831"], ["CD管 パナフレキCD 呼び28"]);
+  relAdd(["セルフィット ホース SPL06"], ["セルフィット 口金具 FT06R（テーパねじ）","セルフィット 口金具 FT06F（ユニオンナット）","ホースカッター 61HC04・61HC05"]);
+  relAdd(["セルフィット 口金具 FT06R（テーパねじ）","セルフィット 口金具 FT06F（ユニオンナット）","セルフィット 口金具 FS06R・FU06F（加圧前なら抜ける）"], ["セルフィット ホース SPL06","シールテープ"]);
+  relAdd(["エルボアダプタ 8021RG06（90°）・8023RG06（45°）"], ["セルフィット 口金具 FT06F（ユニオンナット）","シールテープ"]);
   relAdd(["タツノ 組立式プロテクター（PKS・PKWS）"], ["タツノ 防水型 角型マンホールカバー MKA-401","ドレンタイト","アルミテープ","水糸"]);
   relAdd(["タツノ 防水型 角型マンホールカバー MKA-401"], ["タツノ 組立式プロテクター（PKS・PKWS）","マスカーテープ"]);
   relAdd(["EFソケット","EFエルボ（90°）","EF 45°エルボ","EFチーズ","EFキャップ"], ["バリアパイプ 直管（エスロン バリアパイプエスエス）"]);
@@ -1083,11 +1155,11 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     else if(cs.indexOf("コーティング") >= 0) m.order = "タマダ株式会社";
     else if(cs.some(function(c){ return ["ねじ込み継手","溶接継手","パッキン","ボルト","シール材"].indexOf(c) >= 0; })) m.order = "札幌軸受工具株式会社";
   });
-  var CATS = ["ねじ込み継手","溶接継手","パッキン","樹脂配管","泡消火","エアー配管","ボルト","ブラケット","シール材","コーティング","プロテクター","計量器立上がり","レンタル","宿","車両"];
+  var CATS = ["ねじ込み継手","溶接継手","パッキン","樹脂配管","泡消火","エアー配管","電材","ボルト","ブラケット","シール材","コーティング","プロテクター","計量器立上がり","レンタル","宿","車両"];
   var cur = "ねじ込み継手", q = "";
   var esc = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   var GROUPS = [
-    {k:"材料", g:"mat", d:"継手・パッキン・ボルトなど", cats:["ねじ込み継手","溶接継手","パッキン","樹脂配管","泡消火","エアー配管","ボルト","ブラケット","シール材","コーティング","プロテクター","計量器立上がり"]},
+    {k:"材料", g:"mat", d:"継手・パッキン・ボルトなど", cats:["ねじ込み継手","溶接継手","パッキン","樹脂配管","泡消火","エアー配管","電材","ボルト","ブラケット","シール材","コーティング","プロテクター","計量器立上がり"]},
     {k:"車両", g:"veh", d:"トラック・工具・機械", cats:["車両"]},
     {k:"段取り", g:"prep", d:"レンタル・宿", cats:["レンタル","宿"]}
   ];
@@ -1129,7 +1201,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
       }
       if(m.inn) return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+innHtml(m)+'</div></details>';
       if(m.rent) return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+rentHtml(m)+'</div></details>';
-      if(m.custom) return '<details><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+m.custom+'</div></details>';
+      if(m.custom) return '<details'+(m.open && cur === m.c && !q.trim() ? ' open' : '')+'><summary>'+m.ic+'<div><b>'+esc(m.n)+'</b><span>'+esc(m.s)+'</span></div></summary><div class="body">'+m.custom+'</div></details>';
       var W = m.warn || [];
       var warnHtml = W.length ? '<div class="sec warn"><h3>注意・よくある間違い</h3><ul>'+W.slice(0,2).map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul>'+(W.length > 2 ? '<details class="more"><summary>もっと見る（あと'+(W.length-2)+'件）</summary><ul>'+W.slice(2).map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></details>' : '')+'</div>' : '';
       var tblHtml = m.tbl ? '<div class="sec"><h3>サイズ表</h3>'+(typeof m.tbl==="object" ? gTable(m.tbl) : m.tbl==="G10" ? gasketTable(F10,"10K") : m.tbl==="G5" ? gasketTable(F5,"5K") : m.tbl==="FK" ? kumiTable() : jisTable(m.tbl==="F10" ? F10 : F5, m.tbl==="F10" ? "10K" : "5K"))+'</div>' : '';

@@ -1,6 +1,6 @@
 // アプリを更新したときは、この番号を1つ上げてください（例：v1 → v2）
-const CACHE = "koujika-tools-v68";
-const FILES = ["./", "./index.html", "./pc.html", "./thread.html", "./weld.html", "./materials.html", "./zfile.html", "./tokico-ga-1.jpg", "./tokico-ga-2.jpg", "./tatsuno-6m.jpg", "./tatsuno-6m-foot.jpg", "./gyomu.html", "./fill.html", "./leak.html", "./leak-admin.html", "./leak-list.html", "./sites.json", "./map-kuribayashi.jpg", "./map-igarashi.jpg", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
+const CACHE = "koujika-tools-v71";
+const FILES = ["./", "./index.html", "./pc.html", "./thread.html", "./weld.html", "./materials.html", "./zfile.html", "./tokico-ga-1.jpg", "./tokico-ga-2.jpg", "./tatsuno-6m.jpg", "./tatsuno-6m-foot.jpg", "./foam-dim-unit.jpg", "./foam-dim-anchor.jpg", "./foam-dim-piping.jpg", "./foam-dim-head.jpg", "./foam-dim-headcase.jpg", "./gyomu.html", "./fill.html", "./leak.html", "./leak-admin.html", "./leak-list.html", "./sites.json", "./map-kuribayashi.jpg", "./map-igarashi.jpg", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
