@@ -129,6 +129,7 @@ th:first-child,td:first-child{text-align:left;font-weight:700}
 .qbtn{min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:1.3rem;font-weight:700;cursor:pointer}
 .tsel span{font-size:.82rem;color:var(--muted)}
 .rel .chip{font-size:.85rem;min-height:38px}
+img.dwg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#fff}
 .g2r{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .rentf .cfield input{height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1rem;padding:0 10px;width:100%}
 
@@ -228,11 +229,15 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     inn: sv('<path d="M6 28 V14 L24 4 L42 14 V28 Z" stroke-width="2.5"/><path d="M18 28 V19 H30 V28" stroke-width="2.5"/><path d="M12 16 H16 M32 16 H36" stroke-width="2"/>'),
     pipe: sv('<rect x="2" y="10" width="44" height="12" rx="2" stroke-width="2.5"/><path d="M8 10 V22 M40 10 V22" stroke-width="2"/>'),
     canWB: sv('<rect x="4" y="8" width="18" height="22" rx="2" fill="#FFFFFF" stroke="#8A9499" stroke-width="2"/><rect x="8" y="4" width="10" height="5" rx="1" fill="#8A9499" stroke="none"/><rect x="26" y="8" width="18" height="22" rx="2" fill="#2F6FD6" stroke="#1E4E9E" stroke-width="2"/><rect x="30" y="4" width="10" height="5" rx="1" fill="#1E4E9E" stroke="none"/>'),
+    prot: sv('<path d="M10 6 H38 V28 H10 Z" stroke-width="2.5"/><path d="M10 6 L16 2 H44 L38 6 M38 28 L44 24 V2" stroke-width="2"/>'),
+    mhc: sv('<rect x="8" y="4" width="32" height="24" rx="3" stroke-width="2.5"/><path d="M14 10 H34 M14 16 H34 M14 22 H34" stroke-width="2"/><circle cx="12" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="36" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="24" r="1.5" fill="currentColor" stroke="none"/><circle cx="36" cy="24" r="1.5" fill="currentColor" stroke="none"/>'),
+    disp: sv('<rect x="14" y="2" width="20" height="28" rx="2" stroke-width="2.5"/><rect x="18" y="6" width="12" height="7" rx="1" stroke-width="2"/><path d="M34 12 H40 V24 H36" stroke-width="2.5"/><path d="M10 30 H38" stroke-width="2.5"/>'),
     valve: sv('<path d="M4 20 H44" stroke-width="7"/><path d="M18 14 H30 V26 H18 Z" fill="currentColor" stroke="none"/><path d="M24 14 V6 M17 5 H31" stroke-width="3"/>'),
     gasket: sv('<circle cx="24" cy="16" r="13" stroke-width="2.5"/><circle cx="24" cy="16" r="6.5" stroke-width="2.5"/>'),
     gasketF: sv('<circle cx="24" cy="16" r="14" stroke-width="2"/><circle cx="24" cy="16" r="6" stroke-width="2"/><circle cx="24" cy="5.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="24" cy="26.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="13.5" cy="16" r="1.8" fill="currentColor" stroke="none"/><circle cx="34.5" cy="16" r="1.8" fill="currentColor" stroke="none"/>'),
     bolt: sv('<path d="M6 9 H14 V23 H6 Z" fill="currentColor" stroke="none"/><path d="M14 16 H44" stroke-width="6"/><path d="M22 12 V20 M27 12 V20 M32 12 V20 M37 12 V20" stroke="#fff" stroke-width="1"/><path d="M34 8 H40 V24 H34 Z" stroke-width="2.5"/>'),
     nut: sv('<path d="M16 4 H32 L40 16 L32 28 H16 L8 16 Z" stroke-width="3"/><circle cx="24" cy="16" r="6" stroke-width="2.5"/>'),
+    hayauma: sv('<path d="M6 26 V8 H42 V26" stroke-width="3.5"/><path d="M13 17 H19 M29 17 H35" stroke-width="4" stroke-linecap="round"/>'),
     ubolt: sv('<path d="M12 4 V16 A12 12 0 0 0 36 16 V4" stroke-width="3.5"/><path d="M8 8 H16 M32 8 H40" stroke-width="3"/>'),
     anchor: sv('<path d="M4 16 H40" stroke-width="5"/><path d="M30 11 L40 16 L30 21" stroke-width="2.5"/><path d="M8 10 H12 V22 H8 Z" fill="currentColor" stroke="none"/><path d="M16 12 V20" stroke-width="2"/>'),
     tape: sv('<circle cx="18" cy="16" r="12" stroke-width="2.5"/><circle cx="18" cy="16" r="5" stroke-width="2.5"/><path d="M18 4 H44" stroke-width="2.5"/>'),
@@ -454,6 +459,11 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      use:"コンクリートに下穴をあけて打ち込み、架台や支持金具を固定する。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ10番（対応ビットと一緒）",
      warn:["袋に書いてある径のビットで下穴をあける","ビットのテープの印まで、決まった深さであける","穴の中の粉をダストポンプで飛ばしてから打つ"], spec:[["M10 下穴径（ドリル径）","10.5mm"],["M10 ナットのスパナ（二面幅）","17mm"],["M12 下穴径（ドリル径）","12.7mm"],["M12 ナットのスパナ（二面幅）","19mm"]], from:null, order:null},
+    {c:"ブラケット", ic:IC.hayauma, n:"ハヤウマW（アカギ・両面穴）", s:"溶接なしで組める支持用の鋼材",
+     use:"ハヤウマ接続金具とボルト・ナットで組んで、架台やブラケットを作る。軽量物用。コンクリートにはM10オールアンカーで固定する。",
+     place:TODO,
+     warn:["穴は長穴で幅11mm。M10・W3/8は通るがM12は通らない（現物で確認）","許容荷重はメーカーに確認が必要。重い物には使わない","どぶめっき・ユニクロ・ステンレスを混ぜない"],
+     spec:[["メーカー","アカギ"],["穴","両面穴・長穴（幅11mm）"],["穴ピッチ","60mm"],["固定するアンカー","オールアンカー M10"],["仕上げ","どぶめっき・ユニクロ・ステンレス"]], from:null, order:null},
 
     {c:"シール材", ic:IC.tape, n:"シールテープ", s:"ねじのすき間をふさぐ",
      use:"おねじに巻いて、ねじ込み部分からの漏れを防ぐ。",
@@ -571,7 +581,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      place:"デカ・キャンター：助手席側の棚の側面",
      warn:["チェーンが管にしっかり掛かっているか確認してから力をかける"],
      insp:["チェーンの伸び・切れ・さび","歯の欠け"], parts:null, from:null, order:null},
-    {c:"工具", ic:IC.stand, n:"ハヤウマW（パイプスタンド）", s:"ねじ切り・切断のとき管を支える",
+    {c:"工具", ic:IC.stand, n:"パイプスタンド（パイプ受け）", s:"ねじ切り・切断のとき管を支える",
      use:"長い管をねじ切り機やバンドソーで加工するとき、反対側を支える。",
      place:"デカ・キャンター：ねじ切り機の近く",
      warn:["地面が平らな所に置く","管の重さに合わせて高さを合わせる"],
@@ -673,6 +683,21 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     {c:"宿", ic:IC.inn, n:"北見方面の宿", s:"まだ登録されていません", custom:'<div class="sec"><p>北見方面の宿は、まだ登録されていません。地域・宿の名前・何食付き・電話番号・住所を教えてもらえれば追加します。</p></div>'},
     {c:"宿", ic:IC.inn, n:"三石旅館", s:"静内・浦河方面（新ひだか町三石）・3食付き", inn:{area:"静内・浦河方面", meals:"3食付き", tel:"", addr:"〒059-3107 北海道日高郡新ひだか町三石旭町18", near:"新ひだか町 三石"}},
     {c:"宿", ic:IC.inn, n:"ワークマンハウス帯広", s:"帯広方面（帯広市西17条南）・2食付き・シャワールームあり", inn:{area:"帯広方面", meals:"2食付き・シャワールームあり", tel:"", addr:"〒080-0027 北海道帯広市西17条南1丁目17-25", near:"帯広市"}},
+    {sizes:["PKS-4006", "PKS-4009", "PKS-6406", "PKS-6409", "PKS-6006", "PKS-6009", "PKWS-4006", "PKWS-4009", "PKWS-60406", "PKWS-60409", "PKWS-6006", "PKWS-6009"], c:"プロテクター", ic:IC.prot, n:"タツノ 組立式プロテクター（PKS・PKWS）", s:"マンホールの下に組む箱（高さ610・914）",
+     use:"マンホールの下に組み立てて、配管の立ち上がり部分を囲う箱。上にマンホールカバーを付ける。",
+     place:"置き場所は"+TODO,
+     warn:["型番の数字の下2けたが高さ（06＝610mm、09＝914mm）","補強枠は2セット付属。上下に付けてから据え付ける","すき間はドレンタイトで止水し、穴やすき間はアルミテープでふさぐ","高さは水糸を張って、仕上がりの地面に合わせる"],
+     tbl:{"h": ["型番", "a（内寸）", "b（外寸）", "高さH", "補強枠c", "補強枠d"], "r": [["PKS-4006", "541", "481", "610", "537", "474"], ["PKS-4009", "541", "481", "914", "537", "474"], ["PKS-6406", "660", "402", "610", "656", "395"], ["PKS-6409", "660", "402", "914", "656", "395"], ["PKS-6006", "685", "670", "610", "681", "663"], ["PKS-6009", "685", "670", "914", "681", "663"], ["PKWS-4006", "1110", "481", "610", "1106", "474"], ["PKWS-4009", "1110", "481", "914", "1106", "474"], ["PKWS-60406", "1120", "661", "610", "1116", "654"], ["PKWS-60409", "1120", "661", "914", "1116", "654"], ["PKWS-6006", "1390", "661", "610", "1386", "654"], ["PKWS-6009", "1390", "661", "914", "1386", "654"]], "n": "タツノ 組立式プロテクター図面より（単位mm）。本体MSN-90C t=1.6、補強枠L-30×30×3t（2セット付属）。"}, from:null, order:null},
+    {nosize:true, c:"プロテクター", ic:IC.mhc, n:"タツノ 防水型 角型マンホールカバー MKA-401", s:"プロテクターの上に付けるふた（T-20）",
+     use:"プロテクターの上に付ける、防水型の角型マンホールカバー。",
+     place:"置き場所は"+TODO,
+     warn:["重さ47.4kg。必ず2人で持つ","ふたは六角ボルト（M12・SUS304）4本で締める","パッキンとOリングが切れていないか確認してから閉める","コンクリートを打つときは、マスカーテープで養生する"],
+     spec:[["外形（フレーム）","606 × 563 mm"],["重さ","47.4 kg"],["適用荷重","T-20"],["ふたのボルト","六角ボルト M12（SUS304）×4・平座金×4"],["防水","パッキン（NBR）×4・Oリング（NBR φ14）×1"],["材質","フレーム・カバーとも FCD600（防錆塗装）"]],
+     from:null, order:null},
+    {c:"プロテクター", ic:IC.prot, n:"SKK プロテクター", s:"カタログ未登録", custom:'<div class="sec"><p>SKKのプロテクターは、まだ登録されていません。カタログや図面のPDFを送ってもらえれば、型番・寸法を入れます。</p></div>'},
+    {c:"計量器立上がり", ic:IC.disp, n:"トキコ GAシリーズ 外設搭載機（3L-05785）", s:"GA26・24・W1・W2・13・12・WT用", custom:'<div class="sec"><a href="tokico-ga-1.jpg" target="_blank" rel="noopener"><img class="dwg" src="tokico-ga-1.jpg" alt="トキコ GAシリーズ 外設搭載機 設置寸法図"></a><p class="tnote">図をタップすると大きく表示します。寸法は必ず図面で確認してください。</p></div><div class="sec"><h3>主な寸法</h3><table class="spec"><tr><td>外形</td><td>1246 × 510 mm</td></tr><tr><td>設置面の開口スペース</td><td>1242 × 396 mm</td></tr><tr><td>アンカーボルト</td><td>4 − φ20、ピッチ 936 × 454 mm（中心から左290・右390）</td></tr><tr><td>吸い込み配管</td><td>R1½（ポンプ1・2・3）</td></tr><tr><td>ポンプの間隔</td><td>340 mm（ポンプ2は中心から50 mmずれる）</td></tr><tr><td>ポンプの列</td><td>DEF側の外形から180 mm</td></tr><tr><td>本体の高さ</td><td>275 mm</td></tr></table></div><div class="sec"><h3>機種ごとの吸い込み配管（ポンプの位置）</h3><table class="spec"><tr><td>GA26</td><td>ポンプ1・2・3</td></tr><tr><td>GA24</td><td>ポンプ1・3</td></tr><tr><td>GAW1</td><td>ポンプ2</td></tr><tr><td>GAW2</td><td>ポンプ2</td></tr><tr><td>GA13</td><td>ポンプ1・2・3</td></tr><tr><td>GA12</td><td>ポンプ1・3</td></tr><tr><td>GAWT</td><td>ポンプ1・2</td></tr></table></div><div class="sec warn"><h3>注意</h3><ul><li>立ち上げた配管の上端は、設置面のレベルに合わせる</li><li>アンカーボルトの穴は、計量機を据え付ける前に施工しておく</li><li>コーキングのとき、水抜き穴をふさがない</li><li>防水仕様は、コンパウンド・パワージェルでジャンクションBOXを防水処置する</li><li>ベーパーリカバリ（蒸気回収・タンクリターン）式は、地下タンクへの戻し配管（チューブ径φ10＋R1/2オス）が付く。現地でR1/2（メス）を施工し、戻しはレギュラータンクにつなぐ</li><li>配線の穴：インターホン・POS・計量機200V・計量機100V・外設100V・イーサネット（予備通信線ありは1か所ずつ左へ）</li></ul></div>'},
+    {c:"計量器立上がり", ic:IC.disp, n:"トキコ GAシリーズ 標準用・POS外設なし（3L-05786）", s:"GA26・24・13・12・44・Q4用", custom:'<div class="sec"><a href="tokico-ga-2.jpg" target="_blank" rel="noopener"><img class="dwg" src="tokico-ga-2.jpg" alt="トキコ GAシリーズ 標準用 設置寸法図"></a><p class="tnote">図をタップすると大きく表示します。寸法は必ず図面で確認してください。</p></div><div class="sec"><h3>主な寸法</h3><table class="spec"><tr><td>外形</td><td>1246 × 510 mm</td></tr><tr><td>設置面の開口スペース</td><td>1242 × 396 mm</td></tr><tr><td>アンカーボルト</td><td>4 − φ20、ピッチ 936 × 454 mm（中心から左290・右390）</td></tr><tr><td>吸い込み配管</td><td>R1½（ポンプ1・2・3）</td></tr><tr><td>ポンプの間隔</td><td>340 mm（ポンプ2は中心から50 mmずれる）</td></tr><tr><td>ポンプの列</td><td>DEF側の外形から180 mm</td></tr><tr><td>本体の高さ</td><td>275 mm</td></tr></table></div><div class="sec"><h3>機種ごとの吸い込み配管（ポンプの位置）</h3><table class="spec"><tr><td>GA26</td><td>ポンプ1・2・3</td></tr><tr><td>GA24</td><td>ポンプ1・3</td></tr><tr><td>GA13</td><td>ポンプ1・2・3</td></tr><tr><td>GA12</td><td>ポンプ1・3</td></tr><tr><td>GA44</td><td>ポンプ1・2・3</td></tr><tr><td>GAQ4</td><td>ポンプ1・3</td></tr></table></div><div class="sec warn"><h3>注意</h3><ul><li>立ち上げた配管の上端は、設置面のレベルに合わせる</li><li>アンカーボルトの穴は、計量機を据え付ける前に施工しておく</li><li>コーキングのとき、水抜き穴をふさがない</li><li>防水仕様は、コンパウンド・パワージェルでジャンクションBOXを防水処置する</li><li>配線の穴：POS・100V／200V</li></ul></div>'},
+    {c:"計量器立上がり", ic:IC.disp, n:"タツノ 6本マルチ（AAAJ・3油種2台同時給油）", s:"ルミナス・トップケースなし（3m型）", custom:'<div class="sec"><a href="tatsuno-6m-foot.jpg" target="_blank" rel="noopener"><img class="dwg" src="tatsuno-6m-foot.jpg" alt="タツノ 6本マルチ 施工寸法図"></a><p class="tnote">施工寸法図（ベッド上面図）。タップで拡大。全体の図面は下のボタンから。</p><a class="linkbtn" href="tatsuno-6m.jpg" target="_blank" rel="noopener">図面の全体を開く</a></div><div class="sec"><h3>主な寸法</h3><table class="spec"><tr><td>ベッドの外形</td><td>1280 × 530 mm</td></tr><tr><td>アンカーボルト</td><td>4 − φ18（M12 特殊用途鋼）、ピッチ 900 × 410 mm（左のアンカーから中心まで435）</td></tr><tr><td>吸入管（ポンプ）</td><td>3か所、間隔 285 mm（中心の列に並ぶ）</td></tr><tr><td>ジョイントボックス</td><td>POS・AC200V・AC100V・LAN・オプション</td></tr><tr><td>本体</td><td>幅1280・高さ約1480 mm、ホース3m（トップケースなし）</td></tr></table></div><div class="sec"><h3>機種</h3><table class="spec"><tr><td>AAAJA</td><td>ノズル A-B・C-D・E-F すべて標準</td></tr><tr><td>AAAJD</td><td>A-B が高速、C-D・E-F は標準</td></tr><tr><td>型式</td><td>ルミナス計量機（型式番号 第21TA-DB-01-002号）／セルフ用ルミナス計量機（第21TA-SDB-01-001号）</td></tr></table></div><div class="sec warn"><h3>注意</h3><ul><li>3油種・2台同時給油型（ポンプ3・メーター6・ノズル6）</li><li>ベーパーリカバリーシステム付きの場合は、ベーパー回収配管が付く</li><li>寸法は必ず図面で確認する</li></ul></div>'},
     {c:"レンタル", ic:IC.box, n:"コンプレッサー（レンタル）", s:"PDS670（〜100A）・PDS185（〜50A）", rent:{label:"コンプレッサー", models:["PDS670（〜100A）","PDS185（〜50A）"], time:"13時"}},
     {c:"レンタル", ic:IC.truck, n:"4トンユニック（レンタル）", s:"樹脂配管の現場など", rent:{label:"4トンユニック"}},
     {c:"レンタル", ic:IC.truck, n:"スーパーデッキ（ステージ車・レンタル）", s:"ステージ車", rent:{label:"スーパーデッキ（ステージ車）"}},
@@ -705,10 +730,13 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   relAdd(["パッキン 5K"], ["ガスケットペースト"]);
   relAdd(["溶接エルボ（ロング・ショート）","溶接45°エルボ","溶接チーズ"], ["防食テープ","ペトロテープ","錆止め塗料（赤・グレー）"]);
   relAdd(["防食テープ","ペトロテープ"], ["防食テープ","ペトロテープ"]);
-  relAdd(["オールアンカー（M10・M12）"], ["Uボルト（50A・80A・100A）"]);
+  relAdd(["オールアンカー（M10・M12）"], ["Uボルト（50A・80A・100A）","ハヤウマW（アカギ・両面穴）"]);
+  relAdd(["ハヤウマW（アカギ・両面穴）"], ["オールアンカー（M10・M12）","Uボルト（50A・80A・100A）"]);
   relAdd(["Uボルト（50A・80A・100A）"], ["オールアンカー（M10・M12）"]);
   relAdd(["エポキシ樹脂（主剤・硬化剤 1セット）"], ["アセトン","洗剤","透明ホース（太）","透明ホース（細）"]);
   relAdd(["ドレンタイト"], ["アルミテープ"]);
+  relAdd(["タツノ 組立式プロテクター（PKS・PKWS）"], ["タツノ 防水型 角型マンホールカバー MKA-401","ドレンタイト","アルミテープ","水糸"]);
+  relAdd(["タツノ 防水型 角型マンホールカバー MKA-401"], ["タツノ 組立式プロテクター（PKS・PKWS）","マスカーテープ"]);
   relAdd(["EFソケット","EFエルボ（90°）","EF 45°エルボ","EFチーズ","EFキャップ"], ["バリアパイプ 直管（エスロン バリアパイプエスエス）"]);
   function relHtml(m){
     var r = (REL[m.n]||[]).filter(function(n, i, a){ return a.indexOf(n) === i && findM(n); });
@@ -1055,11 +1083,11 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     else if(cs.indexOf("コーティング") >= 0) m.order = "タマダ株式会社";
     else if(cs.some(function(c){ return ["ねじ込み継手","溶接継手","パッキン","ボルト","シール材"].indexOf(c) >= 0; })) m.order = "札幌軸受工具株式会社";
   });
-  var CATS = ["ねじ込み継手","溶接継手","パッキン","樹脂配管","ボルト","シール材","コーティング","レンタル","宿","車両"];
+  var CATS = ["ねじ込み継手","溶接継手","パッキン","樹脂配管","泡消火","エアー配管","ボルト","ブラケット","シール材","コーティング","プロテクター","計量器立上がり","レンタル","宿","車両"];
   var cur = "ねじ込み継手", q = "";
   var esc = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   var GROUPS = [
-    {k:"材料", g:"mat", d:"継手・パッキン・ボルトなど", cats:["ねじ込み継手","溶接継手","パッキン","樹脂配管","ボルト","シール材","コーティング"]},
+    {k:"材料", g:"mat", d:"継手・パッキン・ボルトなど", cats:["ねじ込み継手","溶接継手","パッキン","樹脂配管","泡消火","エアー配管","ボルト","ブラケット","シール材","コーティング","プロテクター","計量器立上がり"]},
     {k:"車両", g:"veh", d:"トラック・工具・機械", cats:["車両"]},
     {k:"段取り", g:"prep", d:"レンタル・宿", cats:["レンタル","宿"]}
   ];
@@ -1083,7 +1111,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
       return (m.n + m.s + (m.use||'') + (m.custom||'')).toLowerCase().indexOf(key) >= 0;
     });
     var box = document.getElementById("list");
-    if(!items.length){ box.innerHTML = '<div class="empty">見つかりませんでした。別の言葉で探してください。</div>'; return; }
+    if(!items.length){ box.innerHTML = '<div class="empty">'+(key ? '見つかりませんでした。別の言葉で探してください。' : 'まだ登録がありません。')+'</div>'; return; }
     box.className = "list" + (key ? "" : " g-"+grpOf(cur).g);
     box.innerHTML = items.map(itemHtml).join("");
   }
