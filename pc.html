@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1C2326">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -72,6 +73,22 @@ details.more summary{cursor:pointer;color:var(--muted);font-size:.85rem;padding:
 .dot{display:inline-block;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 1.5px var(--muted);margin-right:5px;vertical-align:-1px}
 .del{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:8px 12px;font:inherit;font-size:.85rem;cursor:pointer}
 .guide{border:2px solid var(--ink)}
+.both{display:grid;gap:8px;margin-bottom:12px}
+.cb{border-radius:12px;padding:10px;background:var(--bg);opacity:.55}
+.cb.now{opacity:1;box-shadow:0 0 0 3px var(--ink) inset}
+.cb.fin{opacity:.45}
+.cbn{font-weight:700;font-size:.95rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cbk{font-size:.78rem;font-weight:700;color:var(--muted)}
+.tag{font-size:.72rem;padding:1px 7px;border-radius:9px;background:var(--line);color:var(--ink)}
+.tag.on{background:var(--ink);color:var(--bg)}
+.flow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.flow > div{border-radius:10px;padding:6px 8px;text-align:center}
+.flow small{display:block;font-size:.8rem;font-weight:700}
+.flow b{font-size:2rem;line-height:1.1;font-weight:700}
+.flow i{font-style:normal;font-size:.9rem;margin-left:2px}
+.flow .h{background:var(--blue-bg);color:var(--blue-ink)}
+.flow .t{background:var(--surface);color:var(--ink);border:2px solid var(--ink)}
+.arw{font-size:1.3rem;color:var(--muted)}
 .prog{display:flex;align-items:center;gap:4px;margin-bottom:10px;font-size:.72rem;color:var(--muted);flex-wrap:wrap}
 .prog span{padding:2px 7px;border-radius:9px;background:var(--bg)}
 .prog span.now{background:var(--sel);color:var(--sel-ink);font-weight:700}
@@ -198,9 +215,13 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
     if(!(num(p.len) > 0)){ g.innerHTML = '<div class="say" style="font-size:1.1rem;font-weight:700">サイズと長さを入れると、やることが出ます。</div>'; return; }
     var a = amt(p, f.c), coat = (f.c+1)+"回目の打設", h = '';
     h += progress(f);
+    // 1回目・2回目の量を、いつも両方見えるように
+    h += '<div class="both">'+[0,1].map(function(c){
+      var x = amt(p, c), now = f.st !== "done" && c === f.c, fin = f.st === "done" || c < f.c;
+      return '<div class="cb'+(now ? ' now' : '')+(fin ? ' fin' : '')+'"><div class="cbn">'+(c+1)+'回目の打設量'+(fin ? '<span class="tag">済</span>' : now ? '<span class="tag on">今</span>' : '')+(x.n > 1 ? '<span class="cbk">容器'+x.n+'個（各）</span>' : '')+'</div>' +
+        '<div class="flow"><div class="h"><small>① 青</small><b class="num">'+f1(x.h)+'</b><i>kg</i></div><div class="arw" aria-hidden="true">→</div><div class="t"><small>② 合計</small><b class="num">'+f1(x.s)+'</b><i>kg</i></div></div></div>';
+    }).join("")+'</div>';
     if(f.st !== "wait" && f.st !== "done"){
-      h += '<div class="stage">'+coat+(a.n > 1 ? '　容器'+a.n+'個（どれも同じ量）' : '')+'</div>';
-      h += '<div class="todo"><div class="say"><span class="blue">① 青（硬化剤）</span><big class="num blue">'+f1(a.h)+'<i>kg</i></big><span>② 白を足して合計</span><big class="num">'+f1(a.s)+'<i>kg</i></big></div>'+bucket(a.h, a.s, "s")+'</div>';
       h += '<div class="hint" style="margin-bottom:6px">'+(f.c===0 ? '打設が終わったら、2回目までの時間を押す' : '打設が終わったら、アラームまでの時間を押す')+'</div>';
       h += '<div class="times">'+TMINS.map(function(m){ return '<button type="button" class="chip" data-min="'+m+'">'+m+'分</button>'; }).join("")+'</div>';
     } else if(f.st === "wait"){

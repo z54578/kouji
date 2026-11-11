@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1C2326">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -97,7 +98,7 @@ a.site.o .due b{color:var(--err)}
   var esc = function(t){ return String(t==null?"":t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   var all = [], area = "すべて", q = "";
   var now = new Date(), ty = now.getFullYear(), tm = now.getMonth();
-  function region(a){ var m = String(a||"").replace(/^.+?[都道府県]/, "").match(/^(?:.+?郡)?(.+?[市町村])/); return m ? m[1] : "地域不明"; }
+  function region(a){ var m = String(a||"").replace(/〒?\s*\d{3}-?\d{4}\s*/, "").replace(/^.*?北海道/, "").replace(/^.+?[都府県]/, "").match(/^(?:.+?郡)?(.+?[市町村])/); return m ? m[1] : "地域不明"; }
   function months(c){ c = String(c||""); var y = c.match(/([0-9.]+)\s*年/), mo = c.match(/([0-9]+)\s*(か月|ヶ月|カ月|月)/); if(y) return Math.round(parseFloat(y[1])*12); if(mo) return +mo[1]; if(/半年/.test(c)) return 6; return 12; }
   function due(s){ if(!s.last) return null; var p = s.last.split("-"), d = new Date(+p[0], +p[1]-1+months(s.cycle), +p[2]); return d; }
   function ym(d){ return d.getFullYear()*12+d.getMonth(); }

@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1C2326">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -133,6 +134,15 @@ th:first-child,td:first-child{text-align:left;font-weight:700}
 .cats[class*="g-"] .chip[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
 .list[class*="g-"] > details{border-left:5px solid var(--gc)}
 .list[class*="g-"] > details > summary svg{color:var(--gc)}
+.zoomv{position:fixed;inset:0;z-index:50;background:#000;display:flex;flex-direction:column}
+.zoomv[hidden]{display:none}
+.zoombar{display:flex;gap:8px;justify-content:space-between;align-items:center;padding:calc(8px + env(safe-area-inset-top,0px)) 10px 8px;background:#111}
+.zoombar button{min-width:52px;min-height:44px;border-radius:8px;border:1px solid #555;background:#222;color:#fff;font:inherit;font-size:1.1rem;font-weight:700;cursor:pointer}
+.zoombar span{color:#bbb;font-size:.85rem}
+.zoomarea{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y pinch-zoom;background:#000}
+.zoomarea img{display:block;width:100%;height:auto;max-width:none;background:#fff}
+img.dwg{cursor:zoom-in}
+img.dwg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#fff}
 .empty{color:var(--muted);text-align:center;padding:20px}
 .foot{font-size:.8rem;color:var(--muted);margin-top:18px}
 input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
@@ -153,6 +163,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   <div class="cartpanel" id="cart" hidden></div>
   <div class="cartpanel" id="inv" hidden></div>
   <div class="cartpanel" id="insp" hidden></div>
+  <div class="zoomv" id="zoomv" hidden role="dialog" aria-label="図面の拡大表示"><div class="zoombar"><button type="button" id="zclose" aria-label="閉じる">×</button><span id="zpct">100%</span><span><button type="button" id="zout" aria-label="縮小">−</button> <button type="button" id="zin" aria-label="拡大">＋</button></span></div><div class="zoomarea" id="zarea"><img id="zimg" alt="図面"></div></div>
   <div class="toast" id="toast" role="status" hidden></div>
   <p class="foot">車両の記録と点検の結果は、この端末に保存されます。共有はメールで行います。「未登録」は、会社の補充場所や注文先がまだ入っていない所です。わかったら追加します。</p>
 </div>
@@ -252,15 +263,15 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     {c:"車両", ic:IC.truck, n:"サクシード", s:"移動車", veh:true},
     {c:"車両", ic:IC.truckS, n:"高所作業車", s:"高所作業車", veh:true},
     {c:"車両", ic:IC.truckS, n:"タンクローリー", s:"タンクローリー", veh:true},
-    {c:"検査機器", ic:IC.meter, n:"漏洩検査装置 プレックス", s:"地下タンク・配管の漏洩検査に使う",
-     use:"地下タンクや配管の漏洩検査に使う検査装置。",
-     place:"置き場所は"+TODO,
-     warn:["校正の期限が切れた装置で検査しない","可燃性の蒸気がある場所で使うので、取扱説明書の安全上の注意を守る","使い終わったらホース・継手の汚れを落として片付ける"],
-     spec:[["メーカー・型式",null],["製造番号",null],["台数",null],["校正の期限",null]],
-     insp:["電源・バッテリーの残量","本体・表示部の割れ","ホース・継手の傷と漏れ","圧力計・センサーの0点","校正の期限"],
-     parts:null, from:null, order:null},
+    {c:"検査機器", ic:IC.meter, n:"PREX タンクリークテスタ PSR-5101", s:"地下タンク気相部・配管・二重殻外殻・ローリーの漏洩検査", fig:"<div class=\"sec\"><h3>カタログ・取扱説明書のページ</h3><img class=\"dwg\" src=\"px-c02a.jpg\" alt=\"カタログ・取扱説明書のページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c02b.jpg\" alt=\"カタログ・取扱説明書のページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-psr-6.jpg\" alt=\"カタログ・取扱説明書のページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-psr-7.jpg\" alt=\"カタログ・取扱説明書のページ\" style=\"margin-top:6px\"><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。</p></div>", use:"地下タンクやタンクローリーの漏洩検査で、圧力と温度を測って表示・記録する測定器。報告書作成ソフトで消防様式の報告書が出せる。", place:"置き場所は"+TODO, warn:["加圧法のあとは、通気口に付けたメッシュ付きコックから徐々にガスを抜く。T型接続管などを一気に外すのは非常に危険", "窒素ボンベで加圧するときは、必ずレギュレーターで減圧する", "加圧試験では安全弁を使う。微加圧は二次減圧弁で減圧し、安全装置を使う", "天気の荒れた日は検査しない", "水圧試験・実液試験はできない", "本体はアースに落として使う", "USBなしで検査したら、早めに【データ復元】でUSBに保存する（50件を超えると古いデータが消える）"], spec:[["メーカー", "株式会社プレックス"], ["できる検査", "地下タンクの気相部・配管（加圧・減圧・微加圧・微減圧）、二重殻タンク外殻、タンクローリー、圧力の長時間記録（圧力REC）"], ["ユニット", "FU-501（加圧・減圧）、FU-502（微加圧・微減圧・タンクローリー兼用）。1ユニット2ch、最大5ユニット10ch"], ["記録", "5分ごとに自動印字、USBメモリに自動保存（USBなしは本体に最大50データ、超えると古い順に上書き）"], ["報告書", "消防様式31号・17の3、移動タンクは様式32〜34号（UGT-Rep4／TL-Rep4）"], ["電源", "AC100V（3Pコネクタ、ヒューズ2A）、アース端子あり"], ["温度", "白金抵抗体の温度計で外気温を測る"], ["製造番号・校正の期限", null]], insp:["電源が入り、画面が正常に出るか", "時刻がずれていないか（メンテナンス→時刻設定）", "USBメモリの残容量", "ホース・カプラの傷と漏れ", "校正の期限"], steps:["電源を入れ、機能選択で【1.地下タンク】（ローリーは【2.タンクローリ】）を選ぶ", "ブロックを設定する（同時にスタートしたいチャンネルは同じブロックにする）", "地下タンク：T型接続管を立て、片方に加圧用ホース、反対側にPSR-5101をつなぐ。タンクの接続配管はすべて密閉する", "タンクローリー：各槽の安全弁を外して漏洩センサーを付け、加圧分配器から各槽に送る", "試験を開始し、5分ごとの記録を確認する", "終わったらデータを保存し、報告書ソフトで報告書を作る"], stepsTitle:"使い方の流れ", parts:null, from:null, order:null},
+    {c:"検査機器", ic:IC.meter, n:"PREX 液相部ペアリークテスタ LLT-2200β", s:"地下タンク液相部の漏洩試験", fig:"<div class=\"sec\"><h3>取扱説明書・カタログのページ</h3><img class=\"dwg\" src=\"px-llt-3.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-llt-4.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-llt-5.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c03a.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c03b.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。</p></div>", use:"地下タンクの液相部の漏れを調べる装置。地下水の状態に合わせて、液面の変化（磁歪式変位センサー）か、漏れの気泡音（加速度センサー）で判定する。", place:"置き場所は"+TODO, warn:["センサーは電源を入れる前につなぐ", "ストッパーや基準マグネットは決められた寸法で付ける（下から20mm以下だとフロートを検知できずセンサー異常になる）", "使えないタンク・使えない液に当たらないか、検査の前に確認する"], spec:[["メーカー", "株式会社プレックス"], ["構成", "本体、磁歪式変位センサー、加速度センサー、デジタル圧力計、真空発生器、T型接続管"], ["判定の方法", "液相部が全部地下水に浸かっている → 液面変位（地下水の浸入）。地下水に浸かっていない → 気泡音（振動加速度）。一部だけ → 液面の高さと地下水位で設定"], ["検知の目安", "直径0.3mm以下の開口部からの漏れ、液面変位0.020mm以下"], ["デジタル圧力計", "−100〜500kPa（最小0.1kPa）、精度±0.25%FS、006P 9V乾電池"], ["真空発生器", "1.24kg、310×70×170mm、アース線10m"], ["電源", "AC100V"], ["使えないタンク", "150kL以上、マンホール下の継手が32A未満（25Aはオプション）、フロートが液面に届かない、減圧値20kPa以上、FRPタンク"], ["使える液", "ガソリン・軽油・灯油・A重油・廃油・アルコール類など（比重0.72〜0.92、動粘度150mm²/s未満）"], ["使えない液", "比重1.0以上・動粘度150mm²/s以上の液（グリセリンなど）、塩酸・硝酸などの腐食性の液"], ["製造番号・校正の期限", null]], insp:["電源・画面", "磁歪式センサー・加速度センサーのケーブルの傷", "デジタル圧力計の電池と0点", "真空発生器・ホースの漏れ", "校正の期限"], parts:null, from:null, order:null},
+    {c:"検査機器", ic:IC.meter, n:"PREX 二重殻タンク外殻用 減圧エジェクタ PR-1230", s:"外殻の減圧・配管の微減圧に使う真空発生器", fig:"<div class=\"sec\"><h3>取扱説明書のページ</h3><img class=\"dwg\" src=\"px-pr1230-1.jpg\" alt=\"取扱説明書のページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-pr1230-2.jpg\" alt=\"取扱説明書のページ\" style=\"margin-top:6px\"><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。</p></div>", use:"二重殻地下タンクの外殻を減圧法で減圧するときや、配管を微減圧法で検査するときに使う、小型の真空発生器。", place:"置き場所は"+TODO, warn:["ポート（減圧側・エアー供給側）を確認してから作業する", "排気は安全な場所に出す。排気口をふさがない（ホースが抜ける恐れ）", "供給圧力は仕様以上にしない（ホースが破裂する恐れ）", "圧縮エアー・窒素ボンベの扱いに注意する", "ホースの接続部に無理な力をかけない", "作業中は圧力を見ながら、その場を離れない"], spec:[["メーカー", "株式会社プレックス"], ["供給エアー", "0.45MPa（コンプレッサーか窒素）、消費13L/分"], ["使用圧力範囲・作動圧", "0〜0.5MPa・0.3〜0.6MPa"], ["到達真空度", "0.45MPa供給で約−85kPa"], ["吸込み流量", "最大8L/分（流量調整弁で調整）"], ["エアー供給ポート", "日東工器 20PM（ホース側はメス20Sタイプ）"], ["真空ポート", "日東工器 1TSF（測定器側：青ホース5m・2m、タンク外殻側：黄ホース2m）"], ["変換カプラ", "1TPM＋PT1/8・PT1/4・PT1/2 各1個"], ["重さ", "約350g（ケース別）"], ["騒音", "真空達成時52dB(A)、開始時60dB(A)"]], insp:["ホース・カプラの傷と漏れ", "減圧側カプラのエアー漏れ（定期的にメンテナンス・交換）", "変換カプラ3種類がそろっているか", "排気口の汚れ・詰まり"], steps:["窒素ボンベかコンプレッサーを用意する", "コンプレッサーは0.45MPaに設定（窒素は二次側0.3MPaくらいから始め、様子を見て0.45MPaまで上げる）", "エアー供給用カプラ⑤をコンプレッサーか窒素ボンベにつなぐ", "エジェクタ本体③の排気口をふさがない場所に置く", "測定用カプラ⑧（青ホース）を、圧力測定器（pascal・PSR-2101・PSR-3101など）の−20kPaレンジにつなぐ", "変換カプラ①（PT1/8・1/4・1/2から合うもの）に、シールテープを巻いて外殻の漏洩検知口に付ける", "接続カプラ⑦を変換カプラ①につなぐ", "圧力記録をスタートする", "エアー供給側のバルブを徐々に開く", "流量調整弁②を少しずつ開いて、ちょうどいい速さで減圧する", "−20kPaになったら、流量調整弁②とコック⑥を閉める", "試験を開始する", "終わったらコック⑥を開け、流量調整弁②を徐々に開いて圧力を戻す"], stepsTitle:"使い方の手順（取扱説明書より）", parts:null, from:null, order:null},
+    {c:"検査機器", ic:IC.meter, n:"PREX 総合カタログ（付属品・治具・校正・レンタル）", s:"圧力レコーダ pascal・真空発生器・配管密閉加圧治具など", fig:"<div class=\"sec\"><h3>カタログのページ</h3><img class=\"dwg\" src=\"px-c04a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c04b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c05a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c05b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c06a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c06b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c07a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c07b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c08a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c08b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c09a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c09b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c10a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c10b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c11a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c11b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c12a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c12b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c13a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c13b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。</p></div>", use:"PSR-5101やLLT-2200βと一緒に使う付属品・治具、校正、レンタルなどのカタログ。", place:"置き場所は"+TODO, warn:["型式・価格は変わることがあるので、注文前にメーカーに確認する"], spec:[["主な中身", "圧力レコーダ pascal PR-2022、マルチステージ真空発生器、配管密閉加圧治具、チャッキ弁治具、各種センサー・ホース・カプラ、校正、レンタル"], ["メーカー", "株式会社プレックス"]], insp:[], parts:null, from:null, order:null},
     {c:"検査の手順", ic:IC.meter, n:"地下タンク漏洩検査", s:"周期：毎年または3年ごと",
-     custom:'<div class="sec place"><h3>周期</h3><p>毎年または3年ごと</p></div><div class="sec"><h3>手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div><div class="sec warn"><h3>注意・よくある間違い</h3><p>'+TODO+'</p></div>'},
+     custom:'<div class="sec place"><h3>周期</h3><p>毎年または3年ごと</p></div>'+
+      '<div class="sec"><h3>使う機器</h3><ul><li><b>気相部・配管</b>（加圧・減圧・微加圧・微減圧）：タンクリークテスタ PSR-5101</li><li><b>液相部</b>：液相部ペアリークテスタ LLT-2200β</li><li><b>二重殻タンクの外殻</b>：PSR-5101＋減圧エジェクタ PR-1230（−20kPaまで減圧）</li></ul><p class="tnote">機器の使い方・注意は「検査機器」のそれぞれのページを見てください。</p></div>'+
+      '<div class="sec"><h3>会社の手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div>'+
+      '<div class="sec warn"><h3>安全の注意（機器の取扱説明書より）</h3><ul><li>加圧のあとは、通気口のメッシュ付きコックから徐々にガスを抜く。一気に外さない</li><li>窒素ボンベは必ずレギュレーターで減圧して使う。加圧試験は安全弁、微加圧は二次減圧弁と安全装置を使う</li><li>天気の荒れた日は検査しない</li></ul></div>'},
     {c:"検査の手順", ic:IC.meter, n:"タンクローリーの検査・検定", s:"周期：5年ごと",
      custom:'<div class="sec place"><h3>周期</h3><p>5年ごと</p></div><div class="sec"><h3>手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div><div class="sec warn"><h3>注意・よくある間違い</h3><p>'+TODO+'</p></div>'},
     {c:"検査の手順", ic:IC.meter, n:"安全弁検査", s:"周期：毎年",
@@ -550,7 +561,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
         '<div class="sec"><h3>何に使う</h3><p>'+esc(m.use)+'</p></div>'+
         '<div class="sec place"><h3>どこにある</h3><p>'+m.place+'</p></div>'+
         (m.spec ? '<div class="sec"><h3>仕様・サイズ</h3><table class="spec">'+m.spec.map(function(r){ return '<tr><td>'+esc(r[0])+'</td><td>'+(r[1] ? esc(r[1]) : TODO)+'</td></tr>'; }).join("")+'</table></div>' : '')+
-        (m.steps ? '<div class="sec"><h3>オイル交換の手順</h3><ol style="margin:0;padding-left:1.4em">'+m.steps.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ol></div>' : '')+
+        (m.steps ? '<div class="sec"><h3>'+(m.stepsTitle || 'オイル交換の手順')+'</h3><ol style="margin:0;padding-left:1.4em">'+m.steps.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ol></div>' : '')+
         (m.insp ? '<div class="sec"><h3>点検項目</h3><ul>'+m.insp.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></div>' : '')+
         (m.parts !== undefined ? '<div class="sec"><h3>パーツリスト</h3>'+(m.parts ? '<a class="linkbtn" href="'+m.parts+'" target="_blank" rel="noopener">パーツリストを開く</a>' : '<p>'+TODO+'（メーカーのパーツリストのリンクを登録すると、ここから開けます）</p>')+'</div>' : '')+
         (m.warn && m.warn.length ? '<div class="sec warn"><h3>注意・よくある間違い</h3><ul>'+m.warn.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join("")+'</ul></div>' : '')+
@@ -579,6 +590,18 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     var body = VF.map(function(f){ return f+"："+(vval(v,f) || "未登録"); }).join("\n");
     a.href = "mailto:"+TEAM_CC.join(",")+"?subject="+encodeURIComponent("【車両記録】"+v+" "+today())+"&body="+encodeURIComponent(v+" の記録です。\n\n"+body);
   });
+  (function(){
+    var zv = document.getElementById("zoomv"), zi = document.getElementById("zimg"), za = document.getElementById("zarea"), zp = document.getElementById("zpct"), lv = 1;
+    function setLv(n){ lv = Math.max(1, Math.min(4, n)); zi.style.width = (lv*100)+"%"; zp.textContent = (lv*100)+"%"; }
+    document.addEventListener("click", function(e){
+      var im = e.target.closest("img.dwg"); if(!im) return;
+      e.preventDefault(); zi.src = im.currentSrc || im.src; setLv(1); zv.hidden = false; document.body.style.overflow = "hidden"; za.scrollTop = 0; za.scrollLeft = 0;
+    });
+    document.getElementById("zclose").onclick = function(){ zv.hidden = true; document.body.style.overflow = ""; };
+    document.getElementById("zin").onclick = function(){ var cx = (za.scrollLeft + za.clientWidth/2)/za.scrollWidth, cy = (za.scrollTop + za.clientHeight/2)/za.scrollHeight; setLv(lv+0.5); za.scrollLeft = cx*za.scrollWidth - za.clientWidth/2; za.scrollTop = cy*za.scrollHeight - za.clientHeight/2; };
+    document.getElementById("zout").onclick = function(){ setLv(lv-0.5); };
+    zi.addEventListener("dblclick", function(){ setLv(lv >= 2.5 ? 1 : lv+1); });
+  })();
   document.getElementById("inspbtn").addEventListener("click", openInsp);
   shakenAlert();
   document.getElementById("cartbtn").addEventListener("click", openCart);
