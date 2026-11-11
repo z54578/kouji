@@ -139,19 +139,40 @@ img.dwg{display:block;width:100%;height:auto;border:1px solid var(--line);border
 .zoomarea{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y pinch-zoom;background:#000}
 .zoomarea img{display:block;width:100%;height:auto;max-width:none;background:#fff}
 img.dwg{cursor:zoom-in}
+.qs{margin:0;padding:0;list-style:none}
+.list .body{counter-reset:q}
+.qs li{counter-increment:q;display:grid;grid-template-columns:34px 96px 1fr;align-items:center;gap:6px;padding:9px 0;border-bottom:1px solid var(--line)}
+.qs li::before{content:counter(q);width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:700;display:flex;align-items:center;justify-content:center}
+.qs li b{font-size:1.02rem}
+.qs li span{font-size:.92rem}
+.qh{margin:12px 0 2px;font-weight:700;font-size:.85rem;color:#fff;background:var(--gc,#0F7B6C);border-radius:6px;padding:3px 10px;display:inline-block}
+.qw{margin-top:10px;background:#FDECEA;color:#8A1C12;border-radius:10px;padding:8px 12px;font-weight:700;font-size:.92rem;line-height:1.8}
+.qn{font-size:.85rem;color:var(--muted);margin:8px 0}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:15;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:1px solid var(--line);padding:4px 6px calc(4px + env(safe-area-inset-bottom,0px))}
+.bnav button{position:relative;background:none;border:0;color:var(--ink);font:inherit;font-size:.78rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 0;min-height:52px;cursor:pointer}
+.bnav button span{font-size:1.3rem;line-height:1}
+.bnav i{position:absolute;top:2px;right:calc(50% - 22px);font-style:normal;background:#B42318;color:#fff;border-radius:9px;font-size:.7rem;padding:0 6px;min-width:18px}
+body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+.recent{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 2px}
+.recent > span{font-size:.8rem;color:var(--muted);font-weight:700;width:100%}
+.rchip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:16px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sec.fold > h3{cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:0;padding:4px 0}
+.sec.fold > h3::after{content:"＋";font-weight:700;color:var(--muted)}
+.sec.fold.open > h3::after{content:"−"}
+.sec.fold:not(.open) > :not(h3){display:none}
 .g2r{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .rentf .cfield input{height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1rem;padding:0 10px;width:100%}
 
-:root{--g-mat:#2F6FD6;--g-mat-soft:#E3ECFA;--g-veh:#2E7D4F;--g-veh-soft:#E2F2E8;--g-prep:#B7791F;--g-prep-soft:#FBF0DC;--g-tnk:#7A4FC4;--g-tnk-soft:#EFE7FA}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g-mat:#7FA8E0;--g-mat-soft:#1E2B3D;--g-veh:#6BC48F;--g-veh-soft:#1C2E24;--g-prep:#E2AC4E;--g-prep-soft:#33291A;--g-tnk:#B79AE8;--g-tnk-soft:#2A2238}}
-:root[data-theme="dark"]{--g-mat:#7FA8E0;--g-mat-soft:#1E2B3D;--g-veh:#6BC48F;--g-veh-soft:#1C2E24;--g-prep:#E2AC4E;--g-prep-soft:#33291A;--g-tnk:#B79AE8;--g-tnk-soft:#2A2238}
+:root{--g-mat:#2F6FD6;--g-mat-soft:#E3ECFA;--g-veh:#2E7D4F;--g-veh-soft:#E2F2E8;--g-prep:#B7791F;--g-prep-soft:#FBF0DC;--g-tnk:#7A4FC4;--g-tnk-soft:#EFE7FA;--g-work:#0F7B6C;--g-work-soft:#DDF3EF}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g-mat:#7FA8E0;--g-mat-soft:#1E2B3D;--g-veh:#6BC48F;--g-veh-soft:#1C2E24;--g-prep:#E2AC4E;--g-prep-soft:#33291A;--g-tnk:#B79AE8;--g-tnk-soft:#2A2238;--g-work:#5CC8B6;--g-work-soft:#173430}}
+:root[data-theme="dark"]{--g-mat:#7FA8E0;--g-mat-soft:#1E2B3D;--g-veh:#6BC48F;--g-veh-soft:#1C2E24;--g-prep:#E2AC4E;--g-prep-soft:#33291A;--g-tnk:#B79AE8;--g-tnk-soft:#2A2238;--g-work:#5CC8B6;--g-work-soft:#173430}
 .grps{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0 0}
 .grp{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:62px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);border-top:5px solid var(--gc);background:var(--surface);color:var(--ink);font-family:inherit;text-align:left;cursor:pointer}
 .grp b{font-size:1.05rem}
 .grp span{font-size:.72rem;color:var(--muted);line-height:1.3}
 .grp[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
 .grp[aria-pressed="true"] span{color:rgba(255,255,255,.85)}
-.g-mat{--gc:var(--g-mat);--gs:var(--g-mat-soft)} .g-veh{--gc:var(--g-veh);--gs:var(--g-veh-soft)} .g-prep{--gc:var(--g-prep);--gs:var(--g-prep-soft)} .g-tnk{--gc:var(--g-tnk);--gs:var(--g-tnk-soft)}
+.g-mat{--gc:var(--g-mat);--gs:var(--g-mat-soft)} .g-veh{--gc:var(--g-veh);--gs:var(--g-veh-soft)} .g-prep{--gc:var(--g-prep);--gs:var(--g-prep-soft)} .g-tnk{--gc:var(--g-tnk);--gs:var(--g-tnk-soft)} .g-work{--gc:var(--g-work);--gs:var(--g-work-soft)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .grp[aria-pressed="true"]{color:#161A1C} :root:not([data-theme="light"]) .grp[aria-pressed="true"] span{color:rgba(22,26,28,.8)}}
 .cats[class*="g-"]{background:var(--gs);border-radius:10px;padding:8px;margin-top:8px}
 .cats[class*="g-"] .chip[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
@@ -181,10 +202,17 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   <div class="shaken" id="shaken" hidden></div>
   <div class="toolbar"><button type="button" class="gbtn" id="inspbtn">月次点検をする</button><button type="button" class="gbtn" id="invbtn">棚卸しをする</button></div>
   <input class="search" id="q" type="search" placeholder="名前で探す（全部の種類から探します）" aria-label="材料を名前で探す">
+  <div class="recent" id="recent" hidden></div>
   <div class="grps" id="grps" role="group" aria-label="大きな分類"></div>
   <div class="cats" id="cats" role="group" aria-label="種類で絞り込む"></div>
   <div class="list" id="list"></div>
-  <button class="cartbtn" id="cartbtn" type="button">カート 0</button>
+  <button class="cartbtn" id="cartbtn" type="button" hidden>カート 0</button>
+  <nav class="bnav" aria-label="よく使う操作">
+    <button type="button" id="nHome"><span aria-hidden="true">🏠</span>ホーム</button>
+    <button type="button" id="nFind"><span aria-hidden="true">🔍</span>探す</button>
+    <button type="button" id="nCart"><span aria-hidden="true">🛒</span>カート<i id="nCartN" hidden>0</i></button>
+    <button type="button" id="nInsp"><span aria-hidden="true">✅</span>点検</button>
+  </nav>
   <div class="cartpanel" id="cart" hidden></div>
   <div class="cartpanel" id="inv" hidden></div>
   <div class="cartpanel" id="insp" hidden></div>
@@ -245,6 +273,9 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     cd: sv('<path d="M4 20 Q14 8 24 16 T44 12" stroke="#E07B2E" stroke-width="7" fill="none"/><path d="M4 20 Q14 8 24 16 T44 12" stroke="#B85A15" stroke-width="1.5" stroke-dasharray="2 3" fill="none"/>'),
     cdp: sv('<rect x="8" y="10" width="14" height="12" rx="2" fill="#E07B2E" stroke="none"/><rect x="26" y="10" width="14" height="12" rx="2" fill="#E07B2E" stroke="none"/><rect x="20" y="8" width="8" height="16" rx="1" fill="#B85A15" stroke="none"/>'),
     tank: sv('<ellipse cx="24" cy="18" rx="19" ry="9" stroke-width="2.5"/><path d="M14 9 V4 H20 V9 M28 9 V4 H34 V9" stroke-width="2.5"/>'),
+    book: sv('<path d="M8 6 H22 Q24 6 24 9 V40 Q24 37 21 37 H8 Z" stroke-width="2.5"/><path d="M40 6 H26 Q24 6 24 9 V40 Q24 37 27 37 H40 Z" stroke-width="2.5"/>'),
+    foam: sv('<path d="M14 6 H30 V10 H14 Z" stroke-width="2.5"/><path d="M22 10 V18" stroke-width="2.5"/><path d="M12 22 Q22 14 32 22" stroke-width="2.5"/><circle cx="14" cy="27" r="2.5" stroke-width="2"/><circle cx="22" cy="28" r="3" stroke-width="2"/><circle cx="30" cy="27" r="2.5" stroke-width="2"/>'),
+    air: sv('<path d="M4 16 H24" stroke-width="5"/><rect x="24" y="10" width="8" height="12" rx="2" stroke-width="2.5"/><path d="M32 16 H38 M38 10 V22 M42 12 Q46 16 42 20" stroke-width="2.5"/>'),
     valve: sv('<path d="M4 20 H44" stroke-width="7"/><path d="M18 14 H30 V26 H18 Z" fill="currentColor" stroke="none"/><path d="M24 14 V6 M17 5 H31" stroke-width="3"/>'),
     gasket: sv('<circle cx="24" cy="16" r="13" stroke-width="2.5"/><circle cx="24" cy="16" r="6.5" stroke-width="2.5"/>'),
     gasketF: sv('<circle cx="24" cy="16" r="14" stroke-width="2"/><circle cx="24" cy="16" r="6" stroke-width="2"/><circle cx="24" cy="5.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="24" cy="26.5" r="1.8" fill="currentColor" stroke="none"/><circle cx="13.5" cy="16" r="1.8" fill="currentColor" stroke="none"/><circle cx="34.5" cy="16" r="1.8" fill="currentColor" stroke="none"/>'),
@@ -482,6 +513,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      use:"おねじに巻いて、ねじ込み部分からの漏れを防ぐ。",
      place:"デカ・キャンター：コンテナ8番（予備）・キャビン（使いかけ）",
      warn:["ねじの向きに沿って巻く（管の先から見て時計回り）","管の先の1山目は巻かずに残す","汚れたテープはシール不良の原因"], from:null, order:null},
+    {c:"シール材", ic:IC.book, n:"シールテープの巻き方", s:"向きと回数", custom:"<div class=\"qh\">巻き方</div><ol class=\"qs\"><li><b>掃除</b><span>ねじのごみ・油を拭く</span></li><li><b>始め</b><span>先端の1〜2山は残す</span></li><li><b>向き</b><span>ねじ込む向き（先から見て時計回り）に巻く</span></li><li><b>巻く</b><span>引っぱりながら半分ずつ重ねて巻く</span></li><li><b>回数</b><span>細い管は5〜7回、太い管は多め</span></li><li><b>なじませる</b><span>指でねじ山になじませる</span></li></ol><div class=\"qw\"><div>⚠ 逆向きに巻くと、ねじ込む時にはがれる</div><div>⚠ 締めすぎ・戻し締めをしない（戻すと漏れる）</div></div>"},
     {c:"シール材", ic:IC.tube, n:"ドレンタイト", s:"プロテクターの止水に使う（2液 1:1）",
      use:"マンホールのプロテクターのすき間に使い、水が入らないように止水する。2液を1:1で混ぜて使う。",
      place:"置き場所は"+TODO,
@@ -507,6 +539,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      use:"ねじに塗って、ねじ込み部分の漏れを防ぐ。",
      place:"デカ・キャンター：夏はコンテナ8番、冬はキャビン",
      warn:["夏のキャビンなど高温の場所に置かない","ふたをしっかり閉める","冬は硬くなるので温めてから使う"], from:null, order:null},
+    {c:"シール材", ic:IC.book, n:"ヘルメチックの塗り方", s:"薄く均一に", custom:"<div class=\"qh\">塗り方</div><ol class=\"qs\"><li><b>掃除</b><span>ねじの油・ごみを拭き取る</span></li><li><b>始め</b><span>先端の1〜2山は残す</span></li><li><b>塗る</b><span>おねじの全周に、薄く均一に</span></li><li><b>組む</b><span>乾く前にすぐねじ込む</span></li><li><b>拭く</b><span>はみ出た分を拭き取る</span></li></ol><div class=\"qw\"><div>⚠ 塗りすぎない（管の中に入る）</div><div>⚠ 製品の説明書の使い方と乾く時間を守る</div></div>"},
     {nosize:true, c:"溶接継手", ic:IC.wrap, n:"防食テープ", s:"管の外側のさび止め",
      use:"埋設部などの管の外側に巻いて、腐食を防ぐ。",
      place:"デカ・キャンター：運転席側の台の下 コンテナ5番（防食セット）",
@@ -632,6 +665,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      spec:[["バッテリー型番",null],["砥石のサイズ",null]],
      insp:["本体・ケースの割れ","異音・異常な振動","スイッチ・ブレーキが効くか","ホイールガードが付いているか","砥石のひび・欠け","バッテリー端子の汚れ・割れ"],
      parts:null, from:null, order:null},
+    {c:"充電工具", ic:IC.book, n:"サンダーの刃の交換", s:"砥石の付け替え", custom:"<div class=\"qh\">交換のしかた</div><ol class=\"qs\"><li><b>電池</b><span>バッテリーを外す</span></li><li><b>ロック</b><span>スピンドルロックを押したまま、レンチでナットを緩める</span></li><li><b>外す</b><span>古い砥石を外す</span></li><li><b>確認</b><span>新しい砥石の大きさ・回転数・ひびを確認</span></li><li><b>付ける</b><span>砥石を付けてナットを締める</span></li><li><b>カバー</b><span>カバーの向きを合わせる</span></li><li><b>試運転</b><span>人のいない方へ向けて1分回す</span></li></ol><div class=\"qw\"><div>⚠ 砥石の交換・試運転は「自由研削といし」の特別教育を受けた人が行う</div><div>⚠ カバーは外さない</div><div>⚠ 保護メガネを使う</div></div>"},
     {c:"充電工具", ic:IC.cordless, n:"インパクトレンチ×2", s:"ボルト・ナットを締める（ハイコーキ）",
      use:"フランジのボルトなどを締めたり、ゆるめたりする。",
      place:"デカ・キャンター：運転席側の台の上（締める系ケース）",
@@ -667,6 +701,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      warn:["刃のカバーを外したまま持ち運ばない"],
      spec:[["バッテリー型番",null],["替刃の型番",null]],
      insp:["刃の切れ・歯の欠け","刃の張り","本体の割れ","バッテリー端子"], parts:null, from:null, order:null},
+    {c:"充電工具", ic:IC.book, n:"バンドソーの使い方", s:"材料の固定と切り方", custom:"<div class=\"qh\">使い方</div><ol class=\"qs\"><li><b>固定</b><span>材料をバイスなどでしっかり固定</span></li><li><b>合わせる</b><span>切る線に刃を合わせる</span></li><li><b>切る</b><span>スイッチON → 押し付けず刃の重さで切る</span></li><li><b>切り終わり</b><span>材料が落ちるので支えておく</span></li></ol><div class=\"qw\"><div>⚠ 回っている刃に触らない</div><div>⚠ 保護メガネを使う</div><div>⚠ 切ったすぐの所は熱い</div></div>"},
+    {c:"充電工具", ic:IC.book, n:"バンドソーの刃の交換", s:"向きとテンション", custom:"<div class=\"qh\">交換のしかた</div><ol class=\"qs\"><li><b>電池</b><span>バッテリーを外す</span></li><li><b>緩める</b><span>テンションレバーを緩める</span></li><li><b>外す</b><span>カバーを開けて古い刃を外す</span></li><li><b>向き</b><span>新しい刃の矢印（刃先）の向きを確認</span></li><li><b>掛ける</b><span>プーリーに掛け、ガイドローラーの間に入れる</span></li><li><b>張る</b><span>テンションレバーで張り、カバーを閉める</span></li><li><b>確認</b><span>空回しして、刃がずれないか見る</span></li></ol><div class=\"qw\"><div>⚠ 必ずバッテリーを外してから</div><div>⚠ 刃は手袋をして持つ</div></div>"},
     {c:"充電工具", ic:IC.batt, n:"バッテリー・マルチ充電器", s:"ハイコーキの充電式工具用",
      use:"充電工具のバッテリーと、まとめて充電するマルチ充電器。",
      place:"デカ・キャンター：運転席側の台の上（充電器ケース）",
@@ -731,7 +767,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
      warn:["鋼管側の止めねじは、ねじ切れるまで確実に締める","CD管側は奥まで差し込む"],
      spec:[["メーカー","パナソニック"],["呼び","2831（CD28 × E31）"],["参考価格","希望小売 715円（税抜650円）※変わることがあります"]],
      from:null, order:null},
-    {c:"泡消火", ic:IC.foam, open:true, n:"【寸法図】QS-Guard（すぐ見る）", s:"ユニット・アンカー・配管・泡放出口の寸法", custom:'<p class=\"tnote\">図をタップすると大きく表示します。寸法は必ず取扱説明書で確認してください。</p><div class=\"sec\"><h3>よく使う寸法</h3><table class=\"spec\"><tr><td>消火ユニットの大きさ</td><td>幅775 × 高さ1785 × 奥行615 mm（約370 kg）</td></tr><tr><td>アンカー</td><td>4 − φ14.5、ピッチ 700 × 510 mm、M10ボルトで固定</td></tr><tr><td>配管の穴</td><td>φ40 を放射区画数の1/2の数だけ（ノックアウト・ポンチ位置）</td></tr><tr><td>電線管の穴</td><td>上 φ28（信号用）・下 φ22（電源用）</td></tr><tr><td>泡放出口の高さ</td><td>床面から中心まで 60〜70 mm</td></tr><tr><td>泡ヘッドの間隔</td><td>1500〜2000 mm が目安</td></tr><tr><td>ユニット内の配管</td><td>20A SGP 白（表16の寸法はねじ部を含む）</td></tr></table></div><div class=\"sec\"><h3>消火ユニット 配管・電線管の穴あけ位置（図16）</h3><a href=\"foam-dim-unit.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-unit.jpg\" alt=\"消火ユニット 配管・電線管の穴あけ位置（図16）\"></a><p class=\"tnote\">正面の幅775・奥行583、穴は上から230の所。配管の穴は104×3ピッチ（正面）・60×3ピッチ（側面）。</p></div><div class=\"sec\"><h3>消火ユニット 固定アンカー位置（図17）</h3><a href=\"foam-dim-anchor.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-anchor.jpg\" alt=\"消火ユニット 固定アンカー位置（図17）\"></a><p class=\"tnote\">4 − φ14.5、700 × 510。M10で固定。</p></div><div class=\"sec\"><h3>消火ユニット 配管寸法（表16）・配管上面図（図18）・配管例（図19）</h3><a href=\"foam-dim-piping.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-piping.jpg\" alt=\"消火ユニット 配管寸法（表16）・配管上面図（図18）・配管例（図19）\"></a><p class=\"tnote\">右出し・左出し・後出しの上段／下段ラインの寸法。使用配管20A SGP白。</p></div><div class=\"sec\"><h3>泡放出口 取付断面図（図10）・アイランド周辺配管（図11）</h3><a href=\"foam-dim-head.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-head.jpg\" alt=\"泡放出口 取付断面図（図10）・アイランド周辺配管（図11）\"></a><p class=\"tnote\">床から中心まで60〜70。分岐配管の長さ（L1・L2）はそれぞれ等しく。</p></div><div class=\"sec\"><h3>ヘッドケースの取付（図12〜15）</h3><a href=\"foam-dim-headcase.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-headcase.jpg\" alt=\"ヘッドケースの取付（図12〜15）\"></a><p class=\"tnote\">コンクリート製アイランド・スチール型枠製アイランドの場合。</p></div>'},
+    {c:"泡消火", ic:IC.foam, open:true, n:"【寸法図】QS-Guard（すぐ見る）", s:"ユニット・アンカー・配管・泡放出口の寸法", custom:"<p class=\"tnote\">図をタップすると大きく表示します（＋で拡大）。</p><div class=\"sec\"><h3>消火ユニット 配管・電線管の穴あけ位置（図16）</h3><a href=\"foam-dim-unit.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-unit.jpg\" alt=\"消火ユニット 配管・電線管の穴あけ位置（図16）\"></a><p class=\"tnote\">正面の幅775・奥行583、穴は上から230の所。配管の穴は104×3ピッチ（正面）・60×3ピッチ（側面）。</p></div><div class=\"sec\"><h3>消火ユニット 固定アンカー位置（図17）</h3><a href=\"foam-dim-anchor.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-anchor.jpg\" alt=\"消火ユニット 固定アンカー位置（図17）\"></a><p class=\"tnote\">4 − φ14.5、700 × 510。M10で固定。</p></div><div class=\"sec\"><h3>消火ユニット 配管寸法（表16）・配管上面図（図18）・配管例（図19）</h3><a href=\"foam-dim-piping.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-piping.jpg\" alt=\"消火ユニット 配管寸法（表16）・配管上面図（図18）・配管例（図19）\"></a><p class=\"tnote\">右出し・左出し・後出しの上段／下段ラインの寸法。使用配管20A SGP白。</p></div><div class=\"sec\"><h3>泡放出口 取付断面図（図10）・アイランド周辺配管（図11）</h3><a href=\"foam-dim-head.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-head.jpg\" alt=\"泡放出口 取付断面図（図10）・アイランド周辺配管（図11）\"></a><p class=\"tnote\">床から中心まで60〜70。分岐配管の長さ（L1・L2）はそれぞれ等しく。</p></div><div class=\"sec\"><h3>ヘッドケースの取付（図12〜15）</h3><a href=\"foam-dim-headcase.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"foam-dim-headcase.jpg\" alt=\"ヘッドケースの取付（図12〜15）\"></a><p class=\"tnote\">コンクリート製アイランド・スチール型枠製アイランドの場合。</p></div><div class=\"sec\"><h3>よく使う寸法</h3><table class=\"spec\"><tr><td>消火ユニットの大きさ</td><td>幅775 × 高さ1785 × 奥行615 mm（約370 kg）</td></tr><tr><td>アンカー</td><td>4 − φ14.5、ピッチ 700 × 510 mm、M10ボルトで固定</td></tr><tr><td>配管の穴</td><td>φ40 を放射区画数の1/2の数だけ（ノックアウト・ポンチ位置）</td></tr><tr><td>電線管の穴</td><td>上 φ28（信号用）・下 φ22（電源用）</td></tr><tr><td>泡放出口の高さ</td><td>床面から中心まで 60〜70 mm</td></tr><tr><td>泡ヘッドの間隔</td><td>1500〜2000 mm が目安</td></tr><tr><td>ユニット内の配管</td><td>20A SGP 白（表16の寸法はねじ部を含む）</td></tr></table></div>"},
     {c:"泡消火", ic:IC.foam, n:"QS-Guard 仕様（ヤマトプロテック YGS-180NP）", s:"セルフSS用 パッケージ型固定泡消火設備", custom:'<div class=\"sec\"><h3>仕様</h3><table class=\"spec\"><tr><td>名称</td><td>セルフサービス方式給油取扱所用 パッケージ型固定泡消火設備</td></tr><tr><td>機種</td><td>YGS-180NP（QS-Guard）</td></tr><tr><td>確認番号</td><td>第 YP-E-02号</td></tr><tr><td>消火薬剤</td><td>水成膜泡 7L</td></tr><tr><td>不凍液</td><td>173L</td></tr><tr><td>泡消火薬剤貯蔵容器</td><td>7.7L（SUS304）</td></tr><tr><td>不凍液貯蔵容器</td><td>198L（SS400）</td></tr><tr><td>加圧用ガス容器</td><td>13.4L（窒素）</td></tr><tr><td>放射圧力</td><td>0.25〜0.50 MPa</td></tr><tr><td>放射量</td><td>11.0〜18.8 L/分</td></tr><tr><td>発泡倍率</td><td>2〜6倍</td></tr><tr><td>配管</td><td>架橋ポリエチレン管 または SGP、20A・25A</td></tr><tr><td>放射区画選択弁</td><td>電気式、4放射区画ごとに1個</td></tr><tr><td>泡放出口</td><td>C3604B、1放射区画ごとに2個</td></tr><tr><td>制御盤</td><td>幅265 × 高さ165 × 奥行100 mm</td></tr><tr><td>操作箱</td><td>卓上型 240 × 70 × 205、壁掛型 240 × 205 × 70 mm</td></tr></table></div><div class=\"sec\"><h3>機種と区画数</h3><table class=\"spec\"><tr><td>YGS-180NP-01</td><td>1〜4区画・選択弁1個</td></tr><tr><td>YGS-180NP-02</td><td>1〜8区画・選択弁2個</td></tr><tr><td>YGS-180NP-03</td><td>1〜12区画・選択弁3個</td></tr><tr><td>YGS-180NP-04</td><td>1〜16区画・選択弁4個</td></tr><tr><td>YGS-180NP-05</td><td>1〜20区画・選択弁5個</td></tr><tr><td>YGS-180NP-06</td><td>1〜24区画・選択弁6個</td></tr></table></div>'},
     {c:"泡消火", ic:IC.foam, n:"QS-Guard 据付・配管・泡放出口の手順", s:"取扱説明書のポイント", custom:'<div class=\"sec\"><h3>消火ユニットの据付</h3><ol style=\"margin:0;padding-left:1.4em\"><li>配管を出す方向（左・右・背面）を現場に合わせて決める</li><li>配管の穴 φ40 を放射区画数の1/2だけ、電線管の穴を上 φ28・下 φ22 であける（ノックアウト・ポンチ位置）</li><li>穴のバリを取り、配管の穴にゴムブッシュを付ける</li><li>設置場所が水平で平らか確認し、アンカーの穴をあける（4 − φ14.5、700 × 510）</li><li>アンカーを打ち、ユニットを据え付け、水平を確認してM10ボルトで固定する</li></ol></div><div class=\"sec\"><h3>ユニットの配管</h3><ul><li>主配管とユニットは、絶縁のため<b>ユニオン</b>でつなぐ</li><li>ユニオンは隣の配管に当たらないよう、垂直部分で<b>千鳥</b>に配置する</li><li>立ち上がり・立ち下がりに<b>フレキ</b>を使うと合わせ作業が楽</li><li>ユニット内の配管は20A SGP白（寸法表はねじ部込み）</li></ul></div><div class=\"sec\"><h3>泡放出口までの配管</h3><ul><li>使える配管：<b>GSガードユカロンエクセルパイプ</b>（埋設◎・架空×）、<b>SGP または SGP-PD</b>（埋設○・架空◎）、管径20A、全損失0.25 MPa</li><li>樹脂の配管・継手は<b>GSガードユカロンエクセルパイプだけ</b>。ほかは使えない</li><li>ユニットからの配管1本で2区画（泡放出口4個）に同時に出る。<b>アイランドごとに1系統</b>で、必ず両側に同時に出るように配管する</li><li>シール剤は<b>日本ヘルメチック製 ヘルメシール55</b>を推奨</li></ul></div><div class=\"sec\"><h3>泡放出口の取付</h3><ul><li>床から中心まで60〜70 mm、ヘッドの間隔は1500〜2000 mmが目安</li><li>分岐配管の長さは、それぞれ等しくする</li><li><b>コンクリートのアイランド</b>：型枠にφ30の円を書き、中心にφ12の穴 → ヘッドケース内側にグリス → 継手に接続し六角ボルトで型枠を挟む → 防食テープを巻く → 打設 → 硬化後ボルトを外し、入ったコンクリートをウエスで取る</li><li>モルタルで後から仕上げるときは、ヘッドキャップ部（φ40以上）をよける</li><li><b>スチール型枠のアイランド</b>：φ32の穴 → ヘッドケースが型枠より出ないように、ティグ溶接（2点以上）で固定</li></ul></div>'},
     {nosize:true, unit:"m", c:"エアー配管", ic:IC.air, n:"セルフィット ホース SPL06", s:"ブリヂストン・内径9.5mm（3/8）",
@@ -830,6 +866,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     {sizes:["BS-20", "BS-25", "BS-32", "BS-40", "BS-50", "BS-65", "BS-80", "BS-100", "SBS-25-T", "SBS-32-T", "SBS-40-T", "SBS-50-T", "BSH-40（除水口）", "BH-2565", "BH-3280", "BH-4080"], c:"配管部品", ic:IC.valve, n:"コーギケン 除水器・除水口・特殊ブッシュ", s:"BS・SBS・BSH・BH", fig:"<div class=\"sec\"><h3>カタログのページ（寸法図）</h3><a href=\"ki-p14.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"ki-p14.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"></a><a href=\"ki-p15.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"ki-p15.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"></a><a href=\"ki-p16.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"ki-p16.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"></a><a href=\"ki-p17.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"ki-p17.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"></a><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。寸法は必ずカタログで確認してください。</p></div>", use:"吸油管の先に付ける除水器、水抜き用の除水口、吸油管用の特殊ブッシュ。", place:"置き場所は"+TODO, warn:["除水器はタンク底から離して取り付ける（寸法はカタログで確認）"], spec:[["SBS", "ステンレス製"], ["問い合わせ", "コーギケン 札幌支店 TEL 011-785-1361"]], from:null, order:null},
     {sizes:["OS-20S-N", "OS-25S-N", "OS-32S-N", "OS-40S-N", "OS-50S-N", "OS-20W-N", "OS-25W-N", "OS-32W-N", "OS-40W-N"], c:"配管部品", ic:IC.valve, n:"コーギケン オイルストレーナ", s:"OS-S-N・OS-W-N", fig:"<div class=\"sec\"><h3>カタログのページ（寸法図）</h3><a href=\"ki-p32.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"ki-p32.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"></a><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。寸法は必ずカタログで確認してください。</p></div>", use:"配管に入れて、油の中のごみを取るストレーナ。", place:"置き場所は"+TODO, warn:[], spec:[["問い合わせ", "コーギケン 札幌支店 TEL 011-785-1361"]], from:null, order:null},
     {sizes:["VP-50", "VPH-10"], c:"ベーパー・ドレン", ic:IC.tank, n:"コーギケン ベーパー回収システム", s:"VP-50・VPH-10", fig:"<div class=\"sec\"><h3>カタログのページ（寸法図）</h3><a href=\"ki-p33.jpg\" target=\"_blank\" rel=\"noopener\"><img class=\"dwg\" src=\"ki-p33.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"></a><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。寸法は必ずカタログで確認してください。</p></div>", use:"荷卸しのときのベーパーを回収する装置とホース。", place:"置き場所は"+TODO, warn:[], spec:[["問い合わせ", "コーギケン 札幌支店 TEL 011-785-1361"]], from:null, order:null},
+    {c:"ねじ切り機", ic:IC.book, n:"ねじ切り機の使い方", s:"切断・バリ取り・ねじ切り", custom:"<div class=\"qh\">使い方（レッキス F80AIII）</div><ol class=\"qs\"><li><b>置く</b><span>平らな所に置き、アース付きのコンセントへ</span></li><li><b>油</b><span>切削油の量を確認</span></li><li><b>サイズ</b><span>ダイヘッドの目盛りを管のサイズに合わせる</span></li><li><b>固定</b><span>管を通して、後ろ → 前のチャックで締める</span></li><li><b>切断</b><span>カッターを当て、回しながら少しずつ締める</span></li><li><b>バリ取り</b><span>リーマーで管の内側のバリを取る</span></li><li><b>ねじ切り</b><span>ダイヘッドを下ろしてスイッチON → ハンドルで押し当て、2〜3山かかったら手を離す</span></li><li><b>終わり</b><span>止めてダイヘッドを開き、戻す</span></li><li><b>確認</b><span>ねじゲージで確認</span></li></ol><div class=\"qw\"><div>⚠ 回っている所に手・手袋を近づけない</div><div>⚠ 長い管はパイプスタンドで受ける</div><div>⚠ 足元の油ですべらない</div></div><p class=\"qn\">ねじが浅い・山がつぶれる時は「ねじ切り機」のページの「ねじがおかしいときの確認」（チェーザ・しぼり）を見る。</p>"},
+    {c:"ねじ切り機", ic:IC.book, n:"ねじ切り機のメンテナンス", s:"掃除・切削油・チェーザ", custom:"<div class=\"qh\">毎回</div><ol class=\"qs\"><li><b>拭く</b><span>切粉と油を拭き取る</span></li><li><b>切粉</b><span>切粉受けを空にする</span></li><li><b>チャック</b><span>爪の切粉を落とす</span></li></ol><div class=\"qh\">ときどき</div><ol class=\"qs cont\"><li><b>切削油</b><span>汚れ・水が混ざったら交換、減ったら補充</span></li><li><b>フィルター</b><span>油のフィルターを掃除</span></li><li><b>チェーザ</b><span>欠け・すり減りを見る。替える時は4枚セットで、番号の順に</span></li></ol><div class=\"qw\"><div>⚠ 掃除・点検はプラグを抜いてから</div><div>⚠ チェーザは別のセットと混ぜない</div></div>"},
     {c:"レンタル", ic:IC.box, n:"コンプレッサー（レンタル）", s:"PDS670（〜100A）・PDS185（〜50A）", rent:{label:"コンプレッサー", models:["PDS670（〜100A）","PDS185（〜50A）"], time:"13時"}},
     {c:"レンタル", ic:IC.truck, n:"4トンユニック（レンタル）", s:"樹脂配管の現場など", rent:{label:"4トンユニック"}},
     {c:"レンタル", ic:IC.truck, n:"スーパーデッキ（ステージ車・レンタル）", s:"ステージ車", rent:{label:"スーパーデッキ（ステージ車）"}},
@@ -912,7 +950,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   function saveCart(){ try{ localStorage.setItem(CKEY, JSON.stringify(cart)); }catch(e){} }
   function findM(n){ for(var i=0;i<M.length;i++) if(M[i].n===n) return M[i]; return null; }
   function toast(t){ var el = document.getElementById("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.tm); toast.tm = setTimeout(function(){ el.hidden = true; }, t.length > 20 ? 4000 : 1800); }
-  function updateCartBtn(){ document.getElementById("cartbtn").textContent = "カート " + cart.items.length; }
+  function updateCartBtn(){ var n = cart.items.length; document.getElementById("cartbtn").textContent = "カート " + n; var b = document.getElementById("nCartN"); if(b){ b.textContent = n; b.hidden = !n; } }
   function groups(){
     var g = {}, order = [];
     cart.items.forEach(function(it){ var k = it.order || ""; if(!g[k]){ g[k] = []; order.push(k); } g[k].push(it); });
@@ -1232,10 +1270,11 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   var cur = "ねじ込み継手", q = "";
   var esc = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   var GROUPS = [
-    {k:"材料", g:"mat", d:"継手・パッキン・ボルトなど", cats:["ねじ込み継手","溶接継手","パッキン","樹脂配管","泡消火","エアー配管","電材","ボルト","ブラケット","シール材","コーティング","計量器立上がり"]},
+    {k:"材料", g:"mat", d:"継手・パッキン・ボルトなど", cats:["ねじ込み継手","溶接継手","パッキン","樹脂配管","エアー配管","電材","ボルト","ブラケット","シール材","コーティング"]},
     {k:"車両", g:"veh", d:"トラック・工具・機械", cats:["車両"]},
     {k:"地下タンク", g:"tnk", d:"マンホール・注油口・通気口など", cats:["マンホール","プロテクター・ピット","注油口まわり","通気・計量・検知","配管部品","ベーパー・ドレン","点検用品・計測"]},
-    {k:"段取り", g:"prep", d:"レンタル・宿", cats:["レンタル","宿"]}
+    {k:"段取り", g:"prep", d:"レンタル・宿", cats:["レンタル","宿"]},
+    {k:"作業", g:"work", d:"泡消火・計量器の寸法図", cats:["泡消火","計量器立上がり"]}
   ];
   function grpOf(c){ for(var i=0;i<GROUPS.length;i++) if(GROUPS[i].cats.indexOf(c) >= 0) return GROUPS[i]; return GROUPS[0]; }
   function drawCats(){
@@ -1260,6 +1299,48 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     if(!items.length){ box.innerHTML = '<div class="empty">'+(key ? '見つかりませんでした。別の言葉で探してください。' : 'まだ登録がありません。')+'</div>'; return; }
     box.className = "list" + (key ? "" : " g-"+grpOf(cur).g);
     box.innerHTML = items.map(itemHtml).join("");
+    foldSecs(box);
+    drawRecent();
+  }
+  // ---- 中身は見出しだけにたたむ（最初の見出しと「注文する」は開いておく）
+  var OPEN_H = ["注文する","よく使う寸法"];
+  function foldSecs(root){
+    root.querySelectorAll(".body").forEach(function(b){
+      var secs = Array.prototype.filter.call(b.children, function(x){ return x.classList.contains("sec") && x.querySelector(":scope > h3"); });
+      if(secs.length < 3) return;
+      secs.forEach(function(sec, i){
+        if(sec.classList.contains("fold")) return;
+        if(sec.querySelector("img.dwg, svg[role=img]")) return; // 図面・寸法図はたたまずに、いつも見えるように
+        sec.classList.add("fold");
+        var t = sec.querySelector(":scope > h3").textContent;
+        if(i === 0 || OPEN_H.indexOf(t) >= 0) sec.classList.add("open");
+      });
+    });
+  }
+  document.addEventListener("click", function(e){
+    var h = e.target.closest(".sec.fold > h3"); if(!h) return;
+    h.parentNode.classList.toggle("open");
+  });
+  // ---- 最近見たもの
+  var RKEY = "hb-recent-v1";
+  function getRecent(){ try{ return JSON.parse(localStorage.getItem(RKEY)) || []; }catch(e){ return []; } }
+  function pushRecent(n){ var r = getRecent().filter(function(x){ return x !== n; }); r.unshift(n); r = r.slice(0,5); try{ localStorage.setItem(RKEY, JSON.stringify(r)); }catch(e){} }
+  document.getElementById("list").addEventListener("toggle", function(e){
+    var d = e.target; if(!d.open || !d.parentNode || d.parentNode.id !== "list") return;
+    var b = d.querySelector(":scope > summary b"); if(b) pushRecent(b.textContent);
+  }, true);
+  function drawRecent(){
+    var el = document.getElementById("recent"), r = getRecent().filter(function(n){ return M.some(function(m){ return m.n === n; }); });
+    if(q.trim() || !r.length){ el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = '<span>最近見たもの</span>'+r.map(function(n){ return '<button type="button" class="rchip" data-rn="'+esc(n)+'">'+esc(n)+'</button>'; }).join("");
+    el.querySelectorAll("[data-rn]").forEach(function(b){ b.onclick = function(){
+      var n = b.dataset.rn.replace(/&amp;/g,"&"), m = M.filter(function(x){ return x.n === n; })[0]; if(!m) return;
+      var c = Array.isArray(m.c) ? m.c[0] : m.c; cur = c; var qi = document.getElementById("q"); qi.value = ""; q = "";
+      drawCats(); drawList();
+      var d = Array.prototype.filter.call(document.querySelectorAll("#list > details"), function(x){ var bb = x.querySelector(":scope > summary b"); return bb && bb.textContent === n; })[0];
+      if(d){ d.open = true; d.scrollIntoView({behavior:"smooth", block:"start"}); }
+    }; });
   }
   function itemHtml(m){
       if(m.veh){
@@ -1360,6 +1441,10 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     zi.addEventListener("dblclick", function(){ setLv(lv >= 2.5 ? 1 : lv+1); });
   })();
   document.getElementById("inspbtn").addEventListener("click", openInsp);
+  document.getElementById("nHome").onclick = function(){ var qi = document.getElementById("q"); if(qi.value){ qi.value = ""; q = ""; drawList(); } document.querySelectorAll("#list > details[open]").forEach(function(d){ d.open = false; }); drawRecent(); window.scrollTo({top:0, behavior:"smooth"}); };
+  document.getElementById("nFind").onclick = function(){ var qi = document.getElementById("q"); window.scrollTo({top:0, behavior:"smooth"}); setTimeout(function(){ qi.focus(); }, 250); };
+  document.getElementById("nCart").onclick = function(){ document.getElementById("cartbtn").click(); };
+  document.getElementById("nInsp").onclick = function(){ document.getElementById("inspbtn").click(); };
   shakenAlert();
   document.getElementById("cartbtn").addEventListener("click", openCart);
   document.getElementById("invbtn").addEventListener("click", openInv);
