@@ -97,35 +97,97 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-
 .refs{display:grid;gap:6px;margin-bottom:8px}
 .refs > div{display:grid;grid-template-columns:40px 1fr;align-items:center;gap:6px}
 .refs span{font-weight:700;font-size:.9rem}
-.mic{width:100%;min-height:52px;border:2px solid var(--ink);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;font-weight:700;font-size:1rem;cursor:pointer;margin-bottom:8px}
-.mic.on{background:#B42318;border-color:#B42318;color:#fff;font-size:.85rem}
-.heard{background:var(--bg);border-radius:10px;padding:8px 12px;font-size:.88rem;margin-bottom:10px;line-height:1.6}
+#fit1,#fit2{display:none}
+.pp{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:0;margin-bottom:6px}
+.pe{min-height:96px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px}
+.pe[aria-expanded="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.pe .ico svg{height:28px;width:auto}
+.pe b{font-size:.92rem;line-height:1.25;text-align:center}
+.pe small{font-size:.72rem;color:var(--muted)}
+.pbar{height:16px;background:var(--cut);border-radius:3px}
+.fitpop{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border-radius:12px;padding:10px;margin-bottom:8px}
+.fitpop .pt{grid-column:1/3;font-weight:700;font-size:.9rem}
+.fitpop button{min-height:56px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 8px;text-align:left}
+.fitpop button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.fitpop .ico svg{height:22px;width:auto}
+details.figs{margin:6px 0 10px}
+details.figs summary{cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px 0}
+.resbar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:2px solid var(--ink);padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.resbar .answer{margin:0;padding:0;background:none;min-height:0}
+.resbar .answer .big{font-size:2.1rem;line-height:1.1}
+.resbar .answer .lbl{font-size:.75rem}
+.resbar .answer .how{font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
+.resbar .answer .hint{font-size:.85rem;padding:0;background:none}
+.resbar .btn{margin:0;min-height:56px;padding:0 14px;font-size:.9rem;white-space:nowrap}
+body{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
+.item{display:grid;grid-template-columns:44px 1fr 40px;align-items:center;gap:8px}
+.item b{font-size:1.6rem}
+.item b small{font-size:.85rem}
+.ck{width:40px;height:40px;border-radius:10px;border:2px solid var(--ink);background:var(--surface);color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer}
+.ck[aria-pressed="true"]{background:#2E9E4F;border-color:#2E9E4F}
+.item.done b{text-decoration:line-through;color:var(--muted)}
+.ng{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px}
+.ngh{font-size:.95rem;margin-bottom:6px}
+.bar{display:grid;grid-template-columns:44px 1fr;gap:6px;align-items:center;margin:4px 0}
+.bl{font-size:.75rem;color:var(--muted);font-weight:700}
+.bt{display:flex;height:40px;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.bt span{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--cut);color:#fff;font-size:.78rem;font-weight:700;border-right:2px solid var(--surface);min-width:0;overflow:hidden;white-space:nowrap}
+.bt span i{font-style:normal;font-size:.62rem;font-weight:400;opacity:.85}
+.bt span.dn{background:#2E9E4F}
+.bt span.rs{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,var(--line) 6px,var(--line) 8px);color:var(--muted);border-right:0}
+.btn.share{flex:1}
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="./index.html">← メニューに戻る</a>
   <h1>ねじ込み配管 切断長計算</h1>
-  <div class="tabs" role="group" aria-label="画面の切り替え">
-    <button class="chip" type="button" data-tab="calc" aria-pressed="true">切断長の計算</button>
-    <button class="chip" type="button" data-tab="table" aria-pressed="false">寸法表</button>
-  </div>
+
 
   <section id="calc">
     <div class="card">
-      <button class="mic" id="mic" type="button" aria-label="声で入力">🎤 声で入力</button>
-      <div class="heard" id="heard" hidden></div>
+
       <div class="fieldname">サイズ</div>
       <div class="sizes" id="sizes"></div>
 
-      <div class="fieldname">片側（端1）の継手</div>
-      <div class="fits" id="fit1"></div>
-      <div class="manual inrow" id="man1" hidden><input class="num" inputmode="decimal" aria-label="端1の差し引き寸法（mm）" placeholder="差し引く寸法"><span class="unit">mm</span></div>
+      <div class="fieldname">測り方</div>
+      <div class="kinds2" id="mode"></div>
+      <div id="m-cc">
+      <div class="fieldname">芯々寸法（継手の中心から中心まで。フランジ側はフランジ面まで）</div>
+      <div class="inrow"><input id="cc" class="num" inputmode="decimal" aria-label="芯々寸法（mm）" placeholder="0"><span class="unit">mm</span></div>
+      </div>
+      <div id="m-wall" hidden>
+        <div class="fieldname">壁から端1の継手の中心まで（フランジは面まで）</div>
+        <div class="inrow"><input id="w1" class="num" inputmode="decimal" aria-label="壁から端1の中心まで（mm）" placeholder="0"><span class="unit">mm</span></div>
+        <div class="fieldname">壁から端2の継手の中心まで（フランジは面まで）</div>
+        <div class="inrow"><input id="w2" class="num" inputmode="decimal" aria-label="壁から端2の中心まで（mm）" placeholder="0"><span class="unit">mm</span></div>
+        <p class="note">同じ壁から2か所を測ると、その差が芯々寸法になります。切断リストに追加すると、端2の数字が次の管の端1に移ります。</p>
+      </div>
+      <div id="m-face" hidden>
+        <figure class="fig">
+          <svg viewBox="0 0 340 130" role="img" aria-label="面間と切断長の関係の図">
+            <rect x="20" y="52" width="70" height="36" rx="4" style="fill:var(--line)"/>
+            <rect x="250" y="52" width="70" height="36" rx="4" style="fill:var(--line)"/>
+            <path d="M66 70 H274" stroke-width="14" style="stroke:var(--cut)"/>
+            <path d="M90 14 V60 M250 14 V60" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/>
+            <path d="M92 26 H248" stroke="currentColor" stroke-width="1.5" marker-start="url(#arm)" marker-end="url(#arm)"/>
+            <text x="170" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">面間（継手の端から端）</text>
+            <path d="M66 80 V122 M274 80 V122" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
+            <path d="M68 116 H272" stroke-width="1.5" style="stroke:var(--cut)" marker-start="url(#arc)" marker-end="url(#arc)"/>
+            <text x="170" y="110" text-anchor="middle" font-size="13" font-weight="700" style="fill:var(--cut)">切断長</text>
+            <text x="78" y="102" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">ℓ</text>
+            <text x="262" y="102" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">ℓ</text>
+          </svg>
+          <figcaption>継手の端から端（面間）を測ります。管は両側の継手にねじ込む分（ℓ）だけ長く切るので、面間＋両側のℓが切断長です。</figcaption>
+        </figure>
+        <div class="fieldname">どこからどこまで測ったか</div>
+        <div class="refs"><div><span>端1</span><div class="kinds2" id="r1"></div></div><div><span>端2</span><div class="kinds2" id="r2"></div></div></div>
+        <div class="fieldname" id="fflbl">面間（継手の端から端まで。フランジ側はフランジ面まで）</div>
+        <div class="inrow"><input id="ff" class="num" inputmode="decimal" aria-label="面間（mm）" placeholder="0"><span class="unit">mm</span></div>
+      </div>
 
-      <div class="fieldname">もう片側（端2）の継手</div>
-      <div class="fits" id="fit2"></div>
-      <div class="manual inrow" id="man2" hidden><input class="num" inputmode="decimal" aria-label="端2の差し引き寸法（mm）" placeholder="差し引く寸法"><span class="unit">mm</span></div>
-
+      <details class="figs"><summary>図で見る（芯々・壁から）</summary>
       <figure class="fig" id="fig-cc">
         <svg viewBox="0 0 340 150" role="img" aria-label="芯々寸法と切断長の関係の図">
           <defs>
@@ -176,61 +238,32 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-
         </svg>
         <figcaption>同じ壁から端1と端2の継手の中心を測ります。その差が芯々寸法で、そこから両端のGを引いた長さが切断長です。</figcaption>
       </figure>
-      <div class="fieldname">測り方</div>
-      <div class="kinds2" id="mode"></div>
-      <div id="m-cc">
-      <div class="fieldname">芯々寸法（継手の中心から中心まで。フランジ側はフランジ面まで）</div>
-      <div class="inrow"><input id="cc" class="num" inputmode="decimal" aria-label="芯々寸法（mm）" placeholder="0"><span class="unit">mm</span></div>
-      </div>
-      <div id="m-wall" hidden>
-        <div class="fieldname">壁から端1の継手の中心まで（フランジは面まで）</div>
-        <div class="inrow"><input id="w1" class="num" inputmode="decimal" aria-label="壁から端1の中心まで（mm）" placeholder="0"><span class="unit">mm</span></div>
-        <div class="fieldname">壁から端2の継手の中心まで（フランジは面まで）</div>
-        <div class="inrow"><input id="w2" class="num" inputmode="decimal" aria-label="壁から端2の中心まで（mm）" placeholder="0"><span class="unit">mm</span></div>
-        <p class="note">同じ壁から2か所を測ると、その差が芯々寸法になります。切断リストに追加すると、端2の数字が次の管の端1に移ります。</p>
-      </div>
-      <div id="m-face" hidden>
-        <figure class="fig">
-          <svg viewBox="0 0 340 130" role="img" aria-label="面間と切断長の関係の図">
-            <rect x="20" y="52" width="70" height="36" rx="4" style="fill:var(--line)"/>
-            <rect x="250" y="52" width="70" height="36" rx="4" style="fill:var(--line)"/>
-            <path d="M66 70 H274" stroke-width="14" style="stroke:var(--cut)"/>
-            <path d="M90 14 V60 M250 14 V60" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/>
-            <path d="M92 26 H248" stroke="currentColor" stroke-width="1.5" marker-start="url(#arm)" marker-end="url(#arm)"/>
-            <text x="170" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">面間（継手の端から端）</text>
-            <path d="M66 80 V122 M274 80 V122" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
-            <path d="M68 116 H272" stroke-width="1.5" style="stroke:var(--cut)" marker-start="url(#arc)" marker-end="url(#arc)"/>
-            <text x="170" y="110" text-anchor="middle" font-size="13" font-weight="700" style="fill:var(--cut)">切断長</text>
-            <text x="78" y="102" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">ℓ</text>
-            <text x="262" y="102" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">ℓ</text>
-          </svg>
-          <figcaption>継手の端から端（面間）を測ります。管は両側の継手にねじ込む分（ℓ）だけ長く切るので、面間＋両側のℓが切断長です。</figcaption>
-        </figure>
-        <div class="fieldname">どこからどこまで測ったか</div>
-        <div class="refs"><div><span>端1</span><div class="kinds2" id="r1"></div></div><div><span>端2</span><div class="kinds2" id="r2"></div></div></div>
-        <div class="fieldname" id="fflbl">面間（継手の端から端まで。フランジ側はフランジ面まで）</div>
-        <div class="inrow"><input id="ff" class="num" inputmode="decimal" aria-label="面間（mm）" placeholder="0"><span class="unit">mm</span></div>
-      </div>
+      </details>
+      <div class="fieldname">継手（管の左右をタップして選ぶ）</div>
+      <div class="pp"><button type="button" class="pe" id="pe1" aria-label="端1の継手を選ぶ"></button><div class="pbar" aria-hidden="true"></div><button type="button" class="pe" id="pe2" aria-label="端2の継手を選ぶ"></button></div>
+      <div class="fitpop" id="fitpop" hidden></div>
+      
+      <div class="fits" id="fit1"></div>
+      <div class="manual inrow" id="man1" hidden><input class="num" inputmode="decimal" aria-label="端1の差し引き寸法（mm）" placeholder="差し引く寸法"><span class="unit">mm</span></div>
 
+      
+      <div class="fits" id="fit2"></div>
+      <div class="manual inrow" id="man2" hidden><input class="num" inputmode="decimal" aria-label="端2の差し引き寸法（mm）" placeholder="差し引く寸法"><span class="unit">mm</span></div>
+
+      <div class="resbar">
       <div class="answer num" id="answer" aria-live="polite"></div>
-      <button class="btn" id="save" type="button">切断リストに追加</button>
+      <button class="btn" id="save" type="button">リストに追加</button>
+      </div>
     </div>
 
-    <h2>切断リスト</h2>
+    <h2>切断リスト <span class="cnt" id="lcnt"></span></h2>
     <div class="list" id="list"></div>
-    <div class="actions"><button class="ghost" id="clear" type="button">リストを全部消す</button></div>
+    <h2>4m管の取り方</h2>
+    <div id="nest"></div>
+    <div class="actions"><button class="btn share" id="share" type="button">Teamsで送る（共有）</button><button class="ghost" id="clear" type="button">リストを全部消す</button></div>
   </section>
 
-  <section id="table" hidden>
-    <h2>継手の形と使い方</h2>
-    <div class="shapes" id="t-shape"></div>
-    <h2>配管用炭素鋼鋼管（SGP）</h2>
-    <div class="tbl" id="t-pipe"></div>
-    <h2>継手の寸法（JIS B 2301）</h2>
-    <div class="tbl" id="t-fit"></div>
-    <p class="note">L：中心から端面まで（ソケットは全長）、ℓ：ねじ込み長さ（面間で測るときに足す寸法）、G：差し引く寸法（L−ℓ）。ソケットのGは管と管のすき間で、計算では片側にその半分を使います。</p>
-    <p class="note">ねじ込みフランジは、寸法をフランジ面まで測り、管の先を面から3mm手前で止める前提で、3mmを差し引いています。ユニオンはメーカーで寸法が違うため、計算画面で差し引く寸法を入力してください。</p>
-  </section>
+  
 </div>
 
 <script>
@@ -318,9 +351,27 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-
     chips(document.getElementById("r2"), RO, st.r2, function(v){ st.r2 = v; drawPickers(); calc(); });
     document.getElementById("fflbl").textContent = st.r1 === "face" && st.r2 === "face" ? "面間（継手の端から端まで。フランジ側はフランジ面まで）" : st.r1 === "center" && st.r2 === "center" ? "芯々（継手の中心から中心まで）" : "面から芯まで（片方は継手の端、もう片方は継手の中心）";
     if(st.mode === "face") document.getElementById("fig-cc").hidden = true;
+    drawPipePick();
     [["man1","r1"],["man2","r2"]].forEach(function(p){ document.querySelector("#"+p[0]+" input").placeholder = st.mode === "face" && st[p[1]] === "face" ? "ねじ込み量" : "差し引く寸法"; });
   }
 
+
+  function drawPipePick(){
+    var f = function(k){ return FITS.filter(function(x){ return x.k === k; })[0]; };
+    [["pe1","f1","端1"],["pe2","f2","端2"]].forEach(function(p){
+      var it = f(st[p[1]]), b = document.getElementById(p[0]);
+      b.innerHTML = '<span class="ico">'+it.ic+'</span><b>'+it.name.replace("（入力）","").replace("（管端）","")+'</b><small>'+p[2]+'　変える ▾</small>';
+      b.setAttribute("aria-expanded", openEnd === p[1]);
+    });
+    var pop = document.getElementById("fitpop");
+    if(!openEnd){ pop.hidden = true; return; }
+    pop.hidden = false;
+    pop.innerHTML = '<div class="pt">'+(openEnd === "f1" ? "端1" : "端2")+'の継手</div>'+FITS.map(function(x){ return '<button type="button" data-pk="'+x.k+'" aria-pressed="'+(st[openEnd]===x.k)+'"><span class="ico">'+x.ic+'</span>'+x.name+'</button>'; }).join("");
+    pop.querySelectorAll("[data-pk]").forEach(function(b){ b.onclick = function(){ st[openEnd] = b.dataset.pk; openEnd = null; drawPickers(); calc(); }; });
+  }
+  var openEnd = null;
+  document.getElementById("pe1").addEventListener("click", function(){ openEnd = openEnd === "f1" ? null : "f1"; drawPipePick(); });
+  document.getElementById("pe2").addEventListener("click", function(){ openEnd = openEnd === "f2" ? null : "f2"; drawPipePick(); });
   var last = null;
   function calc(){
     if(st.mode === "face") return calcFace();
@@ -360,31 +411,63 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-
     document.getElementById("save").disabled = !last;
     save();
   }
+  var STOCK = 4000; // 白ガス管 1本4m
+  function sz(r){ return typeof r.size === "number" ? r.size+"A" : r.size; }
+  // 4m管の取り方（長い順に、入る管に詰めていく）
+  function nest(){
+    var g = {};
+    st.list.forEach(function(r, i){ var k = sz(r); (g[k] = g[k] || []).push({i:i, len:r.cut}); });
+    return Object.keys(g).map(function(k){
+      var ps = g[k].slice().sort(function(a,b){ return b.len - a.len; }), bars = [], over = [];
+      ps.forEach(function(p){
+        if(p.len > STOCK){ over.push(p); return; }
+        var b = bars.filter(function(b){ return STOCK - b.used >= p.len; }).sort(function(x,y){ return (STOCK-x.used)-(STOCK-y.used); })[0];
+        if(!b){ b = {used:0, ps:[]}; bars.push(b); }
+        b.ps.push(p); b.used += p.len;
+      });
+      return {size:k, bars:bars, over:over};
+    });
+  }
   function drawList(){
-    var box = document.getElementById("list");
-    if(!st.list.length){ box.innerHTML = '<div class="hint">計算した切断長を追加すると、ここに並びます。</div>'; return; }
+    var box = document.getElementById("list"), nb = document.getElementById("nest"), cnt = document.getElementById("lcnt");
+    if(!st.list.length){ box.innerHTML = '<div class="hint">計算した切断長を追加すると、ここに並びます。</div>'; nb.innerHTML = '<div class="hint">切断リストから、4m管が何本いるかと切り方を出します。</div>'; cnt.textContent = ""; document.getElementById("share").disabled = true; return; }
+    document.getElementById("share").disabled = false;
+    var left = st.list.filter(function(r){ return !r.done; }).length;
+    cnt.textContent = left ? "残り "+left+" 本 / "+st.list.length+" 本" : "全部切りました";
     box.innerHTML = st.list.map(function(r, i){
-      return '<div class="item num"><div><b>'+fmt(r.cut)+' mm</b><div class="t">'+(typeof r.size==="number" ? r.size+"A" : r.size)+'・'+(r.k||'芯々')+fmt(r.cc)+'・'+r.f1+'／'+r.f2+'</div></div>'+
-        '<span class="t">'+(i+1)+'本目</span><button class="x" type="button" data-i="'+i+'" aria-label="'+(i+1)+'本目を消す">×</button></div>';
+      return '<div class="item num'+(r.done ? ' done' : '')+'"><button class="ck" type="button" data-c="'+i+'" aria-pressed="'+(!!r.done)+'" aria-label="'+(i+1)+'本目を切った">'+(r.done ? '✓' : '')+'</button>'+
+        '<div><b>'+fmt(r.cut)+' <small>mm</small></b><div class="t">'+(i+1)+'本目・'+sz(r)+'・'+(r.k||'芯々')+fmt(r.cc)+'・'+r.f1+'／'+r.f2+'</div></div>'+
+        '<button class="x" type="button" data-i="'+i+'" aria-label="'+(i+1)+'本目を消す">×</button></div>';
     }).join("");
     box.querySelectorAll(".x").forEach(function(b){ b.addEventListener("click", function(){ st.list.splice(+b.dataset.i,1); drawList(); save(); }); });
+    box.querySelectorAll(".ck").forEach(function(b){ b.addEventListener("click", function(){ var r = st.list[+b.dataset.c]; r.done = !r.done; drawList(); save(); }); });
+    nb.innerHTML = nest().map(function(g){
+      return '<div class="ng"><div class="ngh">'+g.size+'：<b>4m管 '+g.bars.length+'本</b></div>'+
+        g.bars.map(function(b, bi){
+          var rest = STOCK - b.used;
+          return '<div class="bar"><div class="bl">'+(bi+1)+'本目</div><div class="bt">'+b.ps.map(function(p){ return '<span style="flex:'+p.len+'" class="'+(st.list[p.i].done ? 'dn' : '')+'">'+fmt(p.len)+'<i>'+(p.i+1)+'本目</i></span>'; }).join("")+(rest > 0 ? '<span class="rs" style="flex:'+rest+'">残り '+fmt(rest)+'</span>' : '')+'</div></div>';
+        }).join("")+
+        (g.over.length ? '<div class="hint">4mより長い：'+g.over.map(function(p){ return (p.i+1)+'本目 '+fmt(p.len)+'mm'; }).join("、")+'（つなぐ必要があります）</div>' : '')+'</div>';
+    }).join("");
   }
-
-  function drawTables(){
-    document.getElementById("t-shape").innerHTML = SHAPES.map(function(s){ return '<div class="shape"><div>'+s.ic+'</div><div><b>'+s.n+'</b><span>'+s.d+'</span></div></div>'; }).join("");
-    document.getElementById("t-pipe").innerHTML = '<table class="num"><tr><th>呼び</th><th>インチ</th><th>外径</th><th>厚さ</th><th>内径</th><th>山数/25.4mm</th></tr>'+
-      S.map(function(s){ return '<tr><td>'+s.a+'A</td><td>'+s.b+'</td><td>'+s.od.toFixed(1)+'</td><td>'+s.t.toFixed(1)+'</td><td>'+(s.od-2*s.t).toFixed(1)+'</td><td>'+s.n+'</td></tr>'; }).join("")+'</table>';
-    document.getElementById("t-fit").innerHTML = '<table class="num"><tr><th>呼び</th><th>ℓ</th><th>90°L</th><th>90°G</th><th>45°L</th><th>45°G</th><th>ソケットL</th><th>ソケットG</th></tr>'+
-      S.map(function(s,i){ return '<tr><td>'+s.a+'A('+s.b+')</td><td>'+EL.l[i]+'</td><td>'+EL.L[i]+'</td><td>'+EL.G[i]+'</td><td>'+E45.L[i]+'</td><td>'+E45.G[i]+'</td><td>'+SO.L[i]+'</td><td>'+SO.G[i]+'</td></tr>'; }).join("")+'</table>';
-  }
-
-  document.querySelectorAll("[data-tab]").forEach(function(b){
-    b.addEventListener("click", function(){
-      document.querySelectorAll("[data-tab]").forEach(function(x){ x.setAttribute("aria-pressed", x===b); });
-      document.getElementById("calc").hidden = b.dataset.tab !== "calc";
-      document.getElementById("table").hidden = b.dataset.tab !== "table";
+  function shareText(){
+    var t = ["【切断リスト】"];
+    st.list.forEach(function(r, i){ t.push((r.done ? "✓ " : "□ ")+(i+1)+"本目 "+fmt(r.cut)+"mm（"+sz(r)+"・"+(r.k||"芯々")+fmt(r.cc)+"・"+r.f1+"／"+r.f2+"）"); });
+    t.push(""); t.push("【4m管の取り方】");
+    nest().forEach(function(g){
+      t.push(g.size+"：4m管 "+g.bars.length+"本");
+      g.bars.forEach(function(b, bi){ t.push("　"+(bi+1)+"本目："+b.ps.map(function(p){ return fmt(p.len); }).join("＋")+"（残り "+fmt(STOCK-b.used)+"）"); });
+      g.over.forEach(function(p){ t.push("　4mより長い："+fmt(p.len)+"mm"); });
     });
+    return t.join("\n");
+  }
+  document.getElementById("share").addEventListener("click", function(){
+    var text = shareText();
+    if(navigator.share){ navigator.share({title:"切断リスト", text:text}).catch(function(){}); return; }
+    var done = function(){ alert("コピーしました。Teamsのチャットに貼り付けてください。"); };
+    if(navigator.clipboard){ navigator.clipboard.writeText(text).then(done, function(){ prompt("この文をコピーしてください", text); }); } else prompt("この文をコピーしてください", text);
   });
+
   var ffi = document.getElementById("ff"); ffi.value = st.ff || "";
   ffi.addEventListener("input", function(){ st.ff = ffi.value; calc(); });
   ffi.addEventListener("focus", function(){ ffi.select(); });
@@ -413,64 +496,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-
     st.list = []; drawList(); save();
   });
 
-  drawPickers(); drawTables(); drawList(); calc();
-  // ---- 声で入力（例：「50A エルボ フランジ 面間 500」）
-  (function(){
-    var SR = window.SpeechRecognition || window.webkitSpeechRecognition, btn = document.getElementById("mic"), heard = document.getElementById("heard");
-    function say(t){ heard.hidden = false; heard.innerHTML = t; }
-    var KN = {"〇":0,"零":0,"一":1,"二":2,"三":3,"四":4,"五":5,"六":6,"七":7,"八":8,"九":9};
-    function kanji(t){ // 「千二百五十」などを数字に
-      return t.replace(/[〇零一二三四五六七八九十百千]+/g, function(w){
-        var tot = 0, cur = 0, n = 0;
-        for(var i=0;i<w.length;i++){ var c = w[i];
-          if(c in KN){ n = KN[c]; }
-          else { var u = c==="十"?10:c==="百"?100:1000; cur += (n||1)*u; n = 0; } }
-        tot = cur + n; return String(tot);
-      });
-    }
-    function norm(t){
-      t = String(t).replace(/[０-９．]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0xFEE0); }).replace(/[,，、]/g," ");
-      t = kanji(t);
-      return t.replace(/ミリ|mm|ミリメートル/g," ").replace(/\s+/g," ");
-    }
-    function apply(raw){
-      var t = norm(raw), done = [];
-      var sm = t.match(/(\d{2,3})\s*(A|Ａ|エー|えー|あ)/);
-      var used = "";
-      if(sm){ var a = +sm[1]; for(var i=0;i<S.length;i++){ if(S[i].a === a){ st.i = i; done.push(a+"A"); used = sm[0]; } } }
-      var words = [], re = /(エルボ|えるぼ|チーズ|ちーず|45|四十五|ソケット|そけっと|ユニオン|ゆにおん|フランジ|ふらんじ|継手なし|管端|なし)/g, m;
-      var rest = used ? t.replace(used," ") : t;
-      while((m = re.exec(rest))){ var w = m[1]; words.push(/エルボ|えるぼ|チーズ|ちーず/.test(w) ? "el" : /45|四十五/.test(w) ? "e45" : /ソケット|そけっと/.test(w) ? "so" : /ユニオン|ゆにおん/.test(w) ? "un" : /フランジ|ふらんじ/.test(w) ? "fl" : "none"); }
-      if(words.length){ st.f1 = words[0]; st.f2 = words[1] || words[0]; done.push(fitName(st.f1)+"／"+fitName(st.f2)); }
-      if(/面と芯|面芯|めんとしん/.test(t)){ st.mode = "face"; st.r1 = "face"; st.r2 = "center"; done.push("面と芯"); }
-      else if(/面間|めんかん/.test(t)){ st.mode = "face"; st.r1 = "face"; st.r2 = "face"; done.push("面間"); }
-      else if(/芯々|芯芯|しんしん|心々/.test(t)){ st.mode = "cc"; done.push("芯々"); }
-      else if(/壁|かべ/.test(t)){ st.mode = "wall"; done.push("壁から"); }
-      var nums = (rest.replace(/45|四十五/g," ").match(/\d+(\.\d+)?/g) || []).map(Number).filter(function(n){ return n > 0; });
-      if(nums.length){
-        var v = String(nums[nums.length-1]);
-        if(st.mode === "face"){ st.ff = v; document.getElementById("ff").value = v; }
-        else if(st.mode === "wall"){ if(!st.w1){ st.w1 = v; document.getElementById("w1").value = v; } else { st.w2 = v; document.getElementById("w2").value = v; } }
-        else { st.cc = v; document.getElementById("cc").value = v; }
-        done.push(v+"mm");
-      }
-      drawPickers(); calc();
-      say('聞こえた言葉：「'+raw.replace(/[<>&]/g,"")+'」<br>'+(done.length ? '<b>入れたもの：'+done.join("・")+'</b>' : '<b>うまく聞き取れませんでした。もう一度どうぞ。</b>'));
-    }
-    if(!SR){
-      btn.addEventListener("click", function(){ say('この画面では声の入力が使えません。数字の欄をタップして、<b>キーボードのマイク</b>で話してください。'); });
-      return;
-    }
-    var rec = null, on = false;
-    btn.addEventListener("click", function(){
-      if(on && rec){ rec.stop(); return; }
-      rec = new SR(); rec.lang = "ja-JP"; rec.interimResults = false; rec.maxAlternatives = 1;
-      rec.onresult = function(e){ apply(e.results[0][0].transcript); };
-      rec.onerror = function(e){ say(e.error === "not-allowed" ? 'マイクの使用が許可されていません。設定でマイクを許可してください。' : '聞き取れませんでした。もう一度どうぞ。'); };
-      rec.onend = function(){ on = false; btn.classList.remove("on"); btn.textContent = "🎤 声で入力"; };
-      try{ rec.start(); on = true; btn.classList.add("on"); btn.textContent = "● 聞いています…（例：50A エルボ フランジ 面間 500）"; }catch(err){ say('声の入力を始められませんでした。'); }
-    });
-  })();
+  drawPickers(); drawList(); calc();
 })();
 </script>
 <script>
