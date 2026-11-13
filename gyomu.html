@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap">
 <meta name="theme-color" content="#1C2326">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -14,7 +17,7 @@
 <title>業務課ハンドブック</title>
 <style>
 :root{
-  --bg:#ECEEEC; --surface:#FFFFFF; --ink:#1C2326; --muted:#5E676B; --line:#C9CED0;
+  --bg:#ECEEEC; --surface:#FFFFFF; --ink:#1C2326; --muted:#475055; --line:#B4BCC0;
   --focus:#1F4E8C; --sel:#1C2326; --sel-ink:#FFFFFF; --warn:#9A3412; --warn-soft:#FDEBDD;
   --todo:#8A6D00; --todo-soft:#FFF3C4; --place:#1F4E8C; --place-soft:#DCE6F3;
   color-scheme:light; box-sizing:border-box;
@@ -143,6 +146,28 @@ th:first-child,td:first-child{text-align:left;font-weight:700}
 .zoomarea img{display:block;width:100%;height:auto;max-width:none;background:#fff}
 img.dwg{cursor:zoom-in}
 img.dwg{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#fff}
+.stp{margin:0;padding:0;list-style:none;counter-reset:st}
+.stp li{counter-increment:st;position:relative;padding:8px 0 8px 40px;border-bottom:1px solid var(--line)}
+.stp li:last-child{border-bottom:0}
+.stp li::before{content:counter(st);position:absolute;left:0;top:8px;width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.stp li b{display:block;font-size:1rem}
+.stp li span{display:block;font-size:.88rem;color:var(--muted)}
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.tl div{background:var(--bg);border-radius:8px;padding:6px;text-align:center}
+.tl div.on{background:#DCE8FA}
+.tl b{display:block;font-size:.9rem}
+.tl span{font-size:.75rem;color:var(--muted)}
+.qk{margin:10px 0 4px;background:#FFF2A8;color:#5A4500;border-radius:10px;padding:8px 12px;font-size:.92rem;line-height:1.6}
+.qn{font-size:.85rem;color:var(--muted);margin:8px 0}
+.qs{margin:0;padding:0;list-style:none}
+.body{counter-reset:q}
+.qs.cont{counter-reset:none}
+.qh{margin:12px 0 2px;font-weight:700;font-size:.85rem;color:#fff;background:#2F6FD6;border-radius:6px;padding:3px 10px;display:inline-block}
+.qs li{counter-increment:q;display:grid;grid-template-columns:34px 108px 1fr;align-items:center;gap:6px;padding:9px 0;border-bottom:1px solid var(--line)}
+.qs li::before{content:counter(q);width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:700;display:flex;align-items:center;justify-content:center}
+.qs li b{font-size:1.05rem}
+.qs li span{font-size:.92rem}
+.qw{margin-top:10px;background:#FDECEA;color:#8A1C12;border-radius:10px;padding:8px 12px;font-weight:700;font-size:.92rem;line-height:1.8}
 .empty{color:var(--muted);text-align:center;padding:20px}
 .foot{font-size:.8rem;color:var(--muted);margin-top:18px}
 input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
@@ -267,11 +292,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     {c:"検査機器", ic:IC.meter, n:"PREX 液相部ペアリークテスタ LLT-2200β", s:"地下タンク液相部の漏洩試験", fig:"<div class=\"sec\"><h3>取扱説明書・カタログのページ</h3><img class=\"dwg\" src=\"px-llt-3.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-llt-4.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-llt-5.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c03a.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c03b.jpg\" alt=\"取扱説明書・カタログのページ\" style=\"margin-top:6px\"><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。</p></div>", use:"地下タンクの液相部の漏れを調べる装置。地下水の状態に合わせて、液面の変化（磁歪式変位センサー）か、漏れの気泡音（加速度センサー）で判定する。", place:"置き場所は"+TODO, warn:["センサーは電源を入れる前につなぐ", "ストッパーや基準マグネットは決められた寸法で付ける（下から20mm以下だとフロートを検知できずセンサー異常になる）", "使えないタンク・使えない液に当たらないか、検査の前に確認する"], spec:[["メーカー", "株式会社プレックス"], ["構成", "本体、磁歪式変位センサー、加速度センサー、デジタル圧力計、真空発生器、T型接続管"], ["判定の方法", "液相部が全部地下水に浸かっている → 液面変位（地下水の浸入）。地下水に浸かっていない → 気泡音（振動加速度）。一部だけ → 液面の高さと地下水位で設定"], ["検知の目安", "直径0.3mm以下の開口部からの漏れ、液面変位0.020mm以下"], ["デジタル圧力計", "−100〜500kPa（最小0.1kPa）、精度±0.25%FS、006P 9V乾電池"], ["真空発生器", "1.24kg、310×70×170mm、アース線10m"], ["電源", "AC100V"], ["使えないタンク", "150kL以上、マンホール下の継手が32A未満（25Aはオプション）、フロートが液面に届かない、減圧値20kPa以上、FRPタンク"], ["使える液", "ガソリン・軽油・灯油・A重油・廃油・アルコール類など（比重0.72〜0.92、動粘度150mm²/s未満）"], ["使えない液", "比重1.0以上・動粘度150mm²/s以上の液（グリセリンなど）、塩酸・硝酸などの腐食性の液"], ["製造番号・校正の期限", null]], insp:["電源・画面", "磁歪式センサー・加速度センサーのケーブルの傷", "デジタル圧力計の電池と0点", "真空発生器・ホースの漏れ", "校正の期限"], parts:null, from:null, order:null},
     {c:"検査機器", ic:IC.meter, n:"PREX 二重殻タンク外殻用 減圧エジェクタ PR-1230", s:"外殻の減圧・配管の微減圧に使う真空発生器", fig:"<div class=\"sec\"><h3>取扱説明書のページ</h3><img class=\"dwg\" src=\"px-pr1230-1.jpg\" alt=\"取扱説明書のページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-pr1230-2.jpg\" alt=\"取扱説明書のページ\" style=\"margin-top:6px\"><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。</p></div>", use:"二重殻地下タンクの外殻を減圧法で減圧するときや、配管を微減圧法で検査するときに使う、小型の真空発生器。", place:"置き場所は"+TODO, warn:["ポート（減圧側・エアー供給側）を確認してから作業する", "排気は安全な場所に出す。排気口をふさがない（ホースが抜ける恐れ）", "供給圧力は仕様以上にしない（ホースが破裂する恐れ）", "圧縮エアー・窒素ボンベの扱いに注意する", "ホースの接続部に無理な力をかけない", "作業中は圧力を見ながら、その場を離れない"], spec:[["メーカー", "株式会社プレックス"], ["供給エアー", "0.45MPa（コンプレッサーか窒素）、消費13L/分"], ["使用圧力範囲・作動圧", "0〜0.5MPa・0.3〜0.6MPa"], ["到達真空度", "0.45MPa供給で約−85kPa"], ["吸込み流量", "最大8L/分（流量調整弁で調整）"], ["エアー供給ポート", "日東工器 20PM（ホース側はメス20Sタイプ）"], ["真空ポート", "日東工器 1TSF（測定器側：青ホース5m・2m、タンク外殻側：黄ホース2m）"], ["変換カプラ", "1TPM＋PT1/8・PT1/4・PT1/2 各1個"], ["重さ", "約350g（ケース別）"], ["騒音", "真空達成時52dB(A)、開始時60dB(A)"]], insp:["ホース・カプラの傷と漏れ", "減圧側カプラのエアー漏れ（定期的にメンテナンス・交換）", "変換カプラ3種類がそろっているか", "排気口の汚れ・詰まり"], steps:["窒素ボンベかコンプレッサーを用意する", "コンプレッサーは0.45MPaに設定（窒素は二次側0.3MPaくらいから始め、様子を見て0.45MPaまで上げる）", "エアー供給用カプラ⑤をコンプレッサーか窒素ボンベにつなぐ", "エジェクタ本体③の排気口をふさがない場所に置く", "測定用カプラ⑧（青ホース）を、圧力測定器（pascal・PSR-2101・PSR-3101など）の−20kPaレンジにつなぐ", "変換カプラ①（PT1/8・1/4・1/2から合うもの）に、シールテープを巻いて外殻の漏洩検知口に付ける", "接続カプラ⑦を変換カプラ①につなぐ", "圧力記録をスタートする", "エアー供給側のバルブを徐々に開く", "流量調整弁②を少しずつ開いて、ちょうどいい速さで減圧する", "−20kPaになったら、流量調整弁②とコック⑥を閉める", "試験を開始する", "終わったらコック⑥を開け、流量調整弁②を徐々に開いて圧力を戻す"], stepsTitle:"使い方の手順（取扱説明書より）", parts:null, from:null, order:null},
     {c:"検査機器", ic:IC.meter, n:"PREX 総合カタログ（付属品・治具・校正・レンタル）", s:"圧力レコーダ pascal・真空発生器・配管密閉加圧治具など", fig:"<div class=\"sec\"><h3>カタログのページ</h3><img class=\"dwg\" src=\"px-c04a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c04b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c05a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c05b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c06a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c06b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c07a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c07b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c08a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c08b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c09a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c09b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c10a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c10b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c11a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c11b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c12a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c12b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c13a.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><img class=\"dwg\" src=\"px-c13b.jpg\" alt=\"カタログのページ\" style=\"margin-top:6px\"><p class=\"tnote\">タップで大きく表示（＋で拡大、指でスクロール）。</p></div>", use:"PSR-5101やLLT-2200βと一緒に使う付属品・治具、校正、レンタルなどのカタログ。", place:"置き場所は"+TODO, warn:["型式・価格は変わることがあるので、注文前にメーカーに確認する"], spec:[["主な中身", "圧力レコーダ pascal PR-2022、マルチステージ真空発生器、配管密閉加圧治具、チャッキ弁治具、各種センサー・ホース・カプラ、校正、レンタル"], ["メーカー", "株式会社プレックス"]], insp:[], parts:null, from:null, order:null},
-    {c:"検査の手順", ic:IC.meter, n:"地下タンク漏洩検査", s:"周期：毎年または3年ごと",
-     custom:'<div class="sec place"><h3>周期</h3><p>毎年または3年ごと</p></div>'+
-      '<div class="sec"><h3>使う機器</h3><ul><li><b>気相部・配管</b>（加圧・減圧・微加圧・微減圧）：タンクリークテスタ PSR-5101</li><li><b>液相部</b>：液相部ペアリークテスタ LLT-2200β</li><li><b>二重殻タンクの外殻</b>：PSR-5101＋減圧エジェクタ PR-1230（−20kPaまで減圧）</li></ul><p class="tnote">機器の使い方・注意は「検査機器」のそれぞれのページを見てください。</p></div>'+
-      '<div class="sec"><h3>会社の手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div>'+
-      '<div class="sec warn"><h3>安全の注意（機器の取扱説明書より）</h3><ul><li>加圧のあとは、通気口のメッシュ付きコックから徐々にガスを抜く。一気に外さない</li><li>窒素ボンベは必ずレギュレーターで減圧して使う。加圧試験は安全弁、微加圧は二次減圧弁と安全装置を使う</li><li>天気の荒れた日は検査しない</li></ul></div>'},
+    {c:"検査の手順", ic:IC.meter, n:"地下タンク漏洩検査", s:"毎年または3年ごと", custom:"<div class=\"qk\">🔑 カギは<b>借りたら利き手で持つ</b> → <b>南京錠を開けたらすぐ返す</b><br>ポケットに入れない・車に置かない<br><b>帰る前に、カギと南京錠をもう一度確認</b></div><div class=\"qh\">はじめに</div><ol class=\"qs\"><li><b>あいさつ</b><span>注入口・計量口の南京錠のカギを借りる → 開けたらすぐ返す</span></li><li><b>荷卸し</b><span>今日、荷卸しがあるか確認</span></li><li><b>残量</b><span>サービスタンクの残量を確認</span></li><li><b>ポンプアップ</b><span>エルコンかガチャコンで確認</span></li><li><b>健全性</b><span>ポンプと配管を検査前に確認</span></li></ol><div class=\"qh\">気相部検査</div><ol class=\"qs cont\"><li><b>加圧</b><span>圧をかける</span></li><li><b>確認</b><span>写真撮影 → 検知管測定 → 石鹸水</span></li></ol><div class=\"qh\">液相部検査</div><ol class=\"qs cont\"><li><b>液相部</b><span>液相部検査</span></li><li><b>残量</b><span>サービスタンクの残量を確認</span></li><li><b>使用量</b><span>油の使用量を判断。必要ならもう一度ポンプアップ</span></li></ol><div class=\"qh\">吸引管検査</div><ol class=\"qs cont\"><li><b>吸引管</b><span>吸引管バルブを閉 → 吸引管検査</span></li><li><b>片付け</b><span>吸引管検査の間に液相部の片付け → 終わったら吸引管も片付け</span></li></ol><div class=\"qh\">おわりに</div><ol class=\"qs cont\"><li><b>試運転</b><span>ポンプを動かして確認</span></li><li><b>カギ確認</b><span>カギを返したか・南京錠が閉まっているか確認</span></li><li><b>あいさつ</b><span>終わったことを伝える</span></li></ol><div class=\"qw\"><div>⚠ ボンベは必ずレギュレーター</div><div>⚠ 圧は一気に抜かない</div><div>⚠ 荒れた天気の日はやらない</div></div>"},
+    {c:"検査の手順", ic:IC.meter, n:"二重殻タンク外殻の減圧検査", s:"PR-1230で−20kPa", custom:"<ol class=\"qs\"><li><b>エアー</b><span>0.45MPa（窒素は0.3から）</span></li><li><b>つなぐ</b><span>PR-1230 → 測定器の−20kPa</span></li><li><b>検知口</b><span>変換カプラにシールテープ</span></li><li><b>減圧</b><span>記録スタート → ゆっくり。離れない</span></li><li><b>−20kPa</b><span>弁②とコック⑥を閉める → 試験</span></li><li><b>戻す</b><span>コック⑥ → 弁②を少しずつ</span></li></ol><div class=\"qw\"><div>⚠ 0.5MPaより上げない</div><div>⚠ 排気口をふさがない</div></div>"},
     {c:"検査の手順", ic:IC.meter, n:"タンクローリーの検査・検定", s:"周期：5年ごと",
      custom:'<div class="sec place"><h3>周期</h3><p>5年ごと</p></div><div class="sec"><h3>手順</h3><p>'+TODO+'（今使っている手順書やメモの写真を送ってもらえれば、ここに手順を入れます）</p></div><div class="sec warn"><h3>注意・よくある間違い</h3><p>'+TODO+'</p></div>'},
     {c:"検査の手順", ic:IC.meter, n:"安全弁検査", s:"周期：毎年",

@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap">
 <meta name="theme-color" content="#1C2326">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -13,7 +16,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>漏洩検査 台帳</title>
 <style>
-:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#5E676B;--line:#C9CED0;--focus:#1F4E8C;--sel:#1C2326;--sel-ink:#FFFFFF;--err:#B42318;--err-soft:#FDECEA;--ok:#2E7D4F;--info:#1F4E8C;--info-soft:#DCE6F3;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#475055;--line:#B4BCC0;--focus:#1F4E8C;--sel:#1C2326;--sel-ink:#FFFFFF;--err:#B42318;--err-soft:#FDECEA;--ok:#2E7D4F;--info:#1F4E8C;--info-soft:#DCE6F3;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;color-scheme:dark}
 *,*::before,*::after{box-sizing:inherit}
@@ -81,15 +84,47 @@ a.site.o .due b{color:var(--err)}
 .acts2{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;background:var(--surface);overflow:hidden}
 .acts2 a{display:flex;align-items:center;justify-content:center;min-height:42px;color:var(--ink);text-decoration:none;font-weight:700;font-size:.9rem;border-left:1px solid var(--line)}
 .acts2 a:first-child{border-left:0}
+.kinds{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:12px;border:2px solid var(--ink);border-radius:12px;overflow:hidden}
+.kinds button{min-height:44px;border:0;border-right:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;font-size:.92rem;cursor:pointer}
+.kinds button:last-child{border-right:0}
+.kinds button[aria-pressed="true"]{background:#2F6FD6;color:#fff}
+.views{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+.views button{min-height:46px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.views button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+details.mg{margin-top:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+details.mg > summary{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;font-weight:700;cursor:pointer;list-style:none}
+details.mg > summary::-webkit-details-marker{display:none}
+details.mg > summary span{font-size:.9rem;color:var(--muted)}
+details.mg.o > summary{color:#B42318}
+details.mg.n > summary{background:var(--bg)}
+details.mg[open] > summary{border-bottom:1px solid var(--line)}
+details.mg > .hh, details.mg > .sitebox{margin-left:8px;margin-right:8px}
+.hh{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin:12px 0 4px;padding:4px 2px;border-bottom:2px solid var(--ink)}
+.hh span{font-weight:400;color:var(--muted)}
+.towns{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.chip.sm{min-height:34px;font-size:.82rem;padding:0 10px}
+.tblwrap{overflow-x:auto;margin-top:12px;-webkit-overflow-scrolling:touch}
+table.ht{border-collapse:collapse;font-size:.82rem;min-width:100%}
+table.ht th,table.ht td{border:1px solid var(--line);padding:2px;text-align:center;white-space:nowrap}
+table.ht th{background:var(--surface);font-weight:700;padding:4px 6px}
+table.ht tr > th:first-child{position:sticky;left:0;z-index:1;text-align:left}
+table.ht th.o{color:#B42318}
+.cellb{width:36px;height:34px;border:0;border-radius:6px;font:inherit;font-weight:700;cursor:pointer;background:rgba(47,111,214,var(--a));color:var(--ink)}
+.cellb.o{background:rgba(180,35,24,.18);color:#B42318}
+.cellb.sel{outline:3px solid var(--ink)}
+.z{color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="./index.html">← メニューに戻る</a>
   <h1>漏洩検査 台帳</h1>
-  <p class="lead">次の期限が近い順に並んでいます。現場をタップすると記録用紙が開きます。</p>
+  <p class="lead">現場をタップすると記録用紙が開きます。</p>
   <div class="sum" id="sum"></div>
-  <div class="chips" id="areas" style="margin-top:12px"></div>
+  <div class="kinds" id="kinds" role="group" aria-label="種類"><button type="button" data-k="tank" aria-pressed="true">地下タンク</button><button type="button" data-k="meter" aria-pressed="false">計量器検定</button><button type="button" data-k="lorry" aria-pressed="false">ローリー</button></div>
+  <div class="views" id="views" role="group" aria-label="見かた"><button type="button" data-v="month" aria-pressed="true">月で見る</button><button type="button" data-v="area" aria-pressed="false">地域で見る</button><button type="button" data-v="table" aria-pressed="false">表で見る</button></div>
+  <div class="chips" id="areas" style="margin-top:10px"></div>
+  <div id="tbl"></div>
   <input class="search" id="q" type="search" placeholder="現場名・住所で探す" aria-label="現場を探す">
   <div id="list"></div>
 </div>
@@ -98,43 +133,118 @@ a.site.o .due b{color:var(--err)}
   var esc = function(t){ return String(t==null?"":t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   var all = [], area = "すべて", q = "";
   var now = new Date(), ty = now.getFullYear(), tm = now.getMonth();
-  function region(a){ var m = String(a||"").replace(/〒?\s*\d{3}-?\d{4}\s*/, "").replace(/^.*?北海道/, "").replace(/^.+?[都府県]/, "").match(/^(?:.+?郡)?(.+?[市町村])/); return m ? m[1] : "地域不明"; }
+  function region(a){ if(/^\s*(中央|北|東|白石|豊平|南|西|厚別|手稲|清田)区/.test(String(a||""))) return "札幌市"; var m = String(a||"").replace(/〒?\s*\d{3}-?\d{4}\s*/, "").replace(/^.*?北海道/, "").replace(/^.+?[都府県]/, "").match(/^(?:.+?郡)?(.+?[市町村])/); return m ? m[1] : "地域不明"; }
   function months(c){ c = String(c||""); var y = c.match(/([0-9.]+)\s*年/), mo = c.match(/([0-9]+)\s*(か月|ヶ月|カ月|月)/); if(y) return Math.round(parseFloat(y[1])*12); if(mo) return +mo[1]; if(/半年/.test(c)) return 6; return 12; }
   function due(s){ if(!s.last) return null; var p = s.last.split("-"), d = new Date(+p[0], +p[1]-1+months(s.cycle), +p[2]); return d; }
   function ym(d){ return d.getFullYear()*12+d.getMonth(); }
   function cls(d){ if(!d) return "o"; var today = new Date(ty, tm, now.getDate()); if(d < today) return "o"; if(ym(d) === ty*12+tm) return "n"; return ""; }
+  var HOU = [
+    ["札幌・道央","札幌,江別,千歳,恵庭,北広島,石狩,当別,新篠津,小樽,余市,倶知安,ニセコ,岩内,共和,仁木,古平,積丹,泊,神恵内,寿都,蘭越,京極,喜茂別,留寿都,真狩,黒松内,島牧,赤井川,岩見沢,栗沢,夕張,美唄,芦別,赤平,三笠,滝川,砂川,歌志内,深川,南幌,奈井江,上砂川,由仁,長沼,栗山,月形,浦臼,新十津川,妹背牛,秩父別,雨竜,北竜,沼田,幌加内,室蘭,苫小牧,登別,伊達,白老,安平,厚真,むかわ,洞爺湖,壮瞥,豊浦"],
+    ["函館方面","函館,北斗,七飯,森,八雲,長万部,鹿部,木古内,知内,福島,松前,江差,上ノ国,厚沢部,乙部,奥尻,今金,せたな"],
+    ["旭川方面","旭川,士別,名寄,富良野,鷹栖,東神楽,当麻,比布,愛別,上川,東川,美瑛,上富良野,中富良野,南富良野,占冠,和寒,剣淵,下川,美深,音威子府,中川,留萌,増毛,小平,苫前,羽幌,初山別,遠別,天塩,稚内,猿払,浜頓別,中頓別,枝幸,豊富,礼文,利尻,幌延"],
+    ["北見方面","北見,網走,紋別,美幌,津別,斜里,清里,小清水,訓子府,置戸,佐呂間,遠軽,湧別,滝上,興部,西興部,雄武,大空"],
+    ["釧路方面","釧路,厚岸,浜中,標茶,弟子屈,鶴居,白糠,根室,別海,中標津,標津,羅臼"],
+    ["帯広方面","帯広,音更,士幌,上士幌,鹿追,新得,清水,芽室,中札内,更別,大樹,広尾,幕別,池田,豊頃,本別,足寄,陸別,浦幌"],
+    ["静内・浦河方面","日高,平取,新冠,新ひだか,静内,浦河,様似,えりも"]
+  ];
+  var HNAMES = HOU.map(function(h){ return h[0]; }).concat(["その他"]);
+  function hou(town){
+    var t = String(town||"");
+    for(var i=0;i<HOU.length;i++){ var ks = HOU[i][1].split(","); for(var j=0;j<ks.length;j++){ if(t === ks[j] || t.indexOf(ks[j]) === 0) return HOU[i][0]; } }
+    return "その他";
+  }
+  var kind = "tank";
+  // 「2027.3」「2027/03」「2027年3月」「R9.3」「H34.2」「34.2」「2027-03-15」などを、その月の末日に
+  function pdue(v){
+    var t = String(v||"").replace(/[０-９．／]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0xFEE0); }).replace(/\s/g,"");
+    var m, y, mo, dd;
+    if((m = t.match(/^(\d{4})[.\/年-](\d{1,2})(?:[月.\/-](\d{1,2}))?/))){ y = +m[1]; mo = +m[2]; dd = m[3] ? +m[3] : 0; }
+    else if((m = t.match(/^[RＲ令]和?\.?(\d{1,2})[.\/年](\d{1,2})/))){ y = 2018 + +m[1]; mo = +m[2]; }
+    else if((m = t.match(/^[HＨ平]成?\.?(\d{1,2})[.\/年](\d{1,2})/))){ y = 1988 + +m[1]; mo = +m[2]; }
+    else if((m = t.match(/^(\d{1,2})[.\/](\d{1,2})$/))){ y = +m[1] >= 31 ? 1988 + +m[1] : 2018 + +m[1]; mo = +m[2]; }
+    else return null;
+    if(mo < 1 || mo > 12) return null;
+    return dd ? new Date(y, mo-1, dd) : new Date(y, mo, 0);
+  }
+  function earliest(arr){ var ds = arr.filter(Boolean); if(!ds.length) return null; return new Date(Math.min.apply(null, ds)); }
+  var view = "month", hsel = "すべて", tsel = "すべて", cell = null;
+  try{ var sv = JSON.parse(localStorage.getItem("leak-list-view")) || {}; if(sv.view) view = sv.view; }catch(e){}
+  function mkey(s){ var c = cls(s.due); if(!s.due) return "不明"; if(c === "o") return "切れ"; var k = ym(s.due) - (ty*12+tm); return k > 11 ? "先" : "m"+k; }
+  function mlabel(k){ if(k === "不明") return kind === "tank" ? "期限不明（前回の日付なし）" : "期限不明（期限が書かれていない）"; if(k === "切れ") return "期限切れ"; if(k === "先") return "1年より先"; var n = +k.slice(1), d = new Date(ty, tm+n, 1); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+(n===0 ? "（今月）" : n===1 ? "（来月）" : ""); }
+  var MKEYS = ["切れ"].concat([0,1,2,3,4,5,6,7,8,9,10,11].map(function(n){ return "m"+n; })).concat(["先","不明"]);
+  function card(s){
+    var c = cls(s.due), d = s.due, tel = ((s.contacts||[])[0]||{}).tel || s.tel || "";
+    return '<div class="sitebox '+c+'"><a class="site '+c+'" href="./leak.html?id='+encodeURIComponent(s.id)+'"><div class="due">'+(d ? '<b>'+(d.getMonth()+1)+'/'+d.getDate()+'</b><span>'+d.getFullYear()+'年</span>' : '<b>？</b><span>前回不明</span>')+'</div><div><div class="nm">'+esc(s.site)+(s.fac ? '　'+esc(s.fac) : '')+'</div>'+
+      '<div class="meta">'+esc(s.region)+'・'+esc(s.addr)+'</div><div class="meta">'+(s.tanks.length ? '<span class="tag">タンク'+s.tanks.length+'基</span>' : '')+(s.hasMob ? '<span class="tag">ローリー'+s.mob.length+'台</span>' : '')+(c==="o" && d ? '<span class="tag r">要対応</span>' : '')+'</div>'+
+      (kind === "meter" ? '<div class="meta">計量機 '+s.meters.length+'台・検定期限 '+esc(s.meters.map(function(m){ return m["検定期限"]; }).filter(function(v){ return pdue(v); }).sort(function(a,b){ return pdue(a)-pdue(b); }).filter(function(v,i,a){ return a.indexOf(v)===i; }).slice(0,3).join("・")||"不明")+'</div>' : '') +
+      (kind === "lorry" ? '<div class="meta">'+s.mob.map(function(l){ return esc(l["車番"]||"")+(l["検査期限"] ? '（'+esc(l["検査期限"])+'）' : ''); }).join("、")+'</div><div class="meta" style="color:#B42318">ローリーの検査・検定は 6月〜9月第1週</div>' : '') +
+      (kind !== "tank" ? '' : '<div class="meta">前回 '+esc(s.prevDate||"不明")+(s.prevNo ? '（No.'+esc(String(s.prevNo).replace(/^\s*N[Oo][.,]?\s*(N[Oo][.,]?\s*)?/,''))+'）' : '')+(s.cycle ? '・周期 '+esc(s.cycle) : '')+'</div>')+'</div></a>'+
+      '<div class="acts2">'+(s.addr ? '<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.addr)+'" target="_blank" rel="noopener">ナビ</a>' : '')+(tel ? '<a href="tel:'+tel.replace(/[^0-9+]/g,"")+'">電話</a>' : '')+'<a href="./leak.html?id='+encodeURIComponent(s.id)+'">記録用紙</a></div></div>';
+  }
+  function byHou(list){
+    var h = "";
+    HNAMES.forEach(function(hn){ var xs = list.filter(function(s){ return s.hou === hn; }); if(!xs.length) return; h += '<div class="hh">'+hn+'<span>'+xs.length+'件</span></div>'+xs.map(card).join(""); });
+    return h;
+  }
   function draw(){
+    try{ localStorage.setItem("leak-list-view", JSON.stringify({view:view})); }catch(e){}
     var key = q.trim();
-    var items = all.filter(function(s){ return (area === "すべて" || s.region === area) && (!key || (s.site+s.fac+s.addr).indexOf(key) >= 0); });
-    var over = all.filter(function(s){ return cls(s.due) === "o"; }).length, cur = all.filter(function(s){ return cls(s.due) === "n"; }).length;
+    document.querySelectorAll("[data-k]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.k === kind); });
+    var has = function(s){ return kind === "tank" ? s.tanks.length > 0 : kind === "meter" ? s.meters.length > 0 : s.mob.length > 0; };
+    all.forEach(function(s){ s.due = kind === "tank" ? s.dueT : kind === "meter" ? s.dueM : s.dueL; });
+    var pool = all.filter(has).sort(function(a,b){ if(!a.due) return 1; if(!b.due) return -1; return a.due - b.due; });
+    var base = pool.filter(function(s){ return !key || (s.site+s.fac+s.addr).indexOf(key) >= 0; });
+    var all0 = all; all = pool;
+    var over = all.filter(function(s){ return s.due && cls(s.due) === "o"; }).length, cur = all.filter(function(s){ return cls(s.due) === "n"; }).length;
     var nx = all.filter(function(s){ return s.due && ym(s.due) === ty*12+tm+1; }).length;
     document.getElementById("sum").innerHTML = '<div class="o"><b>'+over+'</b><span>期限切れ</span></div><div class="n"><b>'+cur+'</b><span>今月が期限</span></div><div><b>'+nx+'</b><span>来月が期限</span></div>';
-    var cnt = {}; all.forEach(function(s){ cnt[s.region] = (cnt[s.region]||0)+1; });
-    var areas = ["すべて"].concat(Object.keys(cnt).sort());
-    document.getElementById("areas").innerHTML = areas.map(function(a){ return '<button type="button" class="chip" data-a="'+esc(a)+'" aria-pressed="'+(a===area)+'">'+esc(a)+'（'+(a==="すべて"?all.length:cnt[a])+'）</button>'; }).join("");
-    document.querySelectorAll("[data-a]").forEach(function(b){ b.onclick = function(){ area = b.dataset.a; draw(); }; });
-    var h = "", g = null;
-    items.forEach(function(s){
-      var c = cls(s.due), key2 = c === "o" ? "期限切れ" : s.due.getFullYear()+"年"+(s.due.getMonth()+1)+"月";
-      if(key2 !== g){
-        g = key2;
-        var n = items.filter(function(x){ var c2 = cls(x.due); return (c2 === "o" ? "期限切れ" : x.due.getFullYear()+"年"+(x.due.getMonth()+1)+"月") === g; }).length;
-        h += '<div class="mh '+(c==="o"?"o":c==="n"?"n":"")+'">'+g+(c==="n"?"（今月）":"")+'<span>'+n+'件</span></div>';
+    all = all0;
+    document.querySelectorAll("[data-v]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.v === view); });
+    var areas = document.getElementById("areas"), tbl = document.getElementById("tbl"), out = document.getElementById("list"), h = "";
+    areas.innerHTML = ""; tbl.innerHTML = "";
+    if(view === "month"){
+      MKEYS.forEach(function(k){
+        var xs = base.filter(function(s){ return mkey(s) === k; }); if(!xs.length) return;
+        var open = key || k === "m0" || k === "切れ";
+        h += '<details class="mg '+(k==="切れ" ? "o" : k==="m0" ? "n" : "")+'"'+(open && k !== "切れ" ? " open" : "")+'><summary>'+mlabel(k)+'<span>'+xs.length+'件</span></summary>'+byHou(xs)+'</details>';
+      });
+    } else if(view === "area"){
+      var cnt = {}; base.forEach(function(s){ cnt[s.hou] = (cnt[s.hou]||0)+1; });
+      areas.innerHTML = ["すべて"].concat(HNAMES.filter(function(n){ return cnt[n]; })).map(function(a){ return '<button type="button" class="chip" data-h="'+esc(a)+'" aria-pressed="'+(a===hsel)+'">'+esc(a)+'（'+(a==="すべて" ? base.length : cnt[a])+'）</button>'; }).join("");
+      var xs = base.filter(function(s){ return hsel === "すべて" || s.hou === hsel; });
+      if(hsel !== "すべて"){
+        var tc = {}; xs.forEach(function(s){ tc[s.region] = (tc[s.region]||0)+1; });
+        areas.innerHTML += '<div class="towns">'+["すべて"].concat(Object.keys(tc).sort(function(a,b){ return tc[b]-tc[a]; })).map(function(t){ return '<button type="button" class="chip sm" data-t="'+esc(t)+'" aria-pressed="'+(t===tsel)+'">'+esc(t)+'（'+(t==="すべて" ? xs.length : tc[t])+'）</button>'; }).join("")+'</div>';
+        if(tsel !== "すべて") xs = xs.filter(function(s){ return s.region === tsel; });
       }
-      var d = s.due;
-      var tel = ((s.contacts||[])[0]||{}).tel || s.tel || "";
-      h += '<div class="sitebox '+c+'"><a class="site '+c+'" href="./leak.html?id='+encodeURIComponent(s.id)+'"><div class="due">'+(d ? '<b>'+(d.getMonth()+1)+'/'+d.getDate()+'</b><span>'+d.getFullYear()+'年</span>' : '<b>？</b><span>前回不明</span>')+'</div><div><div class="nm">'+esc(s.site)+(s.fac ? '　'+esc(s.fac) : '')+'</div>'+
-        '<div class="meta">'+esc(s.region)+'・'+esc(s.addr)+'</div><div class="meta"><span class="tag">タンク'+s.tanks.length+'基</span><span class="tag">検知管'+esc(s.wells||"−")+'本</span>'+(s.hasMob ? '<span class="tag">移動タンク'+s.mob.length+'台</span>' : '')+(c==="o" ? '<span class="tag r">要対応</span>' : '')+'</div>'+
-        '<div class="meta">前回 '+esc(s.prevDate||"不明")+'（No.'+esc(s.prevNo||"不明")+'）・周期 '+esc(s.cycle||"1年")+'</div></div></a>'+
-        '<div class="acts2">'+(s.addr ? '<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.addr)+'" target="_blank" rel="noopener">ナビ</a>' : '')+(tel ? '<a href="tel:'+tel.replace(/[^0-9+]/g,"")+'">電話</a>' : '')+'<a href="./leak.html?id='+encodeURIComponent(s.id)+'">記録用紙</a></div></div>';
-    });
-    document.getElementById("list").innerHTML = h || '<p class="lead" style="margin-top:16px">該当する現場がありません。</p>';
+      h = xs.map(card).join("");
+    } else {
+      var cols = MKEYS.filter(function(k){ return k !== "不明"; }), mx = 1, grid = {};
+      HNAMES.forEach(function(hn){ grid[hn] = {}; cols.forEach(function(k){ var n = base.filter(function(s){ return s.hou === hn && mkey(s) === k; }).length; grid[hn][k] = n; if(k !== "切れ" && n > mx) mx = n; }); });
+      var head = '<tr><th>方面</th>'+cols.map(function(k){ if(k === "切れ") return '<th class="o">期限<br>切れ</th>'; if(k === "先") return '<th>1年<br>先</th>'; var d = new Date(ty, tm+(+k.slice(1)), 1); return '<th>'+(d.getMonth()===0 || k==="m0" ? '<small>'+d.getFullYear()+'</small><br>' : '<br>')+(d.getMonth()+1)+'月</th>'; }).join("")+'</tr>';
+      var rows = HNAMES.filter(function(hn){ return cols.some(function(k){ return grid[hn][k]; }); }).map(function(hn){
+        return '<tr><th>'+hn+'</th>'+cols.map(function(k){ var n = grid[hn][k], a = k==="切れ" ? 0 : Math.min(1, n/mx); var sel = cell && cell[0]===hn && cell[1]===k;
+          return '<td>'+(n ? '<button type="button" class="cellb'+(k==="切れ" ? ' o' : '')+(sel ? ' sel' : '')+'" data-c="'+esc(hn)+'|'+k+'" style="--a:'+(0.12+a*0.75).toFixed(2)+'">'+n+'</button>' : '<span class="z">·</span>')+'</td>'; }).join("")+'</tr>';
+      }).join("");
+      tbl.innerHTML = '<div class="tblwrap"><table class="ht">'+head+rows+'</table></div><p class="lead" style="margin:6px 0 0">数字を押すと、その方面・その月の現場が下に出ます。</p>';
+      if(cell){ var xs2 = base.filter(function(s){ return s.hou === cell[0] && mkey(s) === cell[1]; }); h = '<div class="hh">'+cell[0]+'・'+mlabel(cell[1])+'<span>'+xs2.length+'件</span></div>'+xs2.map(card).join(""); }
+    }
+    out.innerHTML = h || (view === "table" ? "" : '<p class="lead" style="margin-top:16px">該当する現場がありません。</p>');
+    areas.querySelectorAll("[data-h]").forEach(function(b){ b.onclick = function(){ hsel = b.dataset.h; tsel = "すべて"; draw(); }; });
+    areas.querySelectorAll("[data-t]").forEach(function(b){ b.onclick = function(){ tsel = b.dataset.t; draw(); }; });
+    tbl.querySelectorAll("[data-c]").forEach(function(b){ b.onclick = function(){ var p = b.dataset.c.split("|"); cell = (cell && cell[0]===p[0] && cell[1]===p[1]) ? null : p; draw(); if(cell) document.getElementById("list").scrollIntoView({behavior:"smooth", block:"start"}); }; });
   }
+  document.querySelectorAll("[data-v]").forEach(function(b){ b.onclick = function(){ view = b.dataset.v; draw(); }; });
+  document.querySelectorAll("[data-k]").forEach(function(b){ b.onclick = function(){ kind = b.dataset.k; cell = null; hsel = "すべて"; tsel = "すべて"; draw(); }; });
   document.getElementById("q").addEventListener("input", function(e){ q = e.target.value; draw(); });
   fetch("sites.json", {cache:"no-cache"}).then(function(r){ return r.json(); }).then(function(list){
     var done = {}; try{ done = JSON.parse(localStorage.getItem("leak-done-v1")) || {}; }catch(e){}
-    all = list.map(function(s){ var o = done[s.id]; if(o && (!s.last || o.last > s.last)){ s.last = o.last; s.prevDate = o.prevDate; s.prevNo = o.prevNo; } s.region = region(s.addr); s.due = due(s); return s; });
-    all.sort(function(a,b){ if(!a.due) return -1; if(!b.due) return 1; return a.due - b.due; });
+    all = list.map(function(s){ var o = done[s.id]; if(o && (!s.last || o.last > s.last)){ s.last = o.last; s.prevDate = o.prevDate; s.prevNo = o.prevNo; } s.region = region(s.addr); s.hou = hou(s.region); s.dueT = due(s);
+      s.meters = s.meters || []; s.mob = s.mob || [];
+      s.dueM = earliest(s.meters.map(function(m){ return pdue(m["検定期限"]); }));
+      s.dueL = earliest(s.mob.map(function(l){ return pdue(l["検査期限"]); }));
+      s.due = s.dueT; return s; });
+    all.sort(function(a,b){ if(!a.dueT) return -1; if(!b.dueT) return 1; return a.dueT - b.dueT; });
     draw();
   }).catch(function(){ document.getElementById("list").innerHTML = '<p class="lead" style="margin-top:16px">台帳を読み込めませんでした。電波のある所で開き直してください。</p>'; });
 })();
