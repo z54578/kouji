@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap">
+<meta name="theme-color" content="#1C2326">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANM">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>泡消火配管 寸法計算</title>
+<style>
+:root{
+  --bg:#ECEEEC; --surface:#FFFFFF; --ink:#1C2326; --muted:#475055; --line:#B4BCC0;
+  --field:#FFF3A6; --field-line:#D9C200; --focus:#1F4E8C; --sel:#1C2326; --sel-ink:#FFFFFF;
+  --cut:#1F4E8C; --cut-soft:#DCE6F3; --xred:#B42318;
+  color-scheme: light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+    --field:#3B3713; --field-line:#8F8320; --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C;
+    --cut:#9DBDEB; --cut-soft:#24344A; --xred:#FF8A7A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+  --field:#3B3713; --field-line:#8F8320; --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C;
+  --cut:#9DBDEB; --cut-soft:#24344A; --xred:#FF8A7A; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;line-height:1.25;margin:4px 0 12px;font-weight:700}
+h2{font-size:1.05rem;margin:22px 0 8px;font-weight:700}
+.num{font-variant-numeric:tabular-nums}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px}
+.chip{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;padding:0 6px}
+.chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.fieldname{font-size:.85rem;color:var(--muted);margin:12px 0 6px}
+.fieldname:first-child{margin-top:0}
+.sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.fits{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.fits .chip{font-size:.92rem}
+.fits .chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;min-height:76px;line-height:1.25}
+.fits .chip svg,.shape svg{width:44px;height:28px;flex:none}
+.ico{display:flex;gap:4px}
+.sizes .chip{min-height:52px;padding:4px 2px;line-height:1.15}
+.sizes .chip small{display:block;font-size:.78rem;font-weight:400}
+.shapes{display:grid;gap:8px;margin-bottom:12px}
+.shape{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px}
+.shape b{display:block}
+.shape span{font-size:.85rem;color:var(--muted)}
+.fig{margin:14px 0 0;color:var(--muted)}
+.kinds2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fig svg{width:100%;height:auto;display:block}
+.fig figcaption{font-size:.8rem;margin-top:2px}
+.inrow{display:flex;align-items:center;gap:8px}
+.inrow input{flex:1;min-width:0;height:52px;text-align:right;padding:0 12px;font-size:1.5rem;font-family:inherit;border:2px solid var(--field-line);background:var(--field);color:var(--ink);border-radius:8px}
+.inrow .unit{color:var(--muted)}
+.manual{margin-top:8px}
+.manual input{height:44px;font-size:1.15rem}
+.answer{background:var(--cut-soft);color:var(--cut);border-radius:10px;padding:14px;margin-top:14px}
+.answer .lbl{font-size:.9rem;font-weight:700}
+.answer .big{font-size:2.6rem;line-height:1.1;font-weight:700}
+.answer .big small{font-size:1rem;font-weight:400;margin-left:4px}
+.answer .how{font-size:.85rem;margin-top:6px;color:var(--ink)}
+.hint{font-size:.85rem;color:var(--muted)}
+.btn{width:100%;height:50px;margin-top:12px;border-radius:10px;border:0;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}
+.list{display:grid;gap:6px}
+.item{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.item .t{font-size:.85rem;color:var(--muted)}
+.item b{font-size:1.25rem}
+.x{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;width:36px;height:36px;font-size:1rem;cursor:pointer}
+.ghost{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:inherit;font-size:.9rem;cursor:pointer}
+.actions{display:flex;justify-content:flex-end;margin-top:10px}
+.tbl{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow-x:auto;margin-bottom:12px}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{color:var(--muted);font-weight:700;font-size:.8rem}
+th:first-child,td:first-child{text-align:left;font-weight:700}
+.note{font-size:.82rem;color:var(--muted);margin:8px 0 0}
+[hidden]{display:none!important}
+button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
+.refs{display:grid;gap:6px;margin-bottom:8px}
+.refs > div{display:grid;grid-template-columns:40px 1fr;align-items:center;gap:6px}
+.refs span{font-weight:700;font-size:.9rem}
+#fit1,#fit2{display:none}
+.pp{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:0;margin-bottom:6px}
+.pe{min-height:96px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px}
+.pe[aria-expanded="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.pe .ico svg{height:28px;width:auto}
+.pe b{font-size:.92rem;line-height:1.25;text-align:center}
+.pe small{font-size:.72rem;color:var(--muted)}
+.pbar{height:16px;background:var(--cut);border-radius:3px}
+.fitpop{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border-radius:12px;padding:10px;margin-bottom:8px}
+.fitpop .pt{grid-column:1/3;font-weight:700;font-size:.9rem}
+.fitpop button{min-height:56px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 8px;text-align:left}
+.fitpop button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.fitpop .ico svg{height:22px;width:auto}
+details.figs{margin:6px 0 10px}
+details.figs summary{cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px 0}
+.resbar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:2px solid var(--ink);padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.resbar .answer{margin:0;padding:0;background:none;min-height:0}
+.resbar .answer .big{font-size:2.1rem;line-height:1.1}
+.resbar .answer .lbl{font-size:.75rem}
+.resbar .answer .how{font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
+.resbar .answer .hint{font-size:.85rem;padding:0;background:none}
+.resbar .btn{margin:0;min-height:56px;padding:0 14px;font-size:.9rem;white-space:nowrap}
+body{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
+.item{display:grid;grid-template-columns:44px 1fr 40px;align-items:center;gap:8px}
+.item b{font-size:1.6rem}
+.item b small{font-size:.85rem}
+.ck{width:40px;height:40px;border-radius:10px;border:2px solid var(--ink);background:var(--surface);color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer}
+.ck[aria-pressed="true"]{background:#2E9E4F;border-color:#2E9E4F}
+.item.done b{text-decoration:line-through;color:var(--muted)}
+.ng{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px}
+.ngh{font-size:.95rem;margin-bottom:6px}
+.bar{display:grid;grid-template-columns:44px 1fr;gap:6px;align-items:center;margin:4px 0}
+.bl{font-size:.75rem;color:var(--muted);font-weight:700}
+.bt{display:flex;height:40px;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.bt span{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--cut);color:#fff;font-size:.78rem;font-weight:700;border-right:2px solid var(--surface);min-width:0;overflow:hidden;white-space:nowrap}
+.bt span i{font-style:normal;font-size:.62rem;font-weight:400;opacity:.85}
+.bt span.dn{background:#2E9E4F}
+.bt span.rs{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,var(--line) 6px,var(--line) 8px);color:var(--muted);border-right:0}
+.btn.share{flex:1}
+.isl{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}
+.isl button{flex:none;min-height:42px;padding:0 14px;border-radius:21px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.isl button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.dg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:12px}
+.dg svg{display:block;width:100%;height:auto}
+.inp{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.inp .k{width:34px;height:34px;border-radius:50%;background:var(--xred);color:var(--surface);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.inp .k.b{background:#2F6FD6}
+.inp .k.g{background:var(--muted)}
+.inp .t b{display:block;font-size:.95rem}
+.inp .t small{display:block;color:var(--muted);font-size:.75rem;line-height:1.35}
+.inp input{width:96px;min-height:48px;border:2px solid var(--field-line);background:var(--field);border-radius:10px;font:inherit;font-size:1.3rem;text-align:right;padding:0 8px;color:var(--ink)}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 4px}
+.tg button{min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.tg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cuts{width:100%;border-collapse:collapse;table-layout:fixed}
+.cuts col.c2{width:84px} .cuts col.c3{width:40px}
+.cuts td,.cuts th{border-bottom:1px solid var(--line);padding:8px 4px;text-align:left;vertical-align:middle}
+.cuts th{font-size:.8rem;color:var(--muted)}
+.cuts .n{text-align:right;white-space:nowrap}
+.cuts td:first-child{font-size:.95rem;font-weight:700;padding-left:34px;position:relative}
+.cuts .no{position:absolute;left:2px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:var(--cut);color:var(--surface);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.cuts b{font-size:1.45rem}
+.cuts small{display:block;color:var(--muted);font-size:.78rem;font-weight:400;overflow-wrap:anywhere;line-height:1.4}
+.cuts .q{font-weight:700;text-align:center}
+.pend b{font-size:1rem;color:var(--muted)}
+.warnbox{background:#FDECEA;color:#8A1C12;border-radius:10px;padding:8px 12px;font-weight:700;font-size:.88rem;margin:8px 0}
+.parts{width:100%;border-collapse:collapse}
+.parts td{border-bottom:1px solid var(--line);padding:7px 4px}
+.parts td:last-child{text-align:right;font-weight:700}
+.bar{display:grid;grid-template-columns:58px 1fr;gap:6px;align-items:center;margin:4px 0}
+.bl{font-size:.72rem;color:var(--muted);font-weight:700;line-height:1.25}
+.bt{display:flex;height:38px;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.bt span{display:flex;align-items:center;justify-content:center;background:var(--cut);color:#fff;font-size:.76rem;font-weight:700;border-right:2px solid var(--surface);min-width:0;overflow:hidden;white-space:nowrap}
+.bt span.rs{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,var(--line) 6px,var(--line) 8px);color:var(--muted);border-right:0}
+.btns{display:grid;gap:8px;margin-top:12px}
+.btn2{min-height:54px;border-radius:12px;border:0;background:var(--ink);color:var(--bg);font:inherit;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.btn3{min-height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.bt span{flex-direction:column;line-height:1.15}
+.okbox{margin:8px 0 0;padding:10px 12px;border-radius:10px;background:var(--cut-soft);color:var(--ink);font-size:.92rem;line-height:1.6}
+.cntsel button[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.cntsel button:disabled{opacity:.35}
+.hs{font-size:1rem;margin:14px 0 6px}
+.hs:first-child{margin-top:0}
+.steps{margin:0;padding-left:1.6em;line-height:1.6}
+.steps li{padding:6px 0;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:0}
+.pno{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--cut);color:var(--surface);font-size:.8rem;font-weight:700;margin:0 2px;vertical-align:-3px}
+[hidden]{display:none !important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:30;max-width:90vw}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← メニューに戻る</a>
+  <h1>泡消火配管 寸法計算</h1>
+  <p class="lead">赤い矢印 <b style="color:var(--xred)">x</b> の長さを測って入れるだけ。切断寸法と部材が出ます。</p>
+  <div class="isl" id="isl"></div>
+  <div class="dg" id="dg"></div>
+  <p class="note" style="margin:-6px 0 12px">図は長さの比率を実物に合わせています。x を変えると図も変わります。</p>
+
+  <div class="card">
+    <h2 style="margin-top:0">x を入れる</h2>
+    <div class="inp"><span class="k">x</span><div class="t"><b>計量機の中心 → 立上りチーズの中心</b><small>図の赤い矢印の長さ（mm）</small></div><input id="x" inputmode="decimal" placeholder="—"></div>
+    <details style="margin-top:8px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px 0">決まりの寸法（20A SGP白・ねじ込み）</summary>
+      <p class="note" style="margin:4px 0 0;line-height:1.7">・ヘッド：計量機の中心から前後750<br>・放出口の面：中心線から500（A面〜B面で1000）<br>・a（放出口の面 → ヘッド列の芯）＝61<br>・ストリートエルボ A＝25・B＝47（c＝66）<br>・引く寸法：エルボ・チーズ19、ねじ込み13</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">切断寸法</h2>
+    <div id="cuts"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">部材（このアイランド）</h2>
+    <div id="parts"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">4m管の取り方（全アイランド分）</h2>
+    <div id="nest"></div>
+  </div>
+
+  <div class="btns">
+    <button class="btn2" id="order" type="button">全部のアイランドの部材をカートに入れる</button>
+    <a class="btn3" id="gocart" href="./zfile.html#cart" hidden>工事課ハンドブックのカートを開く →</a>
+    <button class="btn3" id="share" type="button">Teamsで送る（共有）</button>
+    <button class="btn3" id="delisl" type="button">このアイランドを消す</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+<script>
+(function(){
+  var FA = 61, FSA = 25, FB = 47, FS = 1500, FW = 1000; // 決まりの寸法（20A）
+  var GE = 19, GT = 19, ENG = 13, STOCK = 4000, KEY = "foam-std-v1";
+  function blank(n){ return {name:"アイランド"+n, x:"", a:"62", cm:"st", sa:"25", sb:"47", s:"1500", w:"1000"}; }
+  var st; try{ st = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  if(!st || !st.isl || !st.isl.length) st = {cur:0, isl:[blank(1)]};
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+  function I(){ return st.isl[st.cur]; }
+  var num = function(v){ var n = parseFloat(String(v==null?"":v).replace(/[^0-9.\-]/g,"")); return isFinite(n) ? n : NaN; };
+  var f1 = function(n){ return (Math.round(n*10)/10).toString(); };
+  function toast(t){ var el = document.getElementById("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function(){ el.hidden = true; }, 2500); }
+  // 計算
+  function calc(x){
+    var X = num(x.x), A = FA, S = FS, W = FW;
+    var street = true, SB = FB, SA = FSA, C = SB + 19;
+    var rows = [];
+    rows.push({no:"1", k:"ヘッド列の管", sub:"チーズ ↔ エルボ", cc:S/2, cut:S/2 - GT - GE, q:4, how:"S÷2 − 19 − 19"});
+    if(!street) rows.push({k:"短い管（中心のエルボ → ヘッド列のチーズ）", cc:C, cut:C - GE - GT, q:2, how:"c − 19 − 19", need:"c"});
+    var hdedR = street ? (SA - ENG) : GE;
+    rows.push({no:"2", k:"横に走る管", sub:"エルボ ↔ ストリートエルボ", cc:X, cut:X - GE - hdedR, q:2, how:street ? "x − 19 −（A − 13）" : "x − 19 − 19", need:"x"});
+    var vcc = W/2 - A - C;
+    rows.push({no:"3", k:"立上りの短い管", sub:"立上りチーズ ↔ エルボ", cc:vcc, cut:vcc - GT - GE, q:2, how:"W÷2 − a − c − 19 − 19", need:"x"});
+    return {rows:rows, X:X, A:A, S:S, W:W, C:C, street:street};
+  }
+  function ok(r){ return isFinite(r.cut) && isFinite(r.cc); }
+  // 図
+  // 図の色（ダークモードでは明るい色）
+  function pal(){ var t = document.documentElement.getAttribute("data-theme"), dk = t ? t === "dark" : !!(window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+    return dk ? {fit:"#D3DADE", ink:"#161A1C", red:"#FF8A7A", cs:"#7E888D", no:"#9DBDEB", noInk:"#161A1C"} : {fit:"#1C2326", ink:"#fff", red:"#B42318", cs:"#8A949A", no:"#1F4E8C", noInk:"#fff"}; }
+  try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function(){ drawDiagram(); }); }catch(e){}
+  function drawDiagram(){
+    var K = pal();
+    var x = I(), r = calc(x), W = r.W, S = r.S;
+    var X = isFinite(r.X) && r.X > 0 ? r.X : 600, A = isFinite(r.A) ? r.A : 61, C = isFinite(r.C) && r.C > 0 ? r.C : 66;
+    // 長さの比率は実物どおり（縦も横も同じ縮尺）
+    var hy = W/2 - A, ey = hy - C;
+    var LX = Math.max(X, S/2 + 20), PL = X >= S/2 ? 64 : 16, PR = 48, PT = 44, s0 = Math.min((340 - PL - PR)/(LX + S/2), 260/W), sx = s0, sy = s0;
+    var ox = PL + LX*s0, oy = PT + (W/2)*s0, VH = Math.round(oy + (W/2)*s0 + 62);
+    var P = function(px, py){ return [ox + px*sx, oy - py*sy]; };
+    var g = '', PIPE = '#2F6FD6', PW = Math.max(27*s0, 3.5); // 20Aの管の外径 27
+    var ln = function(a, b){ var p = P(a[0],a[1]), q = P(b[0],b[1]); g += '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="'+PIPE+'" stroke-width="'+PW+'" stroke-linecap="butt"/>'; };
+    // 継手の大きさも実物に合わせる（チーズ・エルボの芯から端まで 32、外径 約34）。小さすぎると見えないので最小だけ決める
+    var FH = Math.max(32*s0, 6), FW = Math.max(34*s0, PW + 2.5);
+    // チーズ：口のある方向に腕をのばした形
+    var tee = function(at, dirs, col){ var p = P(at[0],at[1]); g += '<g>'; dirs.forEach(function(d){ var x0 = Math.min(p[0], p[0]+d[0]*FH) - (d[0]?0:FW/2), y0 = Math.min(p[1], p[1]+d[1]*FH) - (d[1]?0:FW/2); g += '<rect x="'+x0+'" y="'+y0+'" width="'+(d[0]?FH:FW)+'" height="'+(d[1]?FH:FW)+'" fill="'+col+'"/>'; }); g += '<rect x="'+(p[0]-FW/2-1)+'" y="'+(p[1]-FW/2-1)+'" width="'+(FW+2)+'" height="'+(FW+2)+'" rx="1.5" fill="'+col+'"/></g>'; };
+    // エルボ：2方向を丸くつなぐ
+    var elb = function(at, d1, d2, col, street){ var p = P(at[0],at[1]), r0 = FH; var a = [p[0]+d1[0]*r0, p[1]+d1[1]*r0], b = [p[0]+d2[0]*r0, p[1]+d2[1]*r0];
+      g += '<path d="M'+a[0]+' '+a[1]+' Q'+p[0]+' '+p[1]+' '+b[0]+' '+b[1]+'" fill="none" stroke="'+col+'" stroke-width="'+FW+'" stroke-linecap="butt"/>';
+      if(street){ for(var k=0;k<2;k++){ var t = 0.55+k*0.3, mx = p[0]+d2[0]*r0*t, my = p[1]+d2[1]*r0*t; g += '<line x1="'+(mx-d2[1]*FW*0.55)+'" y1="'+(my-d2[0]*FW*0.55)+'" x2="'+(mx+d2[1]*FW*0.55)+'" y2="'+(my+d2[0]*FW*0.55)+'" stroke="#7A5300" stroke-width="1.2"/>'; } } };
+    // 泡ヘッド：エルボの口から放出口の面まで（ヘッドケース＋ヘッド）
+    var head = function(at, up){ var p = P(at[0],at[1]), fy = P(at[0], up ? W/2 : -W/2)[1], d = up ? -1 : 1, e0 = p[1] + d*FH, L = Math.abs(fy - e0), hh = L*0.45, inner = fy - d*hh;
+      g += '<rect x="'+(p[0]-FW*0.35)+'" y="'+Math.min(e0, inner)+'" width="'+(FW*0.7)+'" height="'+Math.abs(inner-e0)+'" fill="'+K.cs+'"/>'; // ヘッドケース
+      g += '<path d="M'+(p[0]-FW*0.4)+' '+inner+' L'+(p[0]+FW*0.4)+' '+inner+' L'+(p[0]+FW*0.9)+' '+fy+' L'+(p[0]-FW*0.9)+' '+fy+' Z" fill="#E0457B"/><line x1="'+(p[0]-FW)+'" y1="'+fy+'" x2="'+(p[0]+FW)+'" y2="'+fy+'" stroke="#E0457B" stroke-width="2"/>'; };
+    // 面と中心線
+    var face = function(y, t, below){ var p = [8, P(0, y)[1]], q = [P(S/2, 0)[0]+FW+10, P(0, y)[1]]; g += '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/><text x="'+(P(-S/4,0)[0])+'" y="'+(q[1]+(below?13:-5))+'" font-size="10" text-anchor="middle" fill="var(--muted)">'+t+'</text>'; };
+    face(W/2, 'A面（放出口の面）', false); face(-W/2, 'B面（放出口の面）', true);
+    (function(){ var p = P(0, W/2 + 14/sy), q = P(0, -W/2 - 14/sy); g += '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="'+K.red+'" stroke-width="1" stroke-dasharray="8 3 2 3"/><text x="'+q[0]+'" y="'+(q[1]+26)+'" font-size="10" font-weight="700" text-anchor="middle" fill="'+K.red+'">計量機の中心</text>'; })();
+    // 配管
+    [1,-1].forEach(function(sg){ ln([-S/2, sg*hy],[S/2, sg*hy]); ln([0, sg*ey],[-X, sg*ey]); ln([-X, sg*ey],[-X, 0]); });
+    // 継手（画面の座標：上がマイナス）
+    [1,-1].forEach(function(sg){
+      var up = sg > 0 ? -1 : 1; // ヘッド列の方向（画面）
+      tee([0, sg*hy], [[-1,0],[1,0],[0,-up]], K.fit);
+      elb([-S/2, sg*hy], [1,0], [0,up], K.fit); head([-S/2, sg*hy], sg > 0);
+      elb([S/2, sg*hy], [-1,0], [0,up], K.fit); head([S/2, sg*hy], sg > 0);
+      elb([0, sg*ey], [-1,0], [0,up], '#E0A800', true);
+      elb([-X, sg*ey], [1,0], [0,-up], K.fit);
+    });
+    // 立上りのチーズ：泡の配管は下（地中）から生えてくるので、上から見ると管の口（⊙）になる
+    tee([-X, 0], [[0,-1],[0,1]], K.red);
+    (function(){ var p = P(-X, 0); g += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(FW*0.42)+'" fill="'+K.red+'" stroke="'+K.ink+'" stroke-width="1.5"/><circle cx="'+p[0]+'" cy="'+p[1]+'" r="1.6" fill="'+K.ink+'"/>';
+      g += '<text x="'+(p[0]-FW-4)+'" y="'+(p[1]-2)+'" font-size="10" font-weight="700" text-anchor="end" fill="'+K.red+'">下から</text><text x="'+(p[0]-FW-4)+'" y="'+(p[1]+10)+'" font-size="10" font-weight="700" text-anchor="end" fill="'+K.red+'">立上り</text>'; })();
+    // 記号
+    var lab = function(at, t, dx, dy, anc){ var p = P(at[0],at[1]); g += '<text x="'+(p[0]+(dx||0))+'" y="'+(p[1]+(dy||0))+'" font-size="12" font-weight="700" text-anchor="'+(anc||"middle")+'" fill="'+K.red+'">'+t+'</text>'; };
+    // x の寸法線（計量機の中心 ↔ 立上りチーズの中心）
+    (function(){ var p = P(-X, 0), q = P(0, 0), y = p[1], hasX = isFinite(r.X) && r.X > 0, mx = (p[0]+q[0])/2;
+      g += '<line x1="'+(p[0]+FW/2+5)+'" y1="'+y+'" x2="'+(q[0]-1)+'" y2="'+y+'" stroke="'+K.red+'" stroke-width="2.5"/>';
+      g += '<path d="M'+(p[0]+FW/2+1)+' '+y+' l9 -5 v10 Z M'+q[0]+' '+y+' l-9 -5 v10 Z" fill="'+K.red+'"/>';
+      var t = hasX ? 'x＝'+f1(r.X) : 'x', w = t.length*8+14;
+      g += '<rect x="'+(mx-w/2)+'" y="'+(y-26)+'" width="'+w+'" height="20" rx="10" fill="'+K.red+'"/><text x="'+mx+'" y="'+(y-11.5)+'" font-size="13" font-weight="700" text-anchor="middle" fill="'+K.ink+'">'+t+'</text>'; })();
+    // 切断する管の番号（表の①②③と同じ）
+    var no = function(at, t){ var p = P(at[0],at[1]); g += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="8.5" fill="'+K.no+'"/><text x="'+p[0]+'" y="'+(p[1]+3.8)+'" font-size="11" font-weight="700" text-anchor="middle" fill="'+K.noInk+'">'+t+'</text>'; };
+    no([-S/4, hy], '1'); no([S/4, hy], '1'); (function(){ var p = P(-X/2, ey); p[1] += 12; g += '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="8.5" fill="'+K.no+'"/><text x="'+p[0]+'" y="'+(p[1]+3.8)+'" font-size="11" font-weight="700" text-anchor="middle" fill="'+K.noInk+'">2</text>'; })(); no([-X, ey/2], '3');
+    // 寸法線（放出口の面・ヘッドの中心にそろえる）
+    var DC = K.fit;
+    var hd = function(x1, x2, ys, t){ var a = P(x1,0)[0], b = P(x2,0)[0]; g += '<line x1="'+a+'" y1="'+ys+'" x2="'+b+'" y2="'+ys+'" stroke="currentColor" stroke-width="1"/><path d="M'+(a-3)+' '+(ys+3)+' L'+(a+3)+' '+(ys-3)+' M'+(b-3)+' '+(ys+3)+' L'+(b+3)+' '+(ys-3)+'" stroke="currentColor" stroke-width="1.4"/><text x="'+((a+b)/2)+'" y="'+(ys-4)+'" font-size="11" font-weight="700" text-anchor="middle" fill="currentColor">'+t+'</text>'; };
+    var vd = function(y1, y2, xs, t){ var a = P(0,y1)[1], b = P(0,y2)[1]; g += '<line x1="'+xs+'" y1="'+a+'" x2="'+xs+'" y2="'+b+'" stroke="currentColor" stroke-width="1"/><path d="M'+(xs-3)+' '+(a+3)+' L'+(xs+3)+' '+(a-3)+' M'+(xs-3)+' '+(b+3)+' L'+(xs+3)+' '+(b-3)+'" stroke="currentColor" stroke-width="1.4"/><text x="'+(xs-5)+'" y="'+((a+b)/2+4)+'" font-size="11" font-weight="700" text-anchor="end" fill="currentColor">'+t+'</text>'; };
+    var ext = function(px, y1, y2){ var p = P(px, y1), q = P(px, y2); g += '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 2"/>'; };
+    var dimY = P(0, W/2)[1] - 30;
+    [-S/2, 0, S/2].forEach(function(px){ ext(px, W/2, W/2 + 30/sy); });
+    hd(-S/2, 0, dimY, '750'); hd(0, S/2, dimY, '750');
+    var dimX = P(S/2, 0)[0] + FW + 34;
+    (function(){ var p = P(S/2, W/2), q = P(S/2, -W/2), c0 = P(S/2, 0); g += '<line x1="'+(p[0]+FW+2)+'" y1="'+p[1]+'" x2="'+(dimX+4)+'" y2="'+p[1]+'" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 2"/><line x1="'+(q[0]+FW+2)+'" y1="'+q[1]+'" x2="'+(dimX+4)+'" y2="'+q[1]+'" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 2"/><line x1="'+(P(0,0)[0])+'" y1="'+c0[1]+'" x2="'+(dimX+4)+'" y2="'+c0[1]+'" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 2"/>'; })();
+    vd(W/2, 0, dimX, '500'); vd(0, -W/2, dimX, '500');
+    // 凡例
+    var lg = '<g transform="translate(8,'+(VH-8)+')" font-size="10" fill="currentColor">'+
+      '<rect x="0" y="-8" width="11" height="11" rx="2" fill="'+K.fit+'"/><text x="15" y="2">チーズ</text>'+
+      '<path d="M55 2 Q55 -8 65 -8" fill="none" stroke="'+K.fit+'" stroke-width="6"/><text x="70" y="2">エルボ</text>'+
+      '<path d="M115 2 Q115 -8 125 -8" fill="none" stroke="#E0A800" stroke-width="6"/><text x="130" y="2">ストリートエルボ</text>'+
+      '<rect x="218" y="-10" width="5" height="7" fill="'+K.cs+'"/><path d="M216 -3 L225 -3 L228 3 L213 3 Z" fill="#E0457B"/><text x="232" y="2">ヘッド</text>'+
+      '<rect x="280" y="-8" width="11" height="11" rx="2" fill="'+K.red+'"/><circle cx="285.5" cy="-2.5" r="3" fill="none" stroke="'+K.ink+'" stroke-width="1.4"/><text x="295" y="2">立上り</text></g>';
+    document.getElementById("dg").innerHTML = '<svg viewBox="0 0 340 '+VH+'" role="img" aria-label="泡消火配管を上から見た図（チーズ・エルボ・ストリートエルボ・泡ヘッド）" style="color:var(--ink)">'+g+lg+'</svg>';
+  }
+  function drawInputs(){
+    var x = I();
+    ["x"].forEach(function(k){ var el = document.getElementById(k); if(document.activeElement !== el) el.value = x[k] || ""; });
+  }
+  function drawCuts(){
+    var r = calc(I()), h = '<table class="cuts"><colgroup><col><col class="c2"><col class="c3"></colgroup><tr><th>区間</th><th class="n">切断</th><th>本数</th></tr>', warn = [];
+    r.rows.forEach(function(row){
+      var good = ok(row);
+      if(good && row.cut < 40) warn.push(row.k+" が "+f1(row.cut)+"mm と短すぎます（ねじが切れません）");
+      h += '<tr class="'+(good?'':'pend')+'"><td><span class="no">'+row.no+'</span>'+row.k+'<small>'+row.sub+'<br>'+(good ? '芯々 '+f1(row.cc) : 'x を入れると出ます')+'</small></td><td class="n">'+(good ? '<b>'+f1(row.cut)+'</b>' : '<b>—</b>')+'</td><td class="q">×'+row.q+'</td></tr>';
+    });
+    h += '</table>';
+    if(warn.length) h += warn.map(function(w){ return '<div class="warnbox">⚠ '+w+'</div>'; }).join("");
+    document.getElementById("cuts").innerHTML = h;
+  }
+  function partsOf(x){
+    var street = true;
+    return [["チーズ（ねじ込み）","20A",3,"個"],["90°エルボ（ねじ込み）","20A",street?6:8,"個"]].concat(street ? [["ストリートエルボ","20A",2,"個"]] : []).concat([["泡ヘッド（QS-Guard）","",4,"個"],["ヘッドケース","",4,"個"]]);
+  }
+  function pieces(x){ var ps = []; calc(x).rows.forEach(function(r){ if(ok(r) && r.cut > 0) for(var i=0;i<r.q;i++) ps.push(r.cut); }); return ps; }
+  function nest(x){ var bars = []; pieces(x).sort(function(a,b){ return b-a; }).forEach(function(p){ var b = bars.filter(function(b){ return STOCK - b.used >= p; }).sort(function(a,c){ return (STOCK-a.used)-(STOCK-c.used); })[0]; if(!b){ b = {used:0, ps:[]}; bars.push(b); } b.ps.push(p); b.used += p; }); return bars; }
+  // 管の端からスケールを1回当てて、足した位置に印をつける
+  function marks(ps){ var s = 0; return '<div style="margin:4px 0 12px;font-size:1rem;line-height:1.6">📏 端から印：'+ps.map(function(p){ s += p; return '<b>'+f1(s)+'</b>'; }).join(' → ')+'</div>'; }
+  function drawParts(){
+    var x = I(), ps = partsOf(x), n = nest(x);
+    document.getElementById("parts").innerHTML = '<table class="parts">'+ps.map(function(p){ return '<tr><td>'+p[0]+(p[1]?'<small style="color:var(--muted)"> '+p[1]+'</small>':'')+'</td><td>'+p[2]+' '+p[3]+'</td></tr>'; }).join("")+'<tr><td>白ガス管（SGP・4m）<small style="color:var(--muted)"> 20A</small></td><td>'+(n.length||"—")+' 本</td></tr></table>';
+    drawJob();
+  }
+  // 全アイランド分：①③を先に（x がいらない）→ ②はあとで（残りから先に使う）
+  function jobN(){ return Math.max(st.isl.length, +st.cnt || 0); }
+  function jobPlan(){
+    var p1 = [], p2 = [], N = jobN();
+    calc(st.isl[0]).rows.forEach(function(r){ if(r.no === "2" || !ok(r) || r.cut <= 0) return; for(var k=0;k<r.q*N;k++) p1.push({len:r.cut, tag:r.no==="1"?"①":"③"}); });
+    st.isl.forEach(function(x, i){ calc(x).rows.forEach(function(r){
+      if(r.no !== "2" || !ok(r) || r.cut <= 0) return;
+      for(var k=0;k<r.q;k++) p2.push({len:r.cut, tag:(i+1)+"-②"});
+    }); });
+    var put = function(bars, ps, isNew){ ps.sort(function(a,b){ return b.len-a.len; }).forEach(function(p){
+      var b = bars.filter(function(b){ return STOCK - b.used >= p.len; }).sort(function(a,c){ return (STOCK-a.used)-(STOCK-c.used); })[0];
+      if(!b){ b = {used:0, ps:[], add:[], fresh:isNew}; bars.push(b); }
+      (isNew && !b.fresh ? b.add : b.ps).push(p); b.used += p.len; }); };
+    var b3 = [], b1 = [];
+    put(b3, p1.filter(function(p){ return p.tag === "③"; }), false); b3.forEach(function(b){ b.kind = "③"; });
+    put(b1, p1.filter(function(p){ return p.tag === "①"; }), false); b1.forEach(function(b){ b.kind = "①"; });
+    var bars = b3.concat(b1); bars.forEach(function(b, i){ b.used1 = b.used; b.k = i < b3.length ? i+1 : i-b3.length+1; });
+    var n1 = bars.length; put(bars, p2, true);
+    var n2 = jobN() - st.isl.filter(function(x){ return num(x.x) > 0; }).length;
+    return {bars:bars, n1:n1, wait:n2};
+  }
+  function barHtml(label, ps, rest){ return '<div class="bar"><div class="bl">'+label+'</div><div class="bt">'+ps.map(function(p){ return '<span style="flex:'+p.len+'">'+f1(p.len)+'<i>'+p.tag+'</i></span>'; }).join("")+(rest>0?'<span class="rs" style="flex:'+rest+'">残り '+f1(rest)+'</span>':'')+'</div></div>'; }
+  function markHtml(ps, from){ var s = 0; return '<div style="margin:4px 0 12px;font-size:1rem;line-height:1.6">📏 '+(from||'端から')+'印：'+ps.map(function(p){ s += p.len; return '<b>'+f1(s)+'</b>'; }).join(' → ')+'</div>'; }
+  function drawJob(){
+    var j = jobPlan(), nb = document.getElementById("nest"), h = '';
+    var N = jobN();
+    h += '<p style="margin:0 0 6px;font-weight:700">何か所分？</p><div class="tg cntsel" style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:8px">';
+    for(var c=1;c<=6;c++) h += '<button type="button" data-cnt="'+c+'" aria-pressed="'+(c===N)+'"'+(c<st.isl.length?' disabled':'')+'>'+c+'</button>';
+    h += '</div><p class="note" style="margin-top:0">'+N+'か所分　20A：4m管 合計 <b>'+j.bars.length+'本</b></p>';
+    var cnt = function(k){ return j.bars.slice(0, j.n1).filter(function(b){ return b.kind === k; }).reduce(function(s,b){ return s + b.ps.length; }, 0); };
+    h += '<h3 class="hs">1. 先に切る：①・③（x がいらない）</h3>';
+    ["③","①"].forEach(function(k){
+      var bs = j.bars.slice(0, j.n1).filter(function(b){ return b.kind === k; }); if(!bs.length) return;
+      h += '<p style="margin:10px 0 4px;font-weight:700">'+k+'（'+f1(bs[0].ps[0].len)+'）だけ ×'+cnt(k)+(k==="③"?'　<span style="color:var(--muted);font-weight:400;font-size:.85rem">先にできると、すぐ組める</span>':'')+'</p>';
+      bs.forEach(function(b){ h += barHtml(k+'の'+b.k+'本目', b.ps, STOCK - b.used1) + markHtml(b.ps); });
+    });
+    h += '<h3 class="hs">2. x を入れたら切る：②（残りから先に使う）</h3>';
+    var any = false;
+    j.bars.forEach(function(b, i){
+      if(i < j.n1 && b.add.length){ any = true; h += barHtml(b.kind+'の'+b.k+'本目の残り', b.add, STOCK - b.used) + markHtml(b.add, b.kind+'の'+b.k+'本目の残り（'+f1(STOCK - b.used1)+'）の端から'); }
+      if(i >= j.n1){ any = true; h += barHtml('新しい'+(i-j.n1+1)+'本目', b.ps, STOCK - b.used) + markHtml(b.ps); }
+    });
+    if(!any) h += '<p class="note" style="margin:0 0 8px">x を入れると、ここに出ます。</p>';
+    if(j.wait) h += '<p class="note" style="margin:0 0 8px">x がまだ：'+j.wait+'か所。上の「＋アイランド」で作って x を入れると、②が出ます</p>';
+    h += '<details style="margin-top:6px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px 0">ねじ切り機で切るときの1本の流れ</summary><ol class="steps"><li>4m管の端にねじを切る</li><li>印のところでカッターで切る（切り代は出ない）</li><li>切った管を反対向きにして、もう片方にねじを切る</li><li>残りの4m管の切り口にねじを切る → 2に戻る</li></ol><p class="note">管には「①」「③」「1-②」のように書いておく。4m管は長いので、パイプ受けで水平にする。</p></details>';
+    nb.innerHTML = h;
+    nb.querySelectorAll("[data-cnt]").forEach(function(b){ b.onclick = function(){ st.cnt = +b.dataset.cnt; save(); drawOut(); }; });
+  }
+  function drawIsl(){
+    var b = document.getElementById("isl");
+    b.innerHTML = st.isl.map(function(x, i){ return '<button type="button" data-i="'+i+'" aria-pressed="'+(i===st.cur)+'">'+x.name+'</button>'; }).join("")+'<button type="button" id="addisl">＋ アイランド</button>';
+    b.querySelectorAll("[data-i]").forEach(function(btn){ btn.onclick = function(){ st.cur = +btn.dataset.i; save(); drawAll(); }; });
+    document.getElementById("addisl").onclick = function(){ var p = I(), n = blank(st.isl.length+1); n.a = p.a; n.cm = p.cm; n.c = p.c; n.sa = p.sa; n.sb = p.sb; n.s = p.s; n.w = p.w; st.isl.push(n); st.cur = st.isl.length-1; save(); drawAll(); };
+  }
+  // 組み方（①③を先に → ② → 取り付け → 打設前）
+  function drawHowto(){
+    var n = jobN(), r = calc(I()), L = {}; r.rows.forEach(function(row){ L[row.no] = ok(row) ? '（'+f1(row.cut)+'）' : ''; });
+    var nb = function(k){ return '<span class="pno">'+k+'</span>'; };
+    var ol = function(a, st0){ return '<ol class="steps"'+(st0?' start="'+st0+'"':'')+'>'+a.map(function(t){ return '<li>'+t+'</li>'; }).join('')+'</ol>'; };
+    document.getElementById("howto").innerHTML =
+      '<h3 class="hs">準備：先に①・③（着いたらすぐ）</h3>'+ol([
+        '<b>Cさん</b>：'+nb(3)+L["3"]+'だけ切って、ねじを切る　×'+(2*n)+'（できた分から渡す）',
+        '<b>Bさん</b>：'+nb(1)+L["1"]+'だけ切って、ねじを切る　×'+(4*n),
+        nb(3)+'に<b>エルボ</b>を付ける　×'+(2*n),
+        nb(1)+'に<b>エルボ</b>を付ける　×'+(4*n),
+        'アイランドごとに分ける（'+nb(1)+'＋エルボ4組・'+nb(3)+'＋エルボ2組）'])+
+      '<div class="okbox">'+nb(3)+'＋エルボができたら、x を待たずに<b>立上りチーズと'+nb(3)+'を付け始められる</b>（下の「現場で」の1・2）</div>'+
+      '<p class="note" style="margin:6px 0 0">その間に：x を測ってアプリに入れる。'+nb(1)+nb(2)+nb(3)+'の通り道と鉄筋の位置も見ておく</p>'+
+      '<h3 class="hs">準備：x を入れたら②</h3>'+ol([
+        '「4m管の取り方」の2で、'+nb(2)+'を切って、ねじを切る。管に「1-②」のようにアイランド番号を書く',
+        nb(2)+'に<b>ストリートエルボ</b>のメス側を付ける　×'+(2*n),
+        'ストリートエルボのオス側を真上に向け、<b>中心のチーズ</b>の横の口をねじ込む。上から見て、チーズのまっすぐの口が'+nb(2)+'と<b>平行</b>で止める　×'+(2*n),
+        'どれも<b>本締め</b>しておく'], 6)+
+      '<h3 class="hs">現場で（1か所ずつ）</h3>'+ol([
+        '<b>立上りチーズ</b>を下からの管に付ける。横の口をA面・B面へ向ける',
+        nb(3)+'＋エルボをねじ込む。エルボの口を<b>計量機の中心</b>へ向けて止める',
+        nb(2)+'＋ストリートエルボ＋チーズをねじ込む。チーズが<b>放出口の面</b>の方を向いたら止める',
+        'チーズの左右に'+nb(1)+'＋エルボ。エルボの口を<b>放出口の面</b>へ向ける',
+        '<b>ヘッドケース・泡ヘッド</b>を付ける',
+        '確認：ヘッドの中心が計量機の中心から<b>750</b>、放出口の面が中心線から<b>500</b>'])+
+      '<h3 class="hs">打設の前に</h3>'+ol([
+        '<b>漏れの試験</b>：会社で決まっている圧力をかけて、全部のねじを見る',
+        '管を<b>鉄筋に結束</b>して、打設で動いたり浮いたりしないようにする',
+        'ヘッド・ヘッドケース・管の口を<b>ふさぐ</b>（コンクリートが入らないように）',
+        '写真を撮る'])+
+      '<div class="warnbox">⚠ 向きは締め込んで合わせる。戻すと漏れる<br>⚠ 準備でチーズの平行がずれると、現場では直せない<br>⚠ 鉄筋やピットの壁で回せないときは：'+nb(2)+'はストリートエルボまでにして、チーズは現場で付ける。'+nb(1)+'は管だけ先にねじ込み、エルボは後から付ける</div>';
+  }
+  function drawOut(){ drawDiagram(); drawCuts(); drawParts(); }
+  function drawAll(){ drawIsl(); drawInputs(); drawOut(); }
+  ["x"].forEach(function(k){ document.getElementById(k).addEventListener("input", function(e){ I()[k] = e.target.value; save(); drawOut(); }); });
+  document.getElementById("delisl").onclick = function(){ var b = this; if(!b.dataset.armed){ b.dataset.armed = "1"; b.textContent = "もう一度押すと消します"; setTimeout(function(){ delete b.dataset.armed; b.textContent = "このアイランドを消す"; }, 3000); return; } st.isl.splice(st.cur,1); if(!st.isl.length) st.isl.push(blank(1)); st.cur = 0; save(); drawAll(); delete b.dataset.armed; b.textContent = "このアイランドを消す"; };
+  document.getElementById("order").onclick = function(){
+    var cart; try{ cart = JSON.parse(localStorage.getItem("materials-cart-v1")) || {items:[]}; }catch(e){ cart = {items:[]}; } cart.items = cart.items || [];
+    var tot = {}, bars = 0, SUP = "札幌軸受工具株式会社";
+    st.isl.forEach(function(x){ partsOf(x).forEach(function(p){ var k = p[0]; tot[k] = tot[k] || {n:p[0], size:p[1], q:0, u:p[3]}; tot[k].q += p[2]; }); bars += nest(x).length; });
+    var n = 0;
+    Object.keys(tot).forEach(function(k){ var t = tot[k]; cart.items.push({n:t.n, size:t.size, qty:t.q+t.u, order:/泡ヘッド|ヘッドケース/.test(t.n) ? "" : SUP}); n++; });
+    if(bars){ cart.items.push({n:"白ガス管（SGP・4m）", size:"20A", qty:bars+"本", order:SUP}); n++; }
+    try{ localStorage.setItem("materials-cart-v1", JSON.stringify(cart)); }catch(e){}
+    toast(n+"品目をカートに入れました"); document.getElementById("gocart").hidden = false;
+  };
+  document.getElementById("share").onclick = function(){
+    var t = ["【泡消火配管 寸法】"];
+    st.isl.forEach(function(x){ var r = calc(x); t.push("■ "+x.name+"　x="+(x.x||"未")+"");
+      r.rows.forEach(function(row){ t.push("・"+"①②③".charAt(row.no-1)+row.k+"："+(ok(row) ? f1(row.cut)+"mm" : "未")+" ×"+row.q); });
+      t.push("　部材："+partsOf(x).map(function(p){ return p[0]+" "+p[2]+p[3]; }).join("、")+"、白ガス管4m "+(nest(x).length||"未")+"本"); });
+    var text = t.join("\n");
+    if(navigator.share){ navigator.share({title:"泡消火配管", text:text}).catch(function(){}); return; }
+    if(navigator.clipboard) navigator.clipboard.writeText(text).then(function(){ toast("コピーしました。Teamsに貼り付けてください"); }); else prompt("コピーしてください", text);
+  };
+  drawAll();
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>
