@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap">
+<meta name="theme-color" content="#1C2326">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANM">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>泡消火ユニット 配管寸法</title>
+<style>
+:root{
+  --bg:#ECEEEC; --surface:#FFFFFF; --ink:#1C2326; --muted:#475055; --line:#B4BCC0;
+  --field:#FFF3A6; --field-line:#D9C200; --focus:#1F4E8C; --sel:#1C2326; --sel-ink:#FFFFFF;
+  --cut:#1F4E8C; --cut-soft:#DCE6F3; --xred:#B42318;
+  color-scheme: light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+    --field:#3B3713; --field-line:#8F8320; --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C;
+    --cut:#9DBDEB; --cut-soft:#24344A; --xred:#FF8A7A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+  --field:#3B3713; --field-line:#8F8320; --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C;
+  --cut:#9DBDEB; --cut-soft:#24344A; --xred:#FF8A7A; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;line-height:1.25;margin:4px 0 12px;font-weight:700}
+h2{font-size:1.05rem;margin:22px 0 8px;font-weight:700}
+.num{font-variant-numeric:tabular-nums}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px}
+.chip{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;padding:0 6px}
+.chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.fieldname{font-size:.85rem;color:var(--muted);margin:12px 0 6px}
+.fieldname:first-child{margin-top:0}
+.sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.fits{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.fits .chip{font-size:.92rem}
+.fits .chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;min-height:76px;line-height:1.25}
+.fits .chip svg,.shape svg{width:44px;height:28px;flex:none}
+.ico{display:flex;gap:4px}
+.sizes .chip{min-height:52px;padding:4px 2px;line-height:1.15}
+.sizes .chip small{display:block;font-size:.78rem;font-weight:400}
+.shapes{display:grid;gap:8px;margin-bottom:12px}
+.shape{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px}
+.shape b{display:block}
+.shape span{font-size:.85rem;color:var(--muted)}
+.fig{margin:14px 0 0;color:var(--muted)}
+.kinds2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fig svg{width:100%;height:auto;display:block}
+.fig figcaption{font-size:.8rem;margin-top:2px}
+.inrow{display:flex;align-items:center;gap:8px}
+.inrow input{flex:1;min-width:0;height:52px;text-align:right;padding:0 12px;font-size:1.5rem;font-family:inherit;border:2px solid var(--field-line);background:var(--field);color:var(--ink);border-radius:8px}
+.inrow .unit{color:var(--muted)}
+.manual{margin-top:8px}
+.manual input{height:44px;font-size:1.15rem}
+.answer{background:var(--cut-soft);color:var(--cut);border-radius:10px;padding:14px;margin-top:14px}
+.answer .lbl{font-size:.9rem;font-weight:700}
+.answer .big{font-size:2.6rem;line-height:1.1;font-weight:700}
+.answer .big small{font-size:1rem;font-weight:400;margin-left:4px}
+.answer .how{font-size:.85rem;margin-top:6px;color:var(--ink)}
+.hint{font-size:.85rem;color:var(--muted)}
+.btn{width:100%;height:50px;margin-top:12px;border-radius:10px;border:0;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}
+.list{display:grid;gap:6px}
+.item{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.item .t{font-size:.85rem;color:var(--muted)}
+.item b{font-size:1.25rem}
+.x{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;width:36px;height:36px;font-size:1rem;cursor:pointer}
+.ghost{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:inherit;font-size:.9rem;cursor:pointer}
+.actions{display:flex;justify-content:flex-end;margin-top:10px}
+.tbl{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow-x:auto;margin-bottom:12px}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{color:var(--muted);font-weight:700;font-size:.8rem}
+th:first-child,td:first-child{text-align:left;font-weight:700}
+.note{font-size:.82rem;color:var(--muted);margin:8px 0 0}
+[hidden]{display:none!important}
+button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
+.refs{display:grid;gap:6px;margin-bottom:8px}
+.refs > div{display:grid;grid-template-columns:40px 1fr;align-items:center;gap:6px}
+.refs span{font-weight:700;font-size:.9rem}
+#fit1,#fit2{display:none}
+.pp{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:0;margin-bottom:6px}
+.pe{min-height:96px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px}
+.pe[aria-expanded="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.pe .ico svg{height:28px;width:auto}
+.pe b{font-size:.92rem;line-height:1.25;text-align:center}
+.pe small{font-size:.72rem;color:var(--muted)}
+.pbar{height:16px;background:var(--cut);border-radius:3px}
+.fitpop{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border-radius:12px;padding:10px;margin-bottom:8px}
+.fitpop .pt{grid-column:1/3;font-weight:700;font-size:.9rem}
+.fitpop button{min-height:56px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 8px;text-align:left}
+.fitpop button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.fitpop .ico svg{height:22px;width:auto}
+details.figs{margin:6px 0 10px}
+details.figs summary{cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px 0}
+.resbar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:2px solid var(--ink);padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.resbar .answer{margin:0;padding:0;background:none;min-height:0}
+.resbar .answer .big{font-size:2.1rem;line-height:1.1}
+.resbar .answer .lbl{font-size:.75rem}
+.resbar .answer .how{font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
+.resbar .answer .hint{font-size:.85rem;padding:0;background:none}
+.resbar .btn{margin:0;min-height:56px;padding:0 14px;font-size:.9rem;white-space:nowrap}
+body{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
+.item{display:grid;grid-template-columns:44px 1fr 40px;align-items:center;gap:8px}
+.item b{font-size:1.6rem}
+.item b small{font-size:.85rem}
+.ck{width:40px;height:40px;border-radius:10px;border:2px solid var(--ink);background:var(--surface);color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer}
+.ck[aria-pressed="true"]{background:#2E9E4F;border-color:#2E9E4F}
+.item.done b{text-decoration:line-through;color:var(--muted)}
+.ng{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px}
+.ngh{font-size:.95rem;margin-bottom:6px}
+.bar{display:grid;grid-template-columns:44px 1fr;gap:6px;align-items:center;margin:4px 0}
+.bl{font-size:.75rem;color:var(--muted);font-weight:700}
+.bt{display:flex;height:40px;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.bt span{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--cut);color:#fff;font-size:.78rem;font-weight:700;border-right:2px solid var(--surface);min-width:0;overflow:hidden;white-space:nowrap}
+.bt span i{font-style:normal;font-size:.62rem;font-weight:400;opacity:.85}
+.bt span.dn{background:#2E9E4F}
+.bt span.rs{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,var(--line) 6px,var(--line) 8px);color:var(--muted);border-right:0}
+.btn.share{flex:1}
+.isl{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}
+.isl button{flex:none;min-height:42px;padding:0 14px;border-radius:21px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.isl button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.dg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:12px}
+.dg svg{display:block;width:100%;height:auto}
+.inp{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.inp .k{width:34px;height:34px;border-radius:50%;background:var(--xred);color:var(--surface);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.inp .k.b{background:#2F6FD6}
+.inp .k.g{background:var(--muted)}
+.inp .t b{display:block;font-size:.95rem}
+.inp .t small{display:block;color:var(--muted);font-size:.75rem;line-height:1.35}
+.inp input{width:96px;min-height:48px;border:2px solid var(--field-line);background:var(--field);border-radius:10px;font:inherit;font-size:1.3rem;text-align:right;padding:0 8px;color:var(--ink)}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 4px}
+.tg button{min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.tg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cuts{width:100%;border-collapse:collapse;table-layout:fixed}
+.cuts col.c2{width:84px} .cuts col.c3{width:40px}
+.cuts td,.cuts th{border-bottom:1px solid var(--line);padding:8px 4px;text-align:left;vertical-align:middle}
+.cuts th{font-size:.8rem;color:var(--muted)}
+.cuts .n{text-align:right;white-space:nowrap}
+.cuts td:first-child{font-size:.95rem;font-weight:700;padding-left:34px;position:relative}
+.cuts .no{position:absolute;left:2px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:var(--cut);color:var(--surface);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.cuts b{font-size:1.45rem}
+.cuts small{display:block;color:var(--muted);font-size:.78rem;font-weight:400;overflow-wrap:anywhere;line-height:1.4}
+.cuts .q{font-weight:700;text-align:center}
+.pend b{font-size:1rem;color:var(--muted)}
+.warnbox{background:#FDECEA;color:#8A1C12;border-radius:10px;padding:8px 12px;font-weight:700;font-size:.88rem;margin:8px 0}
+.parts{width:100%;border-collapse:collapse}
+.parts td{border-bottom:1px solid var(--line);padding:7px 4px}
+.parts td:last-child{text-align:right;font-weight:700}
+.bar{display:grid;grid-template-columns:58px 1fr;gap:6px;align-items:center;margin:4px 0}
+.bl{font-size:.72rem;color:var(--muted);font-weight:700;line-height:1.25}
+.bt{display:flex;height:38px;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.bt span{display:flex;align-items:center;justify-content:center;background:var(--cut);color:#fff;font-size:.76rem;font-weight:700;border-right:2px solid var(--surface);min-width:0;overflow:hidden;white-space:nowrap}
+.bt span.rs{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,var(--line) 6px,var(--line) 8px);color:var(--muted);border-right:0}
+.btns{display:grid;gap:8px;margin-top:12px}
+.btn2{min-height:54px;border-radius:12px;border:0;background:var(--ink);color:var(--bg);font:inherit;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.btn3{min-height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.bt span{flex-direction:column;line-height:1.15}
+.okbox{margin:8px 0 0;padding:10px 12px;border-radius:10px;background:var(--cut-soft);color:var(--ink);font-size:.92rem;line-height:1.6}
+.cntsel button[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.cntsel button:disabled{opacity:.35}
+.hs{font-size:1rem;margin:14px 0 6px}
+.hs:first-child{margin-top:0}
+.steps{margin:0;padding-left:1.6em;line-height:1.6}
+.steps li{padding:6px 0;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:0}
+.pno{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--cut);color:var(--surface);font-size:.8rem;font-weight:700;margin:0 2px;vertical-align:-3px}
+[hidden]{display:none !important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:30;max-width:90vw}
+</style>
+<style>
+.dir{grid-template-columns:repeat(3,1fr)}
+.cnt{grid-template-columns:repeat(4,1fr)}
+.lines{margin:6px 0 0}
+.ln{display:grid;grid-template-columns:72px 1fr 92px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ln:last-child{border-bottom:0}
+.ln .nm{font-weight:700}
+.ln .ud{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ln .ud button{min-height:42px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.ln .ud button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ln .v{text-align:right;font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}
+.ln .v small{display:block;font-size:.72rem;color:var(--muted);font-weight:400}
+.ln{grid-template-columns:72px 1fr}
+.cl{grid-column:1 / -1;display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:.95rem}
+.cl b{text-align:right;font-size:1.35rem;font-variant-numeric:tabular-nums}
+.cl span small{display:block;color:var(--muted);font-size:.76rem}
+.sub{margin:14px 0 6px;font-weight:700;font-size:.95rem}
+.card h2 + .sub{margin-top:4px}
+.udg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.udr{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;align-items:center;font-weight:700;font-size:.9rem}
+.udr button{min-height:40px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer;padding:0}
+.udr button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.udr span{padding-right:4px}
+.ct{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.ct th{font-size:.75rem;color:var(--muted);font-weight:700;text-align:right;padding:4px 4px 6px;border-bottom:1px solid var(--line)}
+.ct th:first-child{text-align:left}
+.ct td{padding:10px 4px;border-bottom:1px solid var(--line);text-align:right;font-size:1.35rem;font-weight:700;vertical-align:top}
+.ct td:first-child{text-align:left;font-size:.95rem}
+.ct td small{display:block;font-size:.7rem;color:var(--muted);font-weight:400}
+.ct tr:last-child td{border-bottom:0}
+.figlink img{width:100%;border-radius:10px;border:1px solid var(--line);background:#fff}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="./index.html">← メニューに戻る</a>
+  <h1>泡消火ユニット 配管寸法</h1>
+  <p class="lead">上から順に：① 選ぶ → ② <b style="color:var(--xred)">d</b> と <b style="color:var(--xred)">x</b> を入れる → ③ アンカー → ④ 切断。QS-Guard・20A SGP白。</p>
+
+  <div class="card">
+    <h2 style="margin-top:0">① 選ぶ</h2>
+    <p class="sub">出す方向</p>
+    <div class="tg dir" id="dir"></div>
+    <p class="sub">ライン数（アイランドの数）</p>
+    <div class="tg cnt" id="cnt"></div>
+    <p class="sub">ラインごとの段（最初は交互）</p>
+    <div id="ud"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">② 寸法を入れる</h2>
+    <div class="inp"><span class="k">d</span><div class="t"><b>うしろの壁 → 一番壁側の立上りの芯</b><small>アンカー位置に使う（③の図の赤い線）</small></div><input id="ad" inputmode="decimal" placeholder="—"></div>
+    <div id="side" style="margin-top:10px"></div>
+    <div class="inp"><span class="k">x</span><div class="t"><b>床 → 今ある立上り管の先</b><small>縦管に使う（上の図の赤い矢印）</small></div><input id="x" inputmode="decimal" placeholder="—"></div>
+    <details style="margin-top:8px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px 0">決まりの寸法</summary>
+      <p class="note" style="margin:4px 0 0;line-height:1.7">・横管の芯の高さ（床から）：上段1644・下段1414（図16）<br>・ユニオンフレキ：全長300、両端めねじ<br>・千鳥：偶数ラインはフレキを150上げる（ソケット＋短管）<br>・引く寸法：エルボ19、ねじ込み13、ソケット38（JIS）<br>・アンカー：4−φ14.5、700×510（底775×583の真ん中）</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">③ アンカー位置</h2>
+    <div id="anc"></div>
+    <div id="ancout" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">④ 切断寸法</h2>
+    <div id="lines"></div>
+    <p class="note" style="margin:8px 0 0">横管は表16の長さ（ねじ部込み）。短管はフレキを150上げるライン（ソケットとフレキの間）。</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">4m管の取り方</h2>
+    <div id="nest"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">寸法表と図（表16・図18・図19）</h2>
+    <a class="figlink" href="foam-dim-piping.jpg" target="_blank" rel="noopener"><img src="foam-dim-piping.jpg" alt="消火ユニット 配管寸法（表16）・配管上面図（図18）・配管例（図19）"></a>
+    <p class="note">ユニットの外の立ち上がり・立ち下がりは、ユニオンとフレキで現場合わせ。ユニオンは垂直部分で千鳥に。</p>
+  </div>
+
+  <div class="btns">
+    <button class="btn3" id="share" type="button">Teamsで送る（共有）</button>
+  </div>
+</main>
+<script>
+(function(){
+  "use strict";
+  // 表16 消火ユニット配管寸法（ねじ部込み）[上段, 下段] × ライン1〜4
+  var T = {
+    "右出し": {up:[380,484,588,692], dn:[280,384,488,592]},
+    "左出し": {up:[795,691,587,483], dn:[695,591,487,383]},
+    "後出し": {up:[306,366,426,486], dn:[206,266,326,386]}
+  };
+  var STOCK = 4000, KEY = "foam-unit-v1";
+  var st = {dir:"右出し", n:2, ud:[]};
+  try{ var sv = JSON.parse(localStorage.getItem(KEY) || "null"); if(sv && T[sv.dir]) st = sv; }catch(e){}
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+  function udOf(i){ return st.ud[i] || (i % 2 === 0 ? "up" : "dn"); } // 千鳥：1上・2下・3上・4下
+  function lenOf(i){ return T[st.dir][udOf(i)][i]; }
+  function mark(i){ return (udOf(i) === "up" ? "a" : "b") + "−" + (i+1); }
+  // 縦管：上のエルボ（横管の芯）から、今ある立上り管の先まで
+  var H = {up:1644, dn:1414}, FLEX = 300, ENG = 13, GE = 19, SOC = 38, STAG = 150;
+  function num(v){ var n = parseFloat(String(v||"").replace(/[^\d.\-]/g,"")); return isFinite(n) ? n : NaN; }
+  function hi(i){ return i % 2 === 1; } // 偶数ライン（2・4）はフレキを150上げる
+  function vert(i){
+    var x = num(st.x); if(!(x > 0)) return null;
+    var L = H[udOf(i)] - x, r = {L:L};
+    if(!hi(i)){ r.v = L - GE - (FLEX - 2*ENG); }          // 立上り → フレキ → 縦管 → エルボ
+    else { r.s = STAG - (SOC - 2*ENG); r.v = L - GE - (FLEX - 2*ENG) - STAG; } // 立上り → ソケット → 短管 → フレキ → 縦管 → エルボ
+    r.v = Math.round(r.v); return r;
+  }
+
+  function drawSel(){
+    document.getElementById("dir").innerHTML = Object.keys(T).map(function(k){ return '<button type="button" data-dir="'+k+'" aria-pressed="'+(k===st.dir)+'">'+k+'</button>'; }).join("");
+    document.getElementById("cnt").innerHTML = [1,2,3,4].map(function(k){ return '<button type="button" data-n="'+k+'" aria-pressed="'+(k===st.n)+'">'+k+'</button>'; }).join("");
+    document.querySelectorAll("[data-dir]").forEach(function(b){ b.onclick = function(){ st.dir = b.dataset.dir; save(); draw(); }; });
+    document.querySelectorAll("[data-n]").forEach(function(b){ b.onclick = function(){ st.n = +b.dataset.n; save(); draw(); }; });
+  }
+  function drawUD(){
+    var h = '<div class="udg">';
+    for(var i=0;i<st.n;i++){ var u = udOf(i); h += '<div class="udr"><span>L'+(i+1)+'</span><button type="button" data-i="'+i+'" data-u="up" aria-pressed="'+(u==="up")+'">上段</button><button type="button" data-i="'+i+'" data-u="dn" aria-pressed="'+(u==="dn")+'">下段</button></div>'; }
+    var el = document.getElementById("ud"); el.innerHTML = h + '</div>';
+    el.querySelectorAll("[data-u]").forEach(function(b){ b.onclick = function(){ st.ud[+b.dataset.i] = b.dataset.u; save(); draw(); }; });
+  }
+  function drawLines(){
+    var h = '<table class="ct"><thead><tr><th>ライン</th><th>横管</th><th>縦管</th><th>短管</th></tr></thead><tbody>';
+    for(var i=0;i<st.n;i++){
+      var v = vert(i), vv = !v ? '<span style="color:var(--muted)">—</span><small>x を入れる</small>' : (v.v < 40 ? '<span style="color:var(--xred)">短すぎ</span>' : v.v+'<small>フレキ'+(hi(i)?'上':'下')+'</small>');
+      h += '<tr><td>ライン'+(i+1)+'<small>'+(udOf(i)==="up"?"上段":"下段")+'</small></td><td>'+lenOf(i)+'<small>'+mark(i)+'</small></td><td>'+vv+'</td><td>'+(hi(i) && v ? v.s+'<small>＋ソケット</small>' : '<span style="color:var(--muted)">—</span>')+'</td></tr>';
+    }
+    document.getElementById("lines").innerHTML = h + '</tbody></table>';
+  }
+  function drawNest(){
+    var ps = []; for(var i=0;i<st.n;i++){ ps.push({len:lenOf(i), tag:"L"+(i+1)+"横"}); var v = vert(i); if(v && v.v >= 40){ ps.push({len:v.v, tag:"L"+(i+1)+"縦"}); if(v.s) ps.push({len:v.s, tag:"L"+(i+1)+"短"}); } }
+    var bars = [];
+    ps.slice().sort(function(a,b){ return b.len-a.len; }).forEach(function(p){
+      var b = bars.filter(function(b){ return STOCK - b.used >= p.len; }).sort(function(a,c){ return (STOCK-a.used)-(STOCK-c.used); })[0];
+      if(!b){ b = {used:0, ps:[]}; bars.push(b); } b.ps.push(p); b.used += p.len; });
+    var h = '<p class="note" style="margin-top:0">20A：4m管 <b>'+bars.length+'本</b></p>';
+    bars.forEach(function(b, k){
+      var s = 0, rest = STOCK - b.used;
+      h += '<div class="bar"><div class="bl">'+(k+1)+'本目</div><div class="bt">'+b.ps.map(function(p){ return '<span style="flex:'+p.len+'" title="'+p.tag+' '+p.len+'">'+(p.len/STOCK >= 0.09 ? p.len+'<i>'+p.tag+'</i>' : '')+'</span>'; }).join("")+(rest>0?'<span class="rs" style="flex:'+rest+'">残り '+rest+'</span>':'')+'</div></div>';
+      h += '<div style="margin:4px 0 12px;font-size:1rem;line-height:1.6">📏 端から印：'+b.ps.map(function(p){ s += p.len; return '<b>'+s+'</b>'; }).join(' → ')+'<br><span style="font-size:.8rem;color:var(--muted)">'+b.ps.map(function(p){ return p.tag+' '+p.len; }).join('・')+'</span></div>';
+    });
+    document.getElementById("nest").innerHTML = h;
+  }
+  function drawSide(){
+    var x = num(st.x), xs = x > 0 ? 'x＝'+x : 'x';
+    // 横から見た図（略図）：ユニット・横管・エルボ・縦管・フレキ・今ある立上り
+    document.getElementById("side").innerHTML = '<svg viewBox="0 0 320 230" width="100%" style="max-width:420px;display:block;margin:0 auto 4px;color:var(--ink)" font-family="inherit">'+
+      '<rect x="14" y="20" width="120" height="186" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><text x="74" y="120" font-size="12" text-anchor="middle" fill="var(--muted)">ユニット</text>'+
+      '<line x1="4" y1="206" x2="316" y2="206" stroke="currentColor" stroke-width="1.5"/><text x="300" y="222" font-size="10" text-anchor="end" fill="var(--muted)">床</text>'+
+      '<line x1="96" y1="52" x2="190" y2="52" stroke="#2F6FD6" stroke-width="6"/><text x="160" y="44" font-size="11" text-anchor="middle" fill="currentColor">横管</text>'+
+      '<path d="M184 52 Q200 52 200 68" fill="none" stroke="var(--ink)" stroke-width="9"/>'+
+      '<line x1="200" y1="66" x2="200" y2="118" stroke="#2F6FD6" stroke-width="6"/><text x="210" y="96" font-size="11" fill="currentColor">縦管</text>'+
+      '<rect x="193" y="118" width="14" height="40" rx="3" fill="#8A949A"/><path d="M193 124 h14 M193 130 h14 M193 136 h14 M193 142 h14 M193 148 h14" stroke="var(--surface)" stroke-width="1"/><text x="212" y="142" font-size="11" fill="currentColor">ユニオンフレキ300</text>'+
+      '<line x1="200" y1="158" x2="200" y2="226" stroke="var(--xred)" stroke-width="6"/><text x="192" y="186" font-size="11" text-anchor="end" fill="var(--xred)" font-weight="700">今ある立上り</text>'+
+      '<line x1="250" y1="160" x2="300" y2="160" stroke="currentColor" stroke-dasharray="3 3"/><line x1="290" y1="160" x2="290" y2="206" stroke="var(--xred)" stroke-width="2.5"/><path d="M290 160 l-5 9 h10 Z M290 206 l-5 -9 h10 Z" fill="var(--xred)"/><text x="284" y="188" font-size="13" font-weight="700" text-anchor="end" fill="var(--xred)">'+xs+'</text>'+
+      '<line x1="214" y1="52" x2="316" y2="52" stroke="currentColor" stroke-dasharray="3 3" opacity=".5"/><text x="314" y="66" font-size="10" text-anchor="end" fill="var(--muted)">上段1644・下段1414</text>'+
+      '</svg>';
+  }
+  // アンカー：4−φ14.5、700×510（底 775×583 の真ん中）
+  // 立上りの位置（図16・図18）：横から出す → 背面から106・166・226・286、側面から下段100・上段200
+  //                           後から出す → 右側面から180・284・388・492、背面から下段100・上段200
+  var AW = 700, AD = 510, BW = 775, BD = 583, ex = (BW-AW)/2, ey = (BD-AD)/2, DIAG = Math.round(Math.sqrt(AW*AW+AD*AD));
+  function f1(v){ return Math.round(v*10)/10; }
+  function off(i){ return udOf(i) === "up" ? 200 : 100; }
+  // ユニットの左上（背面・左側面）を原点にした立上りの位置 [横, 奥行(背面から前が+)]
+  function risers(){
+    var r = [];
+    for(var i=0;i<st.n;i++){
+      if(st.dir === "右出し") r.push([BW + off(i), 106 + 60*i]);
+      else if(st.dir === "左出し") r.push([-off(i), 106 + 60*i]);
+      else r.push([BW - 180 - 104*i, -off(i)]);
+    }
+    return r;
+  }
+  function drawAnc(){
+    var d = num(st.ad), R = risers(), near = R.reduce(function(m, q){ return q[1] < m[1] ? q : m; }, R[0]);
+    var hasD = d >= 0, w = hasD ? d - near[1] : 300; // うしろの壁 → 背面（d がないときは図だけ仮に300）
+    var yB = w + ey, yF = w + ey + AD, r1 = R[0], xL = ex - r1[0], xR = ex + AW - r1[0];
+    // 上から見た図：壁を0にして、壁からの累積寸法を左に、ライン1からの寸法を下に描く
+    var minX = Math.min(0, Math.min.apply(null, R.map(function(q){ return q[0]; }))), maxX = Math.max(BW, Math.max.apply(null, R.map(function(q){ return q[0]; })));
+    var LM = st.dir === "左出し" ? 104 : 78, sc = Math.min((340 - LM - 44)/(maxX - minX), 300/(w + BD)), TOP = 22;
+    var P = function(x, y){ return [LM + (x - minX)*sc, TOP + y*sc]; };
+    var VH = TOP + (w + BD)*sc + 96, red = 'var(--xred)', blue = '#2F6FD6', show = function(v){ return hasD ? f1(v) : '—'; };
+    var g = '<svg viewBox="0 0 340 '+VH+'" width="100%" style="max-width:460px;display:block;margin:0 auto" font-family="inherit">';
+    // 壁
+    g += '<line x1="'+(LM-14)+'" y1="'+TOP+'" x2="334" y2="'+TOP+'" stroke="currentColor" stroke-width="3"/><text x="334" y="'+(TOP-6)+'" font-size="10" text-anchor="end" fill="var(--muted)">うしろの壁</text>';
+    // ユニット
+    var u0 = P(0, w); g += '<rect x="'+u0[0]+'" y="'+u0[1]+'" width="'+(BW*sc)+'" height="'+(BD*sc)+'" fill="var(--cut-soft)" stroke="currentColor" stroke-width="1.5"/>';
+    var uf = P(BW/2, w + BD); g += '<text x="'+uf[0]+'" y="'+(uf[1]+14)+'" font-size="10" text-anchor="middle" fill="var(--muted)">正面（扉）</text>';
+    // アンカーの列・行の補助線
+    var tapeX = LM - 8, tapeY = P(0, w + BD)[1] + 36;
+    [yB, yF].forEach(function(y){ var p = P(minX, y), q = P(ex + AW, y); g += '<line x1="'+tapeX+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="'+red+'" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>'; });
+    var xr1 = P(r1[0], 0)[0];
+    [ex, ex + AW].forEach(function(x){ var p = P(x, yB); g += '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+p[0]+'" y2="'+tapeY+'" stroke="'+red+'" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>'; });
+    g += '<line x1="'+xr1+'" y1="'+P(0, w + r1[1])[1]+'" x2="'+xr1+'" y2="'+tapeY+'" stroke="'+blue+'" stroke-width="1" stroke-dasharray="4 3" opacity=".8"/>';
+    // 対角
+    var c1 = P(ex, yB), c2 = P(ex + AW, yF); g += '<line x1="'+c1[0]+'" y1="'+c1[1]+'" x2="'+c2[0]+'" y2="'+c2[1]+'" stroke="currentColor" stroke-dasharray="2 3" opacity=".45"/><text x="'+((c1[0]+c2[0])/2)+'" y="'+((c1[1]+c2[1])/2-5)+'" font-size="11" text-anchor="middle" fill="currentColor">対角 '+DIAG+'</text>';
+    // アンカー
+    [[ex,yB],[ex+AW,yB],[ex,yF],[ex+AW,yF]].forEach(function(q){ var c = P(q[0],q[1]); g += '<circle cx="'+c[0]+'" cy="'+c[1]+'" r="5.5" fill="'+red+'"/>'; });
+    // 立上り
+    R.forEach(function(q, i){ var c = P(q[0], w + q[1]); g += '<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+(i===0?5.5:4.5)+'" fill="'+blue+'"/><text x="'+(c[0] + 7)+'" y="'+(c[1] + (st.dir==="後出し" ? -6 : 4))+'" font-size="'+(i===0?13:11)+'" font-weight="'+(i===0?700:400)+'" text-anchor="start" fill="'+blue+'">'+(i+1)+'</text>'; });
+    // d
+    var cn = P(near[0], w + near[1]); g += '<line x1="'+cn[0]+'" y1="'+(TOP+2)+'" x2="'+cn[0]+'" y2="'+(cn[1]-5)+'" stroke="'+red+'" stroke-width="2"/><text x="'+(cn[0]+5)+'" y="'+((TOP+cn[1])/2+4)+'" font-size="11" font-weight="700" text-anchor="start" fill="'+red+'">d'+(hasD?'＝'+f1(d):'')+'</text>';
+    // 左のメジャー（壁から累積）
+    var t0 = P(0, 0)[1], tB = P(0, yB)[1], tF = P(0, yF)[1];
+    g += '<line x1="'+tapeX+'" y1="'+t0+'" x2="'+tapeX+'" y2="'+tF+'" stroke="currentColor" stroke-width="2"/>';
+    [[t0,'0'],[tB,show(yB)],[tF,show(yF)]].forEach(function(k, i){ g += '<line x1="'+(tapeX-6)+'" y1="'+k[0]+'" x2="'+(tapeX+6)+'" y2="'+k[0]+'" stroke="currentColor" stroke-width="2"/>'; if(i) g += '<text x="'+(tapeX-9)+'" y="'+(k[0]+5)+'" font-size="15" font-weight="700" text-anchor="end" fill="'+red+'">'+k[1]+'</text>'; });
+    g += '<text x="'+(tapeX-9)+'" y="'+(t0+14)+'" font-size="9" text-anchor="end" fill="var(--muted)">壁から</text>';
+    // 下のメジャー（ライン1の立上りから）
+    var xs = [xr1, P(ex,0)[0], P(ex+AW,0)[0]], lo = Math.min.apply(null, xs), hi = Math.max.apply(null, xs);
+    g += '<line x1="'+lo+'" y1="'+tapeY+'" x2="'+hi+'" y2="'+tapeY+'" stroke="currentColor" stroke-width="2"/>';
+    g += '<line x1="'+xr1+'" y1="'+(tapeY-6)+'" x2="'+xr1+'" y2="'+(tapeY+6)+'" stroke="'+blue+'" stroke-width="2.5"/><text x="'+xr1+'" y="'+(tapeY+38)+'" font-size="10" text-anchor="middle" fill="'+blue+'">ライン1</text>';
+    [[P(ex,0)[0], Math.abs(xL)],[P(ex+AW,0)[0], Math.abs(xR)]].forEach(function(k){ g += '<line x1="'+k[0]+'" y1="'+(tapeY-6)+'" x2="'+k[0]+'" y2="'+(tapeY+6)+'" stroke="currentColor" stroke-width="2"/><text x="'+k[0]+'" y="'+(tapeY+22)+'" font-size="15" font-weight="700" text-anchor="middle" fill="'+red+'">'+f1(k[1])+'</text>'; });
+    g += '</svg>';
+    document.getElementById("anc").innerHTML = g;
+    var out = document.getElementById("ancout");
+    if(!hasD){ out.innerHTML = '<p class="note" style="margin:0">d を入れると、壁からの寸法が出ます。上の「出す方向」「ライン数」「上段・下段」も合わせてください。</p>'; return; }
+    if(w < 0){ out.innerHTML = '<p class="note" style="margin:0;color:var(--xred)">ユニットが壁に当たります（背面が壁から '+f1(w)+'）。d を確認してください。</p>'; return; }
+    var dir = function(v){ return v < 0 ? '左へ' : '右へ'; }, big = function(v){ return '<b style="color:var(--xred);font-size:1.25rem">'+f1(v)+'</b>'; };
+    out.innerHTML = '<ol class="steps" style="font-size:1.02rem">'+
+      '<li>うしろの壁から '+big(yB)+' と '+big(yF)+' に印（壁と平行な線）</li>'+
+      '<li>ライン1の立上りの芯から、'+(xL*xR > 0 ? dir(xL)+' '+big(Math.min(Math.abs(xL),Math.abs(xR)))+' と '+big(Math.max(Math.abs(xL),Math.abs(xR))) : dir(xR)+' '+big(Math.abs(xR))+'、'+dir(xL)+' '+big(Math.abs(xL)))+' に印（壁と直角な線）</li>'+
+      '<li>線が交わる4か所がアンカー（φ14.5・M10）</li>'+
+      '<li>対角2本が <b>'+DIAG+'</b> なら直角</li></ol>'+
+      '<p class="note" style="margin:6px 0 0">右・左は正面から見た向き。ユニットの背面は壁から '+f1(w)+'。</p>';
+  }
+  function draw(){ drawSel(); drawUD(); drawSide(); drawAnc(); drawLines(); drawNest(); }
+  ["ad"].forEach(function(k){ var el = document.getElementById(k); el.value = st[k] || ""; el.addEventListener("input", function(){ st[k] = el.value; save(); drawAnc(); }); });
+  var xi = document.getElementById("x"); xi.value = st.x || ""; xi.addEventListener("input", function(){ st.x = xi.value; save(); drawSide(); drawLines(); drawNest(); });
+  document.getElementById("share").onclick = function(){
+    var t = ["泡消火ユニット 配管（"+st.dir+"・"+st.n+"ライン）"];
+    t.push("x（床→立上りの先）＝"+(st.x||"未"));
+    for(var i=0;i<st.n;i++){ var v = vert(i); t.push("・ライン"+(i+1)+"（"+(udOf(i)==="up"?"上段":"下段")+"）：横 "+lenOf(i)+"　縦 "+(v ? v.v : "未")+(v && v.s ? "　短管 "+v.s+"＋ソケット（フレキ+150）" : "")); }
+    t.push("20A SGP白・ねじ部込み");
+    var text = t.join("\n");
+    if(navigator.share){ navigator.share({title:"泡消火ユニット 配管", text:text}).catch(function(){}); return; }
+    if(navigator.clipboard) navigator.clipboard.writeText(text).then(function(){ alert("コピーしました。Teamsに貼り付けてください"); }); else prompt("コピーしてください", text);
+  };
+  draw();
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>
