@@ -358,7 +358,7 @@ h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
   // 立上りの位置（図16・図18）：横から出す → 背面から106・166・226・286、側面から下段100・上段200
   //                           後から出す → 右側面から180・284・388・492、背面から下段100・上段200
   var AW = 700, AD = 510, BW = 775, BD = 583, ex = (BW-AW)/2, ey = (BD-AD)/2, DIAG = Math.round(Math.sqrt(AW*AW+AD*AD));
-  function f1(v){ return Math.round(v*10)/10; }
+  function f1(v){ return Math.round(v); } // 印をつけやすいように1mm単位（.5は切り上げ、間隔700・510は変わらない）
   function off(i){ return udOf(i) === "up" ? 200 : 100; }
   // ユニットの左上（背面・左側面）を原点にした立上りの位置 [横, 奥行(背面から前が+)]
   function risers(){
@@ -373,7 +373,7 @@ h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
   function drawAnc(){
     var d = num(st.ad), R = risers(), near = R.reduce(function(m, q){ return q[1] < m[1] ? q : m; }, R[0]);
     var hasD = d >= 0, w = hasD ? d - near[1] : 300; // うしろの壁 → 背面（d がないときは図だけ仮に300）
-    var yB = w + ey, yF = w + ey + AD, r1 = R[0], xL = ex - r1[0], xR = ex + AW - r1[0];
+    var r1 = R[0], yB = Math.round(w + ey), yF = yB + AD, xR = Math.round(ex + AW - r1[0]), xL = xR - AW; // 1mm単位に丸めても、間隔は510・700のまま
     // 上から見た図：壁を0にして、壁からの累積寸法を左に、ライン1からの寸法を下に描く
     var minX = Math.min(0, Math.min.apply(null, R.map(function(q){ return q[0]; }))), maxX = Math.max(BW, Math.max.apply(null, R.map(function(q){ return q[0]; })));
     var LM = st.dir === "左出し" ? 104 : 78, sc = Math.min((340 - LM - 44)/(maxX - minX), 300/(w + BD)), TOP = 22;
