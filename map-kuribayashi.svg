@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 320" font-family="'BIZ UDPGothic','Hiragino Sans','Noto Sans JP',sans-serif">
+<rect width="380" height="320" fill="#ffffff"/>
+<g stroke="#1C2326" stroke-width="2" fill="none"><line x1="14" y1="48" x2="372" y2="48"/><line x1="372" y1="48" x2="372" y2="286"/></g>
+<g font-size="10" fill="#1C2326" text-anchor="middle"><text x="120" y="62">通気管 ⑤④⑥①②③</text><text x="252" y="62">注入管 ⑥⑤④③②①</text></g>
+<g stroke="#1C2326" stroke-width="1.4" fill="none">
+<rect x="80" y="202" width="10" height="10"/><path d="M80 202 L90 212 M90 202 L80 212"/>
+<rect x="80" y="230" width="10" height="10"/><path d="M80 230 L90 240 M90 230 L80 240"/>
+<rect x="176" y="202" width="10" height="10"/><path d="M176 202 L186 212 M186 202 L176 212"/>
+<rect x="193" y="207" width="10" height="10"/><path d="M193 207 L203 217 M203 207 L193 217"/>
+<rect x="287" y="204" width="10" height="10"/><path d="M287 204 L297 214 M297 204 L287 214"/>
+<rect x="287" y="266" width="10" height="10"/><path d="M287 266 L297 276 M297 266 L287 276"/>
+</g>
+<g stroke="#1C2326" stroke-width="1.6" fill="none"><rect x="140" y="288" width="85" height="30"/><rect x="225" y="288" width="85" height="30"/><rect x="310" y="288" width="62" height="30"/><rect x="310" y="288" width="22" height="14"/></g>
+<g font-size="12" fill="#1C2326" text-anchor="middle"><text x="182" y="308">販売室</text><text x="267" y="308">ピット室</text></g>
+<text x="341" y="313" font-size="8" fill="#1C2326" text-anchor="middle">オイルサーバー</text>
+</svg>

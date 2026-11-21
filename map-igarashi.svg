@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 280" font-family="'BIZ UDPGothic','Hiragino Sans','Noto Sans JP',sans-serif">
+<rect width="380" height="280" fill="#ffffff"/>
+<rect x="112" y="44" width="136" height="66" fill="none" stroke="#1C2326" stroke-width="1.8"/>
+<g stroke="#1C2326" stroke-width="1.4" fill="none">
+<rect x="124" y="66" width="38" height="16"/><path d="M124 66 L162 82 M162 66 L124 82"/>
+<rect x="196" y="67" width="38" height="16"/><path d="M196 67 L234 83 M234 67 L196 83"/>
+</g>
+<g font-size="10" fill="#1C2326"><text x="258" y="54">② 通気管</text><text x="258" y="65">①</text><text x="258" y="88">② 注入管</text><text x="258" y="99">①</text></g>
+</svg>

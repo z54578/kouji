@@ -16,12 +16,12 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>漏洩検査 記録</title>
 <style>
-:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#475055;--line:#B4BCC0;--focus:#1F4E8C;--sel:#1C2326;--sel-ink:#FFFFFF;--err:#B42318;--err-soft:#FDECEA;--ok:#2E7D4F;--info:#1F4E8C;--info-soft:#DCE6F3;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;color-scheme:dark}
+:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#475055;--line:#B4BCC0;--focus:#1F4E8C;--sel:#1C2326;--sel-ink:#FFFFFF;--err:#B42318;--err-soft:#FDECEA;--ok:#2E7D4F;--info:#1F4E8C;--info-soft:#DCE6F3;--todo:#FFF6CC;--todo-line:#D9A400;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;--todo:#3A3214;--todo-line:#C9A23A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--sel:#E8ECEE;--sel-ink:#161A1C;--err:#F59B91;--err-soft:#3A1F1C;--ok:#6BC48F;--info:#9DBDEB;--info-soft:#24344A;--todo:#3A3214;--todo-line:#C9A23A;color-scheme:dark}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
-.wrap{max-width:640px;margin:0 auto;padding:20px 16px 140px}
+.wrap{max-width:640px;margin:0 auto;padding:6px 12px 130px}
 .back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
 h1{font-size:1.45rem;line-height:1.25;margin:4px 0 6px}
 h2{font-size:1.05rem;margin:0 0 6px}
@@ -31,7 +31,13 @@ h2{font-size:1.05rem;margin:0 0 6px}
 label.f{display:grid;gap:4px;font-size:.85rem;color:var(--muted);margin-top:10px}
 label.f:first-of-type{margin-top:4px}
 input,textarea,select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1.05rem;padding:8px 10px}
-input.bad,textarea.bad{border-color:var(--err);background:var(--err-soft)}
+input.bad,textarea.bad{border-color:var(--err);background:var(--err-soft);border-width:2px}
+input.todo,textarea.todo{border-color:var(--todo-line);background:var(--todo)}
+.chips.todo .chip[aria-pressed="false"]{border-color:var(--todo-line);background:var(--todo)}
+.card.todo{border-color:var(--todo-line);background:var(--todo)}
+.resume{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--info-soft);color:var(--ink);font-size:.9rem}
+.resume button{margin-left:auto;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:.85rem;cursor:pointer}
+.draft{display:inline-block;margin-left:6px;padding:0 8px;border-radius:10px;background:var(--todo);border:1px solid var(--todo-line);font-size:.75rem;font-weight:700;color:var(--ink)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .chip{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:22px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
@@ -45,14 +51,14 @@ input.bad,textarea.bad{border-color:var(--err);background:var(--err-soft)}
 .kv{display:grid;grid-template-columns:7em 1fr;gap:2px 10px;font-size:.9rem}
 .kv dt{color:var(--muted)}
 .kv dd{margin:0}
-.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
-.bar-in{max-width:640px;margin:0 auto}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));z-index:5}
+.bar-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
 .bar button,.btn{width:100%;min-height:50px;border-radius:10px;border:0;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer}
 .bar button[aria-disabled="true"]{background:var(--line);color:var(--muted)}
 .ghost{background:transparent!important;color:var(--ink)!important;border:1px solid var(--line)!important}
-.state{text-align:center;font-size:.85rem;margin-bottom:6px}
+.state{font-size:.85rem;font-weight:700;line-height:1.3;margin:0;white-space:nowrap}
 .state.ng{color:var(--err)} .state.ok{color:var(--ok)}
-.miss{margin:6px 0 0;padding-left:1.2em;font-size:.85rem;color:var(--err)}
+.miss{grid-column:1/-1;margin:0;padding-left:1.2em;font-size:.85rem;color:var(--err)}
 .add{width:100%;min-height:44px;margin-top:10px;border:1px dashed var(--line);border-radius:8px;background:transparent;color:var(--ink);font-family:inherit;font-weight:700;cursor:pointer}
 .del{min-height:36px;padding:0 10px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--muted);font-family:inherit;cursor:pointer;float:right}
 .chk{display:flex;gap:10px;align-items:center;min-height:46px;font-size:1rem}
@@ -97,16 +103,19 @@ img.map.big{margin-top:0;border-radius:8px}
 .chips.mini .chip{min-height:38px;padding:0 12px;font-size:.88rem}
 .row2{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
 .kl{font-size:.82rem;color:var(--muted);min-width:34px}
-.ohm{display:grid;grid-template-columns:auto 1fr auto;gap:6px 8px;align-items:center;margin-top:8px}
+.ohm{display:grid;grid-template-columns:auto 1fr auto auto 1fr auto;gap:4px;align-items:center;margin-top:0}
+.ohm input{min-width:0;padding:6px}
+.ohm .chk.sm{gap:2px;min-height:42px}.ohm .chk.sm input{width:20px;height:20px}
+.ohm .kl{min-width:0;white-space:nowrap;font-size:.8rem}
 .ohm label{font-size:.8rem;color:var(--muted)}
 .chk.sm{font-size:.82rem;white-space:nowrap}
 .mapbox{position:relative}
 .mapbox img{display:block}
-.wbtn{position:absolute;transform:translate(-50%,-50%);min-width:54px;min-height:46px;padding:2px 6px;border-radius:12px;border:2px solid #B42318;background:#fff;color:#B42318;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;line-height:1.1;box-shadow:0 1px 3px rgba(0,0,0,.25)}
-.wbtn b{font-size:1.1rem}
-.wbtn span{font-size:.78rem;font-weight:700}
-.wbtn.ok{border-color:#1D7A4A;color:#1D7A4A;background:#E9F7EF}
-.wbtn.ng{background:#FDECEC}
+.wbtn{position:absolute;transform:translate(-50%,-50%);width:46px;height:46px;padding:0;border-radius:50%;border:3px solid #B42318;background:#fff;color:#B42318;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.wbtn b{font-size:1.5rem;line-height:1}
+.wbtn span{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:2px;padding:0 5px;border-radius:6px;background:rgba(255,255,255,.95);font-size:.78rem;font-weight:700;white-space:nowrap;line-height:1.4}
+.wbtn.ok{border-color:#1D7A4A;color:#fff;background:#1D7A4A}.wbtn.ok span{color:#1D7A4A}
+.wbtn.ng,.tbtn.ng{border-width:4px;border-color:#B42318;background:#FDECEC;color:#B42318}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:2px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.18);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
 .sh-in{max-width:640px;margin:0 auto}
 .sh-hd{display:flex;align-items:center;gap:8px;margin-bottom:6px}
@@ -118,33 +127,167 @@ label.f.big input{font-size:1.4rem;min-height:52px}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .nowrow{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center}
 .act.cam{cursor:pointer;white-space:nowrap}
-.pipes.ov{position:absolute;left:4px;right:4px;top:4px;z-index:2;margin:0;gap:4px;justify-content:center}
-.pipes.ov .pp{min-width:0;padding:2px 6px;font-size:.92rem;background:rgba(255,255,255,.92);border-color:#C9D1D5;color:#1C2326}
-.pipes.ov .pp small{color:#5F6B70}
+.pipes.ov{position:absolute;left:3px;right:3px;top:3px;z-index:2;margin:0;gap:3px;justify-content:center;flex-wrap:nowrap;align-items:stretch}
+.pipes.ov .pp{min-width:0;flex:0 1 auto;padding:1px 4px;font-size:.88rem;background:rgba(255,255,255,.92);border-color:#C9D1D5;color:#1C2326}
+.pipes.ov .pp small{color:#5F6B70;font-size:.66rem;white-space:nowrap}
+.pipes .pp.om{min-width:44px;margin:0;border:2px solid #B42318;line-height:1.1;font-family:inherit;cursor:pointer;color:#B42318}
+.pipes .pp.om.ok{border-color:#1D7A4A;color:#1D7A4A;background:#E9F7EF}
+.pipes .pp.om.ng{border-width:3px;background:#FDECEC}
 .hd + .mapbox,.hd + .warnbox + .mapbox{margin-top:6px}
-.tbtn{position:absolute;transform:translate(-50%,-50%);min-width:96px;min-height:44px;padding:3px 8px;border-radius:10px;border:2px solid #854F0B;background:rgba(255,255,255,.95);color:#633806;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;line-height:1.15;box-shadow:0 1px 3px rgba(0,0,0,.25)}
-.tbtn b{font-size:.85rem}.tbtn span{font-size:.75rem;font-weight:700}
-.tbtn.ok{border-color:#1D7A4A;color:#1D7A4A;background:#E9F7EF}.tbtn.ng{background:#FDECEC}
+.tbtn{position:absolute;transform:translate(-50%,-50%);width:34%;height:22%;padding:2px 10px;border-radius:999px;border:3px solid #B42318;background:#FAEEDA;color:#633806;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;box-shadow:inset 0 -6px 0 rgba(133,79,11,.15),0 1px 3px rgba(0,0,0,.25)}
+.tbtn b{font-size:.9rem}.tbtn span{font-size:.8rem;font-weight:700}
+.tbtn.ok{border-color:#1D7A4A;color:#1D7A4A;background:#E9F7EF}
 .tile{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:48px;margin-top:6px;padding:6px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-family:inherit;cursor:pointer;text-align:left}
 .tile b{font-size:.95rem}.tile span{font-size:.85rem;color:var(--muted);font-weight:700}
-.tile.ok{border-color:#1D7A4A}.tile.ok span{color:#1D7A4A}.tile.ng{border-color:var(--err)}
+.tile{border-color:var(--todo-line);background:var(--todo)}.tile.ok{border-color:#1D7A4A;background:var(--bg)}.tile.ok span{color:#1D7A4A}.tile.ng{border:2px solid var(--err);background:var(--err-soft)}
 .wmm{display:flex;align-items:center;gap:4px;font-size:.9rem}.wmm input{width:90px;min-height:42px}
+.top{display:flex;align-items:center;gap:6px;min-height:46px}
+.top .back{margin:0;padding:8px 6px 8px 0;white-space:nowrap}
+.top h2{flex:1;min-width:0;margin:0;font-size:1rem;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-all}
+.top h2 small{font-weight:400;font-size:.8rem;margin-left:4px}
+.top + .card{margin-top:2px}
+.f1{font-size:.85rem;color:var(--muted);margin:8px 0 4px}.f1 small{font-weight:400}
+.hint:empty{display:none}
+.wk{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px}
+.wk{gap:4px}.wk .chips.mini{gap:3px}.wk .chips.mini .chip{padding:0 8px}
+.cardsep{border:0;border-top:1px solid var(--line);margin:8px 0 0}
+label.f{margin-top:6px}
+.g2 label.f{margin-top:6px}
+.dw{display:grid;grid-template-columns:1.15fr 1fr;gap:8px}
+.dw input{min-height:40px;padding:4px 8px;font-size:.92rem}
+.card.mapcard{padding:0;border:0;background:transparent}
+.mapcard .office{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.nowrow input{min-height:42px;font-size:.95rem}
+.nrow{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin-top:8px}
+.nrow input[data-ik]{min-height:42px;font-size:.95rem}
+.nrow .chk.sm{min-height:42px;gap:6px;font-size:.95rem}
+.mapcard + .card{margin-top:4px}
+details.warnbox{padding:6px 12px;margin:0 0 4px}
+details.warnbox summary{cursor:pointer;font-weight:700;font-size:.9rem;line-height:1.45;list-style:none}
+details.warnbox summary::-webkit-details-marker{display:none}
+details.warnbox .more{display:inline-block;margin-left:6px;padding:0 6px;border-radius:8px;border:1px solid #F2C38B;font-size:.75rem;font-weight:700}
+details.warnbox[open] .more{display:none}
+details.warnbox ul{margin:4px 0 2px;padding-left:1.2em;font-size:.88rem}
+.chip.tk{min-height:42px;padding:0 10px}
+.nrow input[data-ik]{min-width:0}
+.dw1 input{min-height:42px;font-size:.95rem}
+.dw1 + .msg + .wk,.dw1 + .wk{margin-top:8px}
+.card > .wk:first-child{margin-top:0}
+.next{margin-top:6px;padding:10px 12px;border-radius:10px;background:var(--surface);border:2px solid var(--ok)}
+.next span{display:block;font-size:.8rem;color:var(--muted)}
+.next b{display:block;font-size:1.05rem;line-height:1.35}
+.next .acts{display:flex;gap:6px;margin-top:6px}
+
+.autobox{background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 6px 12px}
+.autobox .pipes.ov{position:static;margin:0 0 10px}
+.atanks{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.autobox .tbtn{position:static;transform:none;width:46%;height:auto;min-height:62px}
+.awells{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 12px;margin-top:14px;padding-bottom:10px}
+.autobox .wbtn{position:relative;transform:none}
+.wadd{width:46px;height:46px;border-radius:50%;border:2px dashed #8A9499;background:#fff;color:#5F6B70;font-family:inherit;font-size:1.2rem;line-height:1;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.wadd small{font-size:.55rem;font-weight:700}
+.wdel{margin-left:auto;min-height:36px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:none;color:var(--err);font-family:inherit;font-size:.8rem;cursor:pointer}
+.wdel + .sh-x{margin-left:0}
+.mrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:6px}
+.mn b{display:block;font-size:.95rem;line-height:1.3}.mn small{display:block;font-size:.75rem;color:var(--muted);line-height:1.3}
+
+.meters{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin-top:10px;padding-top:8px;border-top:1px dashed #C9D1D5}
+.meters .ml{font-size:.72rem;color:#5F6B70;width:100%;text-align:center;line-height:1}
+.mt{display:flex;flex-direction:column;align-items:center;min-width:56px;padding:3px 6px;border:1px solid #9AA4A9;border-radius:6px;background:#F4F6F7;color:#1C2326;font-family:inherit;cursor:pointer;line-height:1.15}
+.mt b{font-size:.9rem}.mt small{font-size:.68rem}
+.mt.soon{border:2px solid #C27C0E;background:#FFF4E5}
+.mt.ng{border:2px solid #B42318;background:#FDECEC;color:#B42318}
+.mt.noted{box-shadow:inset 0 0 0 2px #1F4E8C}
+.mapcard > .meters{background:#fff;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;margin-top:-1px;padding-bottom:8px}
+.pv.ng{color:var(--err);font-weight:700}.pv.soon{color:#C27C0E;font-weight:700}
+.mtab{overflow-x:auto;margin-top:4px}
+.mtab table{width:100%;border-collapse:collapse;font-size:.85rem}
+.mtab th,.mtab td{border-bottom:1px solid var(--line);padding:4px 6px;text-align:left;white-space:nowrap}
+.mtab th{font-size:.75rem;color:var(--muted);font-weight:400}
+.mtab td.ng{color:var(--err);font-weight:700}.mtab td.soon{color:#C27C0E;font-weight:700}
+
+.mbtn{display:flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border:1px solid #9AA4A9;border-radius:20px;background:#F4F6F7;color:#1C2326;font-family:inherit;font-weight:700;font-size:.92rem;cursor:pointer}
+.mbtn span{font-size:.75rem;padding:0 6px;border-radius:8px;background:#fff}
+.mbtn.soon{border:2px solid #C27C0E;background:#FFF4E5}.mbtn.soon span{color:#8A5A00}
+.mbtn.ng{border:2px solid #B42318;background:#FDECEC}.mbtn.ng span{color:#B42318}
+.mbtn.noted{box-shadow:inset 0 0 0 2px #1F4E8C}
+.sh-body{max-height:52vh;overflow:auto}
+.mtab tr.u1 td{border-top:2px solid var(--line)}
+
+.tabs{display:flex;gap:4px;margin:0 0 -1px;position:relative;z-index:1}
+.tab{flex:1;min-height:42px;padding:0 6px;border:1px solid var(--line);border-bottom:0;border-radius:8px 8px 0 0;background:var(--bg);color:var(--muted);font-family:inherit;font-weight:700;font-size:.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--surface);color:var(--ink);border-color:var(--line);box-shadow:0 -2px 0 #1C2326 inset}
+.tab .tb{min-width:18px;padding:0 5px;border-radius:9px;background:#B42318;color:#fff;font-size:.7rem;line-height:18px}
+.tab .tb.warn{background:#C27C0E}
+.tabs + .pane .mapbox{border-top-left-radius:0;border-top-right-radius:0}
+.tabs + .pane img.map{border-top-left-radius:0;border-top-right-radius:0}
+.mpane,.vpane{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:0 0 8px 8px;padding:8px 10px 12px}
+.mpane .mtab{max-height:none}
+.mpane .mtab th,.mpane .mtab td{padding:4px 5px;font-size:.82rem}.mpane .mtab td.ng,.mpane .mtab td.soon{font-size:.85rem}
+.vpane .mrow{margin-top:0}.vpane > div + div{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.mapl{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border:1px solid #9AA4A9;border-radius:19px;color:#1C2326;background:#F4F6F7;text-decoration:none;font-weight:700;font-size:.85rem}
+
+.mapbox.photo{background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px}
+.mapbox.photo .pipes.ov{position:static;margin:0 0 4px}
+.mapin{position:relative}
+.mapin img.map{border:0}
+.mapbox.photo .wbtn{width:38px;height:38px;border-width:3px}
+.mapbox.photo .wbtn b{font-size:1.2rem}
+.atanks.under{background:#fff;border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;margin-top:-6px;padding:10px 6px}
+.atanks.under .tbtn{position:static;transform:none;width:30%;min-width:96px;height:auto;min-height:54px}
+
+.tgrp{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;border:3px solid #854F0B;border-radius:999px;overflow:hidden;background:#FAEEDA}
+.tgrp.dbl{box-shadow:0 0 0 3px #fff,0 0 0 5px #854F0B}
+.tgrp.h{flex-direction:row}
+.tcell{flex:1;min-height:0;min-width:0;border:0;margin:0;background:transparent;color:#B42318;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;padding:0}
+.tgrp .tcell + .tcell{border-top:2px solid #854F0B}
+.tgrp.h .tcell + .tcell{border-top:0;border-left:2px solid #854F0B}
+.tgrp.h .tcell{flex-direction:row;gap:4px}
+.tcell b{font-size:.82rem}.tcell small{font-size:.66rem;font-weight:700}
+.tcell.ok{background:#E9F7EF;color:#1D7A4A}
+.tcell.ng{background:#FDECEC;box-shadow:inset 0 0 0 3px #B42318}
+.tab[disabled]{opacity:.55;cursor:default;font-weight:400}.tab small{font-size:.7rem}
+.tbtn.tg{padding:2px 6px}.tbtn.tg b{font-size:.8rem;line-height:1.15}.tbtn.tg span{font-size:.7rem}.tbtn.tg.h b{white-space:nowrap}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="./index.html">← メニューに戻る</a>
+  <a class="back" id="back0" href="./index.html">← メニューに戻る</a>
   <h1 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">地下タンク漏洩検査 記録</h1>
   <div id="app"></div>
 </div>
 <div class="bar" id="bar"><div class="bar-in">
   <div class="state" id="state"></div>
-  <button type="button" id="send" aria-disabled="true">事務員さんに送信</button>
+  <button type="button" id="send" aria-disabled="true">送信</button>
   <ul class="miss" id="miss"></ul>
 </div></div>
 <script>
 (function(){
-  var CLERK = ""; // 事務員さんのメールアドレス（決まったら入れる）
+  var justSent = null, nextSite = null; // 送信した直後の現場・予定表の次の現場
+  // 予定表（schedule.json）から、送った現場の「次の現場」を探す
+  function findNext(id, date, cb){
+    fetch("schedule.json", {cache:"no-cache"}).then(function(x){ return x.json(); }).then(function(sc){
+      var days = (sc.days||[]).filter(function(d){ return d.date >= date; }), col = null, idx = -1;
+      if(!days.length || days[0].date !== date) return cb(null);
+      Object.keys(days[0].cols).forEach(function(c){ days[0].cols[c].forEach(function(it, i){ if(col === null && it.id === id){ col = c; idx = i; } }); });
+      if(col === null) return cb(null);
+      var rest = days[0].cols[col].slice(idx+1);
+      if(rest.length) return cb({date:date, it:rest[0]});
+      for(var k=1;k<days.length;k++){ var a = days[k].cols[col]; if(a && a.length) return cb({date:days[k].date, it:a[0]}); }
+      cb(null);
+    }).catch(function(){ cb(null); });
+  }
+  function nextHtml(n){
+    if(!n) return "";
+    var it = n.it, p = n.date.split("-"), when = (it.tm || "") , other = n.date !== (justSentDate||"");
+    var label = "次" + (other || when ? "（" + (other ? (+p[1])+"/"+(+p[2]) + (when ? " " : "") : "") + when + "）" : "");
+    var q = it.id && sites[it.id] && sites[it.id].addr ? sites[it.id].addr : it.t.replace(/（[^）]*）|【[^】]*】|□\d*|SF\d*|◎\d*|回\d*/g," ").trim();
+    return '<div class="next"><span>'+label+'</span><b>'+esc(it.t)+'</b><div class="acts">'+
+      (it.id ? '<a class="act sm" href="./leak.html?id='+encodeURIComponent(it.id)+'">記録を開く</a>' : '')+
+      '<a class="act sm ghost2" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q)+'" target="_blank" rel="noopener">ナビ</a></div></div>';
+  }
+  var justSentDate = null, drawNow = function(){};
+  var CLERK = "miwa-t@anm.co.jp,ayumi-m@anm.co.jp"; // 事務員さんのメールアドレス（送り先は固定）
   var esc = function(t){ return String(t==null?"":t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   function dec(b){ b = b.replace(/-/g,"+").replace(/_/g,"/"); while(b.length % 4) b += "="; return JSON.parse(decodeURIComponent(escape(atob(b)))); }
   var SK = "leak-sites-v1", sites = {};
@@ -163,59 +306,83 @@ label.f.big input{font-size:1.4rem;min-height:52px}
     }).catch(function(){ if(sites[want]){ site = sites[want]; start(); } else fail("台帳を読み込めません","電波のある所で一度開いてください。"); });
     return;
   }
+  function hasDraft(id){ try{ var x = JSON.parse(localStorage.getItem("leak-rec-v1|"+id)); return !!(x && (x.nowNo || x.pump || x.lorry || (x.wells||[]).some(function(w){ return w.water; }) || (x.tanks||[]).some(function(t){ return t.level || t.rest; }))); }catch(e){ return false; } }
   if(!site){
     var ids = Object.keys(sites);
     app.innerHTML = '<div class="card"><h2>現場を選んでください</h2><p class="lead">漏洩検査の台帳から現場を選ぶと、その現場の記録用紙が開きます。</p><a class="btn" style="display:flex;align-items:center;justify-content:center;text-decoration:none" href="./leak-list.html">漏洩検査の台帳を開く</a></div>'+
-      (ids.length ? '<div class="card"><h2>前に開いた現場</h2>'+ids.map(function(id){ return '<button type="button" class="btn ghost" style="margin-top:8px" data-open="'+esc(id)+'">'+esc(sites[id].site)+(sites[id].fac ? '　'+esc(sites[id].fac) : '')+'</button>'; }).join("")+'</div>' : '');
+      (ids.length ? '<div class="card"><h2>前に開いた現場</h2>'+ids.map(function(id){ return '<button type="button" class="btn ghost" style="margin-top:8px" data-open="'+esc(id)+'">'+esc(sites[id].site)+(sites[id].fac ? '　'+esc(sites[id].fac) : '')+(hasDraft(id) ? '<span class="draft">途中</span>' : '')+'</button>'; }).join("")+'</div>' : '');
     app.querySelectorAll("[data-open]").forEach(function(b){ b.onclick = function(){ site = sites[b.dataset.open]; start(); }; });
     document.getElementById("bar").hidden = true;
     return;
   }
   start();
   function start(){
-    document.getElementById("bar").hidden = false;
+    document.getElementById("bar").hidden = false; document.getElementById("back0").style.display = "none";
     var done = {}; try{ done = JSON.parse(localStorage.getItem("leak-done-v1")) || {}; }catch(e){}
     var o = done[site.id];
     if(o && (!site.last || o.last > site.last)){ site.last = o.last; site.prevDate = o.prevDate; site.prevNo = o.prevNo; }
     var RK = "leak-rec-v1|"+site.id, r;
     try{ r = JSON.parse(localStorage.getItem(RK)); }catch(e){}
-    var nw = Math.max(0, parseInt(site.wells,10) || 0);
+    var resumed = !!(r && r.saved && (r.nowNo || r.pump || r.lorry || (r.wells||[]).some(function(w){ return w.water; }) || (r.tanks||[]).some(function(t){ return t.level || t.rest; })));
+    var WK = "leak-wells|"+site.id, nw = 0; try{ nw = parseInt(localStorage.getItem(WK),10) || 0; }catch(e){}
+    nw = Math.max(nw, parseInt(site.wells,10) || 0);
     if(!r){ var d = new Date(); r = {date:d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2), weather:"", writer:"", kind:"", nowNo:"", gw:"", pump:"", pumpNA:false, lorry:"", lorryNA:false, wells:[], tanks:[], mob:[], note:"", noteNone:false, photo:false}; }
     (function(){ var d = new Date(); r.date = d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); })();
     while(r.wells.length < nw) r.wells.push({st:"", depth:"", water:""}); r.wells.length = nw;
     while(r.tanks.length < site.tanks.length) r.tanks.push({rest:"", level:"", kensui:"", wnote:""}); r.tanks.length = site.tanks.length;
     var mobs = site.hasMob ? site.mob : [];
     while(r.mob.length < mobs.length) r.mob.push({done:"", sticker:""}); r.mob.length = mobs.length;
-    var to = localStorage.getItem("leak-to") || CLERK;
+    var to = CLERK;
     // 最初から決まっている答え（新しい記録のときに1回だけ）
     if(!r.def){ r.def = 1; if(!r.kind) r.kind = "検査"; if(!r.note) r.noteNone = true; }
-    var openW = -1, openT = -1; // タップした検知管・タンク
+    if(r.teiki === undefined) r.teiki = !!site.teiki; // 定期点検（台帳に「定期点検あり」なら最初から押してある）
+    var openW = -1, openT = -1, openO = "", showInfo = false, openM = -1, tab = "tank"; // tab：地下タンク／計量器／移動タンク
+    if(!r.mnote) r.mnote = {};
+    // 計量器：台帳の型式・製造番号・検定期限。製造番号の「-1」「-2」は同じ計量器のノズル
+    var units = []; (site.meters||[]).forEach(function(m){ var sn = String(m["製造番号"]||"").trim(), last = units[units.length-1];
+      var base = /^[-‐－]/.test(sn) && last ? last.base : sn.replace(/[-‐－]\d+$/,"");
+      if(last && base && base === last.base) last.n.push(m); else units.push({base:base, n:[m]}); });
+    function ym(v){ v = String(v||""); var m = v.match(/(\d{4})\s*[.\/年]\s*(\d{1,2})/); if(m) return [+m[1], +m[2]];
+      m = v.match(/^H\s*(\d{1,2})[.\/](\d{1,2})/i); if(m) return [1988 + +m[1], +m[2]];
+      m = v.match(/^(\d{2})[.\/](\d{1,2})$/); if(m) return [2000 + +m[1], +m[2]]; return null; }
+    function due(u){ var best = null; u.n.forEach(function(m){ var y = ym(m["検定期限"]); if(y && (!best || y[0]*12+y[1] < best[0]*12+best[1])) best = y; }); return best; }
+    function dueCls(y){ if(!y) return ""; var d = new Date(), now = d.getFullYear()*12 + d.getMonth()+1, t = y[0]*12 + y[1]; return t < now ? " ng" : (t - now <= 6 ? " soon" : ""); } // タップした検知管・タンク・Ω
     // 記入者：前に入れた名前をこのスマホが覚えておく
-    if(!r.writer){ try{ r.writer = localStorage.getItem("leak-writer") || ""; }catch(e){} }
+    // 記入者：ANMを最初に開いたときに登録したフルネームを使う
+    var myName = ""; try{ myName = localStorage.getItem("anm-name") || localStorage.getItem("leak-writer") || ""; }catch(e){}
+    if(myName) r.writer = myName;
     // 天気：現場の住所の今の天気を自動で入れる（国土地理院で住所→位置、Open-Meteoで天気）。電波がないときは手で選ぶ
-    var autoW = false;
-    function autoWeather(){
-      if(r.weather || !site.addr || (navigator.onLine === false)) return;
+    // 天候：現場の住所の天気を自動で入れる（国土地理院で住所→位置、Open-Meteoで天気）。送信のときにもう一度取り直す
+    // 電波がなくて取れないときだけ、手で選ぶボタンを出す
+    var wState = (site.addr && navigator.onLine !== false) ? "wait" : "fail";
+    function getWeather(cb){
+      var fin = false, end = function(v){ if(!fin){ fin = true; cb(v); } };
+      setTimeout(function(){ end(null); }, 5000);
+      if(!site.addr || navigator.onLine === false){ end(null); return; }
       fetch("https://msearch.gsi.go.jp/address-search/AddressSearch?q="+encodeURIComponent(site.addr)).then(function(x){ return x.json(); }).then(function(a){
         if(!a || !a.length) throw 0; var c = a[0].geometry.coordinates;
         return fetch("https://api.open-meteo.com/v1/forecast?latitude="+c[1]+"&longitude="+c[0]+"&current=weather_code&timezone=Asia%2FTokyo");
       }).then(function(x){ return x.json(); }).then(function(j){
-        var w = j && j.current ? j.current.weather_code : null; if(w == null || r.weather) return;
-        r.weather = w <= 1 ? "晴" : (w <= 48 ? "曇" : ((w >= 71 && w <= 77) || w === 85 || w === 86 ? "雪" : "雨"));
-        autoW = true; save(); var y = window.scrollY; draw(); window.scrollTo(0,y);
-      }).catch(function(){});
+        var w = j && j.current ? j.current.weather_code : null; if(w == null) throw 0;
+        end(w <= 1 ? "晴" : (w <= 48 ? "曇" : ((w >= 71 && w <= 77) || w === 85 || w === 86 ? "雪" : "雨")));
+      }).catch(function(){ end(null); });
+    }
+    function autoWeather(){
+      getWeather(function(w){
+        if(w){ r.weather = w; wState = "ok"; save(); } else wState = "fail";
+        var y = window.scrollY; draw(); window.scrollTo(0,y);
+      });
     }
     var tried = false;
-    function save(){ try{ localStorage.setItem(RK, JSON.stringify(r)); }catch(e){} }
+    function save(){ r.saved = Date.now(); try{ localStorage.setItem(RK, JSON.stringify(r)); }catch(e){} }
     function chips(key, opts, cur){ return '<div class="chips" data-ck="'+key+'">'+opts.map(function(o){ return '<button type="button" class="chip" data-v="'+esc(o)+'" aria-pressed="'+(cur===o)+'">'+esc(o)+'</button>'; }).join("")+'</div>'; }
     function inp(key, val, ph, mode){ return '<input data-ik="'+key+'" value="'+esc(val)+'" placeholder="'+esc(ph||"")+'"'+(mode ? ' inputmode="'+mode+'"' : '')+'>'; }
     var isNum = function(v){ return /^[0-9]+(\.[0-9]+)?$/.test(String(v).trim()); };
     function get(key){ var p = key.split("."), o = r; for(var i=0;i<p.length-1;i++) o = o[p[i]]; return [o, p[p.length-1]]; }
     function check(){
       var e = {}, add = function(k, msg){ e[k] = msg; };
-      if(!r.date) add("date","日付を入れてください");
-      if(!r.weather) add("weather","天候を選んでください");
-      if(!r.writer.trim()) add("writer","記入者を入れてください");
+      if(!r.weather) if(wState === "fail" && !r.weather) add("weather","天気を取れませんでした。天候を選んでください");
+      if(!r.writer.trim()) add("writer","あなたのフルネームを入れてください");
       if(!r.kind) add("kind","検査か資料のどちらかを選んでください");
       if(!r.nowNo.trim()) add("nowNo","今回No.を入れてください");
       var meas = r.kind !== "資料のみ";
@@ -243,9 +410,7 @@ label.f.big input{font-size:1.4rem;min-height:52px}
           if(v.done === "実施" && !v.sticker.trim()) add("mob."+i+".sticker","車両"+(i+1)+"：今回のステッカーNo.を入れてください");
         });
       }
-      if(!r.noteNone && !r.note.trim()) add("note","特記事項を書くか「特記事項なし」にチェックしてください");
-      if(!r.photo) add("photo","写真をクラウドにアップロードしてからチェックしてください");
-      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to)) add("to","送り先（事務員さん）のメールアドレスを入れてください");
+      if(!r.noteNone && !r.note.trim()) add("note","特記事項を書くか「なし」にチェックしてください");
       return e;
     }
     function contactsHtml(){
@@ -255,45 +420,63 @@ label.f.big input{font-size:1.4rem;min-height:52px}
       var msg = (site.site||"")+" "+(site.attn||"ご担当者様")+"\nいつもお世話になっております。地下タンク漏洩検査の日程のご相談です。\n〇月〇日（〇）〇時ごろに伺いたいのですが、ご都合はいかがでしょうか。";
       return '<div class="addr">'+cs.map(function(c){ var n = c.tel.replace(/[^0-9+]/g,""); return '<div>'+esc(c.name)+'　'+esc(c.tel)+'</div><div class="acts"><a class="act" href="tel:'+n+'">電話する</a>'+(/^0[789]0/.test(n) ? '<a class="act ghost2" href="sms:'+n+'?&body='+encodeURIComponent(msg)+'">日程をSMSで連絡</a>' : '')+'</div>'; }).join("")+'</div>';
     }
+    drawNow = function(){ draw(); };
     function draw(){
       r.wells.forEach(function(w, i){
         if(!w.st) w.st = "測定";
         if(w.st === "測定" && !w.depth){ var dd = String((site.prevWells||[])[i]||"").split(/[／/]/)[0].replace(/[^0-9]/g,""); if(dd) w.depth = dd; } // 管の深さはふつう変わらない
       });
-      var e = tried ? check() : {};
-      var bad = function(k){ return e[k] ? ' bad' : ''; }, msg = function(k){ return e[k] ? '<div class="msg">'+esc(e[k])+'</div>' : ''; };
+      var e = check(), eNg = tried ? e : {}; // 送る前は黄色（まだ）、送るを押した後は赤
+      var bad = function(k){ return e[k] ? (tried ? ' bad' : ' todo') : ''; }, msg = function(k){ return eNg[k] ? '<div class="msg">'+esc(eNg[k])+'</div>' : ''; };
       // 縦を短く：現場（最小限）→ 現場図と検知管 → タンク → 地下水・絶縁 → 基本 の順
       var pipes = [["注入",site.d_in],["計量",site.d_meas],["吸引",site.d_suc],["戻り",site.d_ret],["送油",site.d_feed],["通気",site.d_vent]].filter(function(x){ return x[1] && x[1] !== "-" && x[1] !== "−"; });
       var mini = function(k, opts, cur){ return chips(k, opts, cur).replace('class="chips"','class="chips mini'+bad(k)+'"'); };
       var cs = (site.contacts||[]).filter(function(c){ return c.tel; }); if(!cs.length && site.tel) cs = [{name:"TEL", tel:site.tel}];
-      var ov = r.kind !== "資料のみ" && r.wells.length && site.map && (site.wellPos||[]).length >= r.wells.length; // 現場と図を1枚にまとめる
-      var pipesHtml = pipes.length ? '<div class="pipes'+(ov?' ov':'')+'">'+pipes.map(function(x){ return '<span class="pp"><small>'+x[0]+'</small>'+esc(x[1])+'</span>'; }).join("")+'</div>' : '';
-      var h = '<div class="card tight"><div class="hd"><h2>'+esc(site.site)+(site.fac ? '<small>'+esc(site.fac)+'</small>' : '')+'</h2>'+
+      var ov = r.kind !== "資料のみ" && site.map && (site.wellPos||[]).length >= r.wells.length && (r.wells.length || (site.tankGroups||[]).length || (site.tankPos||[]).length); // 現場と図を1枚にまとめる
+      var auto = r.kind !== "資料のみ" && !ov; // 現場図がない現場：同じ形の簡易図を自動で作る
+      var useTabs = (ov || auto) && (units.length || r.mob.length);
+      if(!useTabs) tab = "tank";
+      var oOk = function(k){ return r[k+"NA"] || isNum(r[k]); };
+      var ohmChips = (ov || auto) ? [["pump","ポンプΩ"],["lorry","ローリーΩ"]].map(function(x){ var k = x[0];
+        return '<button type="button" class="pp om'+(oOk(k)?' ok':'')+(eNg[k]?' ng':'')+'" data-oopen="'+k+'"><small>'+x[1]+'</small>'+(r[k+"NA"] ? 'なし' : (r[k] !== "" ? esc(r[k]) : '&nbsp;'))+'</button>'; }).join("") : '';
+      var pipesHtml = (pipes.length || ohmChips) ? '<div class="pipes'+(ov||auto?' ov':'')+'">'+pipes.map(function(x){ return '<span class="pp"><small>'+x[0]+'</small>'+esc(x[1])+'</span>'; }).join("")+ohmChips+'</div>' : '';
+      var h = '<div class="top"><a class="back" href="./index.html" aria-label="メニューに戻る" style="font-size:1.4rem;padding:4px 10px 4px 2px;color:var(--ink)">←</a><h2>'+esc(site.site)+(site.fac ? '<small>'+esc(site.fac)+'</small>' : '')+'</h2>'+
         (site.addr ? '<a class="act sm" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.addr)+'" target="_blank" rel="noopener">ナビ</a>' : '')+
-        (cs.length ? '<a class="act sm ghost2" href="tel:'+cs[0].tel.replace(/[^0-9+]/g,"")+'">電話</a>' : '')+'</div>'+
-        (site.note ? '<div class="warnbox">'+esc(site.note)+'</div>' : '')+
-        (ov ? '@@MAP@@' : pipesHtml)+
-        '<details class="office"><summary>住所・連絡先・事務の情報</summary>'+(site.addr ? '<p style="margin:4px 0">'+esc(site.addr)+'</p>' : '')+contactsHtml()+'<dl class="kv">'+
-        [["依頼先",site.req],["発送先",site.ship],["部数",site.copies],["周期",site.cycle],["前回",(site.prevDate||"")+"　"+(site.prevNo||"")]].map(function(x){ return '<dt>'+x[0]+'</dt><dd>'+esc(x[1]||"−")+'</dd>'; }).join("")+'</dl></details></div>';
+        '<button type="button" class="act sm ghost2" data-info="1" aria-expanded="'+showInfo+'">情報</button>'+(cs.length ? '<a class="act sm ghost2" href="tel:'+cs[0].tel.replace(/[^0-9+]/g,"")+'">電話</a>' : '')+'</div>@@TOP@@<div class="card tight mapcard">'+
+        (site.note ? (function(){ var ln = String(site.note).split(/\n+/).filter(function(x){ return x.trim(); });
+          return ln.length > 1 ? '<details class="warnbox"><summary>⚠ '+esc(ln[0])+'<span class="more">ほか'+(ln.length-1)+'件</span></summary><ul>'+ln.slice(1).map(function(x){ return '<li>'+esc(x)+'</li>'; }).join("")+'</ul></details>'
+            : '<div class="warnbox">⚠ '+esc(ln[0]||"")+'</div>'; })() : '')+
+        (ov || auto ? '@@TABS@@<div class="pane"'+(useTabs && tab !== "tank" ? ' hidden' : '')+'>@@MAP@@</div>@@PANES@@' : pipesHtml)+
+        (showInfo ? '<div class="office" style="margin-top:8px">' : '<div hidden>')+(site.addr ? '<p style="margin:4px 0">'+esc(site.addr)+'</p>' : '')+contactsHtml()+'<dl class="kv">'+
+        [["依頼先",site.req],["発送先",site.ship],["部数",site.copies],["周期",site.cycle],["前回",(site.prevDate||"")+"　"+(site.prevNo||"")]].map(function(x){ return '<dt>'+x[0]+'</dt><dd>'+esc(x[1]||"−")+'</dd>'; }).join("")+'</dl></div></div>';
       if(r.kind !== "資料のみ"){
-        if(r.wells.length){
-          var NUM = "①②③④⑤⑥⑦⑧⑨⑩", pos = site.wellPos || [];
+        var NUM = "①②③④⑤⑥⑦⑧⑨⑩", pos = site.wellPos || [];
+        var wBtn = function(w, i, style){
+          var k = "wells."+i, ok = w.st !== "測定" || (w.depth !== "" && w.water !== ""), ng = eNg[k+".st"] || eNg[k+".depth"] || eNg[k+".water"];
+          var val = w.st === "測定" ? (w.water !== "" ? w.water : "") : w.st;
+          return '<button type="button" class="wbtn'+(ok?' ok':'')+(ng?' ng':'')+'" data-wopen="'+i+'"'+(style ? ' style="'+style+'"' : '')+'><b>'+(i+1)+'</b>'+(val ? '<span>'+esc(val)+'</span>' : '')+'</button>';
+        };
+        if(auto){
+          h = h.replace('@@MAP@@', '<div class="mapbox autobox">'+pipesHtml+'<div class="atanks">@@TANKS@@</div><div class="awells">'+r.wells.map(function(w,i){ return wBtn(w,i,""); }).join("")+
+            (r.wells.length < 10 ? '<button type="button" class="wadd" data-wadd="1" aria-label="検知管を足す">＋<small>検知管</small></button>' : '')+'</div>'+(site.map ? '<div style="text-align:center"><a class="mapl" href="'+esc(site.map)+'" target="_blank" rel="noopener">現場図を見る</a></div>' : '')+'@@METERS@@</div>');
+        }
+        if((r.wells.length || ov) && !auto){
           if(site.map && pos.length >= r.wells.length){
             // 図そのものが入力欄：番号をタップ → 下から入力
-            var mapH = '<div class="mapbox">'+pipesHtml+'<img class="map big" src="'+esc(site.map)+'" alt="'+esc(site.site)+'の現場図">'+r.wells.map(function(w,i){
-              var k = "wells."+i, ok = w.st !== "測定" || (w.depth !== "" && w.water !== ""), ng = e[k+".st"] || e[k+".depth"] || e[k+".water"];
+            var photo = !/\.svg$|^data:image\/svg/i.test(site.map); // 写真の現場図：配管の数字は図の外、タンクは図の下に並べる
+            var mapH = '<div class="mapbox'+(photo ? ' photo' : '')+'">'+pipesHtml+(photo ? '<div class="mapin">' : '')+'<img class="map big" src="'+esc(site.map)+'" alt="'+esc(site.site)+'の現場図">'+r.wells.map(function(w,i){
+              var k = "wells."+i, ok = w.st !== "測定" || (w.depth !== "" && w.water !== ""), ng = eNg[k+".st"] || eNg[k+".depth"] || eNg[k+".water"];
               var val = w.st === "測定" ? (w.water !== "" ? w.water : "") : w.st;
-              return '<button type="button" class="wbtn'+(ok?' ok':'')+(ng?' ng':'')+'" data-wopen="'+i+'" style="left:'+pos[i][0]+'%;top:'+pos[i][1]+'%"><b>'+NUM.charAt(i)+'</b>'+(val ? '<span>'+esc(val)+'</span>' : '<span>入力</span>')+'</button>';
-            }).join("")+'</div><p class="hint">番号をタップして入力'+((site.prevWells||[]).length ? '（管の深さは前回の値）' : '（はじめての現場：管の深さも）')+'</p>';
-            h = h.replace('@@MAP@@', mapH);
-            if(openW >= 0 && openW < r.wells.length){
+              return '<button type="button" class="wbtn'+(ok?' ok':'')+(ng?' ng':'')+'" data-wopen="'+i+'" style="left:'+pos[i][0]+'%;top:'+pos[i][1]+'%"><b>'+(i+1)+'</b>'+(val ? '<span>'+esc(val)+'</span>' : '')+'</button>';
+            }).join("")+(photo ? '</div>' : '')+'</div><p class="hint">番号をタップして入力'+((site.prevWells||[]).length ? '（深さは前回の値）' : '（初回は深さも）')+'</p>';
+            h = h.replace('@@MAP@@', mapH + '@@UNDER@@@@METERS@@');
+            if(false){
               var w = r.wells[openW], k = "wells."+openW, pv = (site.prevWells||[])[openW];
               h += '<div class="sheet"><div class="sh-in"><div class="sh-hd"><b>検知管 '+NUM.charAt(openW)+'</b>'+(pv ? '<span class="pv">前回 '+esc(pv)+'</span>' : '')+'<button type="button" class="sh-x" data-wclose="1" aria-label="閉じる">×</button></div>'+
                 mini(k+".st",["測定","開閉不可","つまり"],w.st)+
                 (w.st === "測定" ? '<div class="g2"><label class="f big" style="margin-top:8px">管の深さ mm'+inp(k+".depth",w.depth,"例：2200","numeric").replace('<input','<input class="'+(w.depth===""?'wfocus ':'')+bad(k+".depth")+'"')+'</label>'+
                   '<label class="f big" style="margin-top:8px">→ 地下水 mm'+inp(k+".water",w.water,"例：1500","numeric").replace('<input','<input class="'+(w.depth!==""?'wfocus ':'')+bad(k+".water")+'"')+'</label></div>'+msg(k+".depth")+msg(k+".water") : '')+
-                '<div class="sh-nav">'+(openW > 0 ? '<button type="button" class="btn ghost" data-wgo="'+(openW-1)+'">← '+NUM.charAt(openW-1)+'</button>' : '<span></span>')+
-                (openW < r.wells.length-1 ? '<button type="button" class="btn" data-wgo="'+(openW+1)+'">次 '+NUM.charAt(openW+1)+' →</button>' : (r.tanks.length ? '<button type="button" class="btn" data-tgo="0">次 タンク →</button>' : '<button type="button" class="btn" data-wclose="1">おわり</button>'))+'</div></div></div>';
+                '<div class="sh-nav">'+(w.st === "測定" ? '<button type="button" class="btn ghost" data-dry="'+openW+'">水なし（0）</button>' : '<span></span>')+'<button type="button" class="btn" data-wclose="1">OK</button></div></div></div>';
             }
           } else {
             h += '<div class="card tight">'+(site.map ? '<a href="'+esc(site.map)+'" target="_blank" rel="noopener"><img class="map big" src="'+esc(site.map)+'" alt="'+esc(site.site)+'の現場図（検知管の番号つき）"></a>' : '<h2>漏洩検知管</h2>')+
@@ -306,17 +489,52 @@ label.f.big input{font-size:1.4rem;min-height:52px}
             }).join("")+'<p class="hint">管の深さは前回の値が入っています。開けられない・詰まっているときは右で選ぶ</p></div>';
           }
         }
+        // 計量器：タブで一覧（期限切れ＝赤、6か月以内＝オレンジ）
+        var nNg = 0, nSoon = 0; units.forEach(function(u){ var c = dueCls(due(u)); if(c === " ng") nNg++; else if(c === " soon") nSoon++; });
+        var meterList = '<div class="mtab"><table><tr><th></th><th>型式</th><th>油種</th><th>検定期限</th><th>製造番号</th><th>製造</th></tr>'+units.map(function(u,i){
+            return u.n.map(function(m,j){ return '<tr class="'+(j === 0 ? 'u1' : '')+'"><td>'+(j === 0 ? '<b>'+(i+1)+'</b>' : '')+'</td><td>'+(j === 0 ? esc(m["型式"]||"") : '')+'</td><td>'+esc(m["油種"]||"")+'</td><td class="'+dueCls(ym(m["検定期限"])).trim()+'">'+esc(m["検定期限"]||"")+'</td><td>'+esc(m["製造番号"]||"")+'</td><td>'+esc(m["製造年月"]||"")+'</td></tr>'; }).join("");
+          }).join("")+'</table></div>'+
+          '<label class="f">台帳と違っていたら（型式・番号・期限のシールなど）'+inp("mnoteAll", r.mnoteAll||"", "例：3番 期限シール 2033.06 → 2034.06")+'</label>';
+        h = h.replace('@@METERS@@', '');
+        if((ov || auto) && openW >= 0 && openW < r.wells.length){
+          var w = r.wells[openW], k = "wells."+openW, pv = (site.prevWells||[])[openW];
+          h += '<div class="sheet"><div class="sh-in"><div class="sh-hd"><b>検知管 '+NUM.charAt(openW)+'</b>'+(pv ? '<span class="pv">前回 '+esc(pv)+'</span>' : '')+(auto && openW === r.wells.length-1 ? '<button type="button" class="wdel" data-wdel="1">この管を消す</button>' : '')+'<button type="button" class="sh-x" data-wclose="1" aria-label="閉じる">×</button></div>'+
+            mini(k+".st",["測定","開閉不可","つまり"],w.st)+
+            (w.st === "測定" ? '<div class="g2"><label class="f big" style="margin-top:8px">管の深さ mm'+inp(k+".depth",w.depth,"例：2200","numeric").replace('<input','<input class="'+(w.depth===""?'wfocus ':'')+bad(k+".depth")+'"')+'</label>'+
+              '<label class="f big" style="margin-top:8px">→ 地下水 mm'+inp(k+".water",w.water,"例：1500","numeric").replace('<input','<input class="'+(w.depth!==""?'wfocus ':'')+bad(k+".water")+'"')+'</label></div>'+msg(k+".depth")+msg(k+".water") : '')+
+            '<div class="sh-nav">'+(w.st === "測定" ? '<button type="button" class="btn ghost" data-dry="'+openW+'">水なし（0）</button>' : '<span></span>')+'<button type="button" class="btn" data-wclose="1">OK</button></div></div></div>';
+        }
         // タンク：タップ → 下から 油面高 → 残量 → 検水（ありなら水の高さ）
         var tpos = site.tankPos || [], tOnMap = ov && tpos.length >= r.tanks.length;
-        var tSum = function(t){ return [t.level ? t.level+"mm" : "", t.rest ? t.rest+"ℓ" : "", t.kensui ? "水"+(t.kensui==="あり" ? (t.wnote||"?")+"mm" : "なし") : ""].filter(Boolean).join(" ") || "入力"; };
+        var tSum = function(t, m){ return [t.level ? t.level+"mm" : "", t.rest ? t.rest+"ℓ" : "", t.kensui ? "水"+(t.kensui==="あり" ? (t.wnote||"?")+"mm" : "なし") : ""].filter(Boolean).join(" ") || (m ? "" : "入力"); };
         var tOk = function(t){ return t.level !== "" && t.rest !== "" && t.kensui && (t.kensui === "なし" || String(t.wnote||"") !== ""); };
-        var tNg = function(i){ var k = "tanks."+i; return e[k+".rest"] || e[k+".level"] || e[k+".kensui"] || e[k+".wnote"]; };
-        if(tOnMap){
+        var tNg = function(i){ var k = "tanks."+i; return eNg[k+".rest"] || eNg[k+".level"] || eNg[k+".kensui"] || eNg[k+".wnote"]; };
+        if(auto){
+          h = h.replace('@@TANKS@@', r.tanks.map(function(t,i){ var st = site.tanks[i];
+            return '<button type="button" class="tbtn'+(tOk(t)?' ok':'')+(tNg(i)?' ng':'')+'" data-topen="'+i+'"><b>No.'+esc(st.no)+' '+esc(st.oil)+' '+esc(st.kl)+'kL</b><span>'+esc(tSum(t,1))+'</span></button>'; }).join(""));
+        } else if(ov && (site.tankGroups||[]).length){
+          // タンクの形どおり：二重殻は二重枠、中仕切りで区切った室ごとにタップ
+          h = h.replace('</div><p class="hint">番号をタップして入力', site.tankGroups.map(function(g){
+            var gs = 'left:'+g.pos[0]+'%;top:'+g.pos[1]+'%;width:'+g.size[0]+'%;height:'+g.size[1]+'%';
+            if(g.tanks.length === 1 && !g.dbl){ var i0 = g.tanks[0], t0 = r.tanks[i0], s0 = site.tanks[i0]; if(!t0 || !s0) return ''; // 一重殻・1室：ほかの現場と同じカプセル形
+              return '<button type="button" class="tbtn tg'+(g.h?' h':'')+(tOk(t0)?' ok':'')+(tNg(i0)?' ng':'')+'" data-topen="'+i0+'" style="'+gs+'"><b>No.'+esc(s0.no)+' '+esc(s0.oil)+' '+esc(s0.kl)+'kL</b><span>'+esc(tSum(t0,1))+'</span></button>'; }
+            return '<div class="tgrp'+(g.dbl ? ' dbl' : '')+(g.h ? ' h' : '')+'" style="left:'+g.pos[0]+'%;top:'+g.pos[1]+'%;width:'+g.size[0]+'%;height:'+g.size[1]+'%">'+g.tanks.map(function(i){ var t = r.tanks[i], st = site.tanks[i]; if(!t || !st) return '';
+              return '<button type="button" class="tcell'+(tOk(t)?' ok':'')+(tNg(i)?' ng':'')+'" data-topen="'+i+'"><b>No.'+esc(st.no)+'</b><small>'+esc(st.oil)+' '+esc(st.kl)+'kL</small></button>'; }).join("")+'</div>'; }).join("")+'</div><p class="hint">番号・タンクをタップして入力');
+        } else if(ov && !tOnMap){
+          h = h.replace('@@UNDER@@', '<div class="atanks under">'+r.tanks.map(function(t,i){ var st = site.tanks[i];
+            return '<button type="button" class="tbtn'+(tOk(t)?' ok':'')+(tNg(i)?' ng':'')+'" data-topen="'+i+'"><b>No.'+esc(st.no)+' '+esc(st.oil)+' '+esc(st.kl)+'kL</b><span>'+esc(tSum(t,1))+'</span></button>'; }).join("")+'</div>');
+        } else if(tOnMap){
           h = h.replace('</div><p class="hint">番号をタップして入力', r.tanks.map(function(t,i){ var st = site.tanks[i];
-            return '<button type="button" class="tbtn'+(tOk(t)?' ok':'')+(tNg(i)?' ng':'')+'" data-topen="'+i+'" style="left:'+tpos[i][0]+'%;top:'+tpos[i][1]+'%"><b>No.'+esc(st.no)+' '+esc(st.oil)+'</b><span>'+esc(tSum(t))+'</span></button>'; }).join("")+'</div><p class="hint">番号・タンクをタップして入力');
+            return '<button type="button" class="tbtn'+(tOk(t)?' ok':'')+(tNg(i)?' ng':'')+'" data-topen="'+i+'" style="left:'+tpos[i][0]+'%;top:'+tpos[i][1]+'%"><b>No.'+esc(st.no)+' '+esc(st.oil)+' '+esc(st.kl)+'kL</b><span>'+esc(tSum(t,1))+'</span></button>'; }).join("")+'</div><p class="hint">番号・タンクをタップして入力');
         } else {
           h += '<div class="card tight"><h2>タンク</h2>'+r.tanks.map(function(t,i){ var st = site.tanks[i];
             return '<button type="button" class="tile'+(tOk(t)?' ok':'')+(tNg(i)?' ng':'')+'" data-topen="'+i+'"><b>No.'+esc(st.no)+' '+esc(st.oil)+' '+esc(st.kl)+'kL</b><span>'+esc(tSum(t))+'</span></button>'; }).join("")+'</div>';
+        }
+        if(openO){ var on = openO === "pump" ? "ポンプΩ" : "ローリーΩ";
+          h += '<div class="sheet"><div class="sh-in"><div class="sh-hd"><b>'+on+'</b><button type="button" class="sh-x" data-wclose="1" aria-label="閉じる">×</button></div>'+
+            '<div class="g2" style="align-items:end"><label class="f big" style="margin-top:4px">数値 Ω'+inp(openO,r[openO+"NA"] ? "" : r[openO],r[openO+"NA"] ? "該当なし" : "","decimal").replace('<input','<input class="'+(r[openO+"NA"]?'':'wfocus ')+bad(openO)+'"'+(r[openO+"NA"]?' disabled':''))+'</label>'+
+            '<label class="chk"><input type="checkbox" data-cb="'+openO+'NA"'+(r[openO+"NA"]?' checked':'')+'>なし（該当なし）</label></div>'+msg(openO)+
+            '<button type="button" class="btn" data-wclose="1" style="margin-top:10px">OK</button></div></div>';
         }
         if(openT >= 0 && openT < r.tanks.length){
           var t = r.tanks[openT], k = "tanks."+openT, st = site.tanks[openT];
@@ -325,49 +543,67 @@ label.f.big input{font-size:1.4rem;min-height:52px}
             '<label class="f big" style="margin-top:4px">→ 残量 ℓ'+inp(k+".rest",t.rest,"","numeric").replace('<input','<input class="'+(t.level!==""&&t.rest===""?'wfocus ':'')+bad(k+".rest")+'"')+'</label></div>'+msg(k+".level")+msg(k+".rest")+
             '<div class="row2"><span class="kl">検水</span>'+mini(k+".kensui",["なし","あり"],t.kensui)+
             (t.kensui === "あり" ? '<label class="wmm">水'+inp(k+".wnote",t.wnote||"","","numeric").replace('<input','<input class="'+(t.wnote?'':'wfocus ')+bad(k+".wnote")+'"')+'mm</label>' : '')+'</div>'+msg(k+".kensui")+msg(k+".wnote")+
-            '<div class="sh-nav">'+(openT > 0 ? '<button type="button" class="btn ghost" data-tgo="'+(openT-1)+'">← No.'+esc(site.tanks[openT-1].no)+'</button>' : '<span></span>')+
-            (openT < r.tanks.length-1 ? '<button type="button" class="btn" data-tgo="'+(openT+1)+'">次 No.'+esc(site.tanks[openT+1].no)+' →</button>' : '<button type="button" class="btn" data-wclose="1">おわり</button>')+'</div></div></div>';
+            '<button type="button" class="btn" data-wclose="1" style="margin-top:10px">OK</button></div></div>';
         }
-        if(r.mob.length) h += '<div class="card tight"><h2>移動タンク</h2>'+r.mob.map(function(v,i){
+        var mobRows = r.mob.map(function(v,i){
           var k = "mob."+i, mv = mobs[i] || {};
-          return '<div class="sub"><b>'+esc(mv["車番"]||("車両"+(i+1)))+'</b><p class="lead" style="margin:0">'+esc([mv["メーカー"],mv["製造番号"],mv["油種・容量"]].filter(Boolean).join("・"))+(mv["前回ステッカーNo."] ? '　前回 '+esc(mv["前回ステッカーNo."]) : '')+'</p>'+
-            mini(k+".done",["実施","未実施"],v.done)+msg(k+".done")+
+          return '<div><div class="mrow"><div class="mn"><b>'+esc(mv["車番"]||("車両"+(i+1)))+'</b><small>'+esc([mv["メーカー"],mv["油種・容量"]].filter(Boolean).join("・"))+(mv["前回ステッカーNo."] ? '　前回 '+esc(mv["前回ステッカーNo."]) : '')+'</small></div>'+
+            mini(k+".done",["実施","未実施"],v.done)+'</div>'+msg(k+".done")+
             (v.done === "実施" ? inp(k+".sticker",v.sticker,"今回のステッカーNo.").replace('<input','<input class="'+bad(k+".sticker")+'" style="margin-top:6px"')+msg(k+".sticker") : '')+'</div>';
-        }).join("")+'</div>';
-        h += '<div class="card tight"><div class="ohm" style="margin-top:0"><span class="kl">ポンプΩ</span>'+inp("pump",r.pump,r.pumpNA ? "該当なし" : "数値","decimal").replace('<input','<input class="'+bad("pump")+'"'+(r.pumpNA?' disabled':''))+'<label class="chk sm"><input type="checkbox" data-cb="pumpNA"'+(r.pumpNA?' checked':'')+'>なし</label>'+
-          '<span class="kl">ローリーΩ</span>'+inp("lorry",r.lorry,r.lorryNA ? "該当なし" : "数値","decimal").replace('<input','<input class="'+bad("lorry")+'"'+(r.lorryNA?' disabled':''))+'<label class="chk sm"><input type="checkbox" data-cb="lorryNA"'+(r.lorryNA?' checked':'')+'>なし</label></div>'+msg("pump")+msg("lorry")+'</div>';
+        }).join("");
+        if(r.mob.length && !useTabs) h += '<div class="card tight"><h2 style="font-size:.9rem;margin:0">移動タンク</h2>'+mobRows+'</div>';
+        if(useTabs){
+          var cnt = function(re){ return Object.keys(e).filter(function(k){ return re.test(k); }).length; };
+          var nT = cnt(/^(wells|tanks|pump|lorry)/), nV = cnt(/^mob/);
+          var tb = function(id, label, badge, cls){ return '<button type="button" class="tab" role="tab" data-tab="'+id+'" aria-selected="'+(tab===id)+'">'+label+(badge ? '<span class="tb'+(cls||'')+'">'+badge+'</span>' : '')+'</button>'; };
+          h = h.replace('@@TABS@@', '<div class="tabs" role="tablist">'+tb("tank","地下タンク",nT)+(units.length ? tb("meter","計量器",nNg ? "期限切れ"+nNg : (nSoon ? "6か月"+nSoon : ""), nNg ? "" : " warn") : '<button type="button" class="tab" disabled>計量器<small>なし</small></button>')+(r.mob.length ? tb("mob","移動タンク",nV) : '<button type="button" class="tab" disabled>移動タンク<small>なし</small></button>')+'</div>');
+          h = h.replace('@@PANES@@',
+            (units.length ? '<div class="pane mpane"'+(tab !== "meter" ? ' hidden' : '')+'>'+meterList+'</div>' : '')+
+            (r.mob.length ? '<div class="pane vpane"'+(tab !== "mob" ? ' hidden' : '')+'>'+mobRows+'</div>' : ''));
+        }
+        if(!ov && !auto) h += '<div class="card tight"><div class="ohm" style="margin-top:0"><span class="kl">ポンプΩ</span>'+inp("pump",r.pump,r.pumpNA ? "該当なし" : "数値","decimal").replace('<input','<input class="'+bad("pump")+'"'+(r.pumpNA?' disabled':''))+'<label class="chk sm"><input type="checkbox" data-cb="pumpNA"'+(r.pumpNA?' checked':'')+'>なし</label>'+
+          '<span class="kl">ローリーΩ</span>'+inp("lorry",r.lorry,r.lorryNA ? "該当なし" : "数値","decimal").replace('<input','<input class="'+bad("lorry")+'"'+(r.lorryNA?' disabled':''))+'<label class="chk sm"><input type="checkbox" data-cb="lorryNA"'+(r.lorryNA?' checked':'')+'>なし</label></div>'+msg("pump")+msg("lorry")+'</div><!--ohmend-->';
       }
-      h += '<div class="card tight"><div class="g2"><label class="f">日付<input type="date" data-ik="date" value="'+esc(r.date)+'" class="'+bad("date")+'"></label><label class="f">記入者'+inp("writer",r.writer,"名前").replace('<input','<input class="'+bad("writer")+'"')+'</label></div>'+msg("date")+msg("writer")+
-        '<div class="row2"><span class="kl">天候</span>'+mini("weather",["晴","曇","雨","雪"],r.weather)+(autoW ? '<span class="hint" style="margin:0">自動で入れました</span>' : '')+'</div>'+msg("weather")+
-        '<div class="row2"><span class="kl">区分</span>'+mini("kind",["検査","資料のみ"],r.kind)+'</div>'+msg("kind")+
-        '<label class="f">今回No.<small style="font-weight:400">（前回 '+esc(site.prevNo||"不明")+'）</small></label><div class="nowrow">'+inp("nowNo",r.nowNo,"例：L-229261〜264").replace('<input','<input class="'+bad("nowNo")+'"')+'<label class="act sm cam">📷 読む<input type="file" accept="image/*" capture="environment" data-ocr="1" hidden></label></div><p class="hint" id="ocrmsg">ステッカーを撮ると番号を読み取ります</p>'+msg("nowNo")+'</div>';
-      h += '<div class="card tight"><h2>特記事項</h2><label class="chk"><input type="checkbox" data-cb="noteNone"'+(r.noteNone?' checked':'')+'>特記事項なし</label>'+(r.noteNone ? '' : '<textarea data-ik="note" rows="2" class="'+bad("note")+'" placeholder="気づいたこと、異常、伝えたいこと">'+esc(r.note)+'</textarea>')+msg("note")+'</div>';
-      h += '<div class="card tight'+(e.photo?' bad':'')+'"><label class="chk"><input type="checkbox" data-cb="photo"'+(r.photo?' checked':'')+'>写真をクラウドにアップロードした</label>'+msg("photo")+'</div>';
-      var toOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to);
-      h += toOk && !e.to ? '<details class="card office"><summary>送り先：'+esc(to)+'（変えるときはタップ）</summary><label class="f">事務員さんのメールアドレス<input data-to="1" type="email" value="'+esc(to)+'" placeholder="例：jimu@example.co.jp"></label></details>'
-        : '<div class="card tight"><h2>送り先</h2><label class="f">事務員さんのメールアドレス<input data-to="1" type="email" value="'+esc(to)+'" class="'+bad("to")+'" placeholder="例：jimu@example.co.jp"></label>'+msg("to")+'</div>';
-      h += '<button type="button" class="btn ghost" id="reset" style="margin-top:14px">送信が終わった（前回No.を今回の番号に更新）</button>';
-      app.innerHTML = h;
+      h += '<div class="card tight">'+(myName ? '' : '<div class="dw1">'+inp("writer",r.writer,"あなたのフルネーム（最初の1回だけ）").replace('<input','<input aria-label="記入者" class="'+bad("writer")+'"')+'</div>'+msg("writer"))+
+        '<div class="wk">'+(wState === "fail" ? '<span class="kl">天候</span>'+mini("weather",["晴","曇","雨","雪"],r.weather) : '')+mini("kind",["検査","資料のみ"],r.kind)+'</div>'+msg("weather")+msg("kind")+
+        '<div class="nowrow" style="margin-top:8px">'+inp("nowNo",r.nowNo,"今回No.（前回 "+(site.prevNo||"不明").replace(/^(No|№)[,.\s]*/i,"")+"）").replace('<input','<input aria-label="今回No." class="'+bad("nowNo")+'"')+'<label class="act sm cam">📷 読む<input type="file" accept="image/*" capture="environment" data-ocr="1" hidden></label></div><p class="hint" id="ocrmsg"></p>'+msg("nowNo");
+      h += '<div class="nrow"><button type="button" class="chip tk" data-tk="1" aria-pressed="'+!!r.teiki+'">定期点検</button>'+inp("note",r.note,r.noteNone ? "特記事項：なし" : "特記事項").replace('<input','<input aria-label="特記事項" class="'+bad("note")+'"')+'<label class="chk sm"><input type="checkbox" data-cb="noteNone"'+(r.noteNone?' checked':'')+'>なし</label></div>'+msg("note")+'</div>';
+      if(justSent === site.id){ var ls = {}; try{ ls = JSON.parse(localStorage.getItem("leak-sent|"+site.id)) || {}; }catch(x){} var bn = '<div class="resume"><span>送信画面を開きました。前回No.を「'+esc(ls.no||"")+'」に更新しました</span>'+(ls.href ? '<a class="act sm" href="'+esc(ls.href)+'">メールをもう一度開く</a>' : '')+'</div>'+nextHtml(nextSite); h = h.replace('@@TOP@@', bn); resumed = false; }
+      if(resumed){ var sd = new Date(r.saved); h = h.replace('@@TOP@@', '<div class="resume"><span>途中の入力から続けています（'+(sd.getMonth()+1)+'/'+sd.getDate()+' '+sd.getHours()+':'+("0"+sd.getMinutes()).slice(-2)+' 保存）</span><button type="button" id="fresh">消して最初から</button></div>'); }
+      h = h.replace('</div><!--ohmend--><div class="card tight">', '<hr class="cardsep">');
+      h = h.replace(/<p class="hint">番号[^<]*<\/p>/, '');
+      h = h.replace('@@TABS@@','').replace('@@PANES@@','').replace('@@UNDER@@','');
+      app.innerHTML = h.replace('@@TOP@@','');
       wire(); status();
     }
     function status(){
       var e = check(), n = Object.keys(e).length, el = document.getElementById("state"), sb = document.getElementById("send");
       el.className = "state " + (n ? "ng" : "ok");
-      el.textContent = n ? "未記入・確認が必要な所が "+n+" か所あります" : "すべて記入できました。送信できます。";
+      el.textContent = n ? "残り "+n+" か所" : "送信できます";
       sb.setAttribute("aria-disabled", n ? "true" : "false");
       var ul = document.getElementById("miss");
       ul.innerHTML = tried && n ? Object.keys(e).slice(0,6).map(function(k){ return '<li>'+esc(e[k])+'</li>'; }).join("")+(n>6?'<li>ほか '+(n-6)+' か所</li>':'') : '';
     }
     function wire(){
       app.querySelectorAll("[data-ck]").forEach(function(box){ box.querySelectorAll(".chip").forEach(function(b){ b.onclick = function(){ var g = get(box.dataset.ck); g[0][g[1]] = b.dataset.v; save(); var y = window.scrollY; draw(); window.scrollTo(0,y); if(openW >= 0 || openT >= 0){ var f = app.querySelector(".sheet .wfocus"); if(f) f.focus(); } }; }); });
-      app.querySelectorAll("[data-ik]").forEach(function(el){ el.oninput = function(){ var g = get(el.dataset.ik); g[0][g[1]] = el.value; if(el.dataset.ik === "writer"){ try{ localStorage.setItem("leak-writer", el.value); }catch(e){} } save(); status(); }; el.onblur = function(){ if(tried){ var y = window.scrollY; draw(); window.scrollTo(0,y); } }; });
-      var reopenT = function(i){ openW = -1; openT = i; var y = window.scrollY; draw(); window.scrollTo(0,y); var f = app.querySelector(".wfocus"); if(f){ f.focus(); } };
+      app.querySelectorAll("[data-ik]").forEach(function(el){ el.oninput = function(){ var g = get(el.dataset.ik); g[0][g[1]] = el.value; if(el.dataset.ik === "note" && el.value.trim() && r.noteNone){ r.noteNone = false; var nc = app.querySelector('[data-cb="noteNone"]'); if(nc) nc.checked = false; el.placeholder = "特記事項"; } if(el.dataset.ik === "writer"){ try{ localStorage.setItem("anm-name", el.value.trim()); }catch(e){} } save(); status(); var e2 = check(); el.classList.toggle("todo", !tried && !!e2[el.dataset.ik]); }; el.onblur = function(){ if(tried){ var y = window.scrollY; draw(); window.scrollTo(0,y); } }; });
+      var reopenT = function(i){ openW = -1; openO = ""; openM = -1; openT = i; var y = window.scrollY; draw(); window.scrollTo(0,y); var f = app.querySelector(".wfocus"); if(f){ f.focus(); } };
       app.querySelectorAll("[data-topen]").forEach(function(b){ b.onclick = function(){ reopenT(+b.dataset.topen); }; });
       app.querySelectorAll("[data-tgo]").forEach(function(b){ b.onclick = function(){ reopenT(+b.dataset.tgo); }; });
-      var reopen = function(i){ openT = -1; openW = i; var y = window.scrollY; draw(); window.scrollTo(0,y); var f = app.querySelector(".wfocus"); if(f){ f.focus(); } };
+      var reopen = function(i){ openT = -1; openO = ""; openM = -1; openW = i; var y = window.scrollY; draw(); window.scrollTo(0,y); var f = app.querySelector(".wfocus"); if(f){ f.focus(); } };
       app.querySelectorAll("[data-wopen]").forEach(function(b){ b.onclick = function(){ reopen(+b.dataset.wopen); }; });
       app.querySelectorAll("[data-wgo]").forEach(function(b){ b.onclick = function(){ reopen(+b.dataset.wgo); }; });
-      app.querySelectorAll("[data-wclose]").forEach(function(b){ b.onclick = function(){ openW = -1; openT = -1; var y = window.scrollY; draw(); window.scrollTo(0,y); }; });
+      var tk = app.querySelector("[data-tk]"); if(tk) tk.onclick = function(){ r.teiki = !r.teiki; save(); var y = window.scrollY; draw(); window.scrollTo(0,y); };
+      var ib = app.querySelector("[data-info]"); if(ib) ib.onclick = function(){ showInfo = !showInfo; var y = window.scrollY; draw(); window.scrollTo(0,y); };
+      app.querySelectorAll("[data-oopen]").forEach(function(b){ b.onclick = function(){ openW = -1; openT = -1; openM = -1; openO = b.dataset.oopen; var y = window.scrollY; draw(); window.scrollTo(0,y); var f = app.querySelector(".sheet .wfocus"); if(f) f.focus(); }; });
+      var wa = app.querySelector("[data-wadd]"); if(wa) wa.onclick = function(){ r.wells.push({st:"測定", depth:"", water:""}); try{ localStorage.setItem(WK, r.wells.length); }catch(e){} save(); openT = -1; openO = ""; openW = r.wells.length-1; var y = window.scrollY; draw(); window.scrollTo(0,y); var f = app.querySelector(".sheet .wfocus"); if(f) f.focus(); };
+      var wd = app.querySelector("[data-wdel]"); if(wd) wd.onclick = function(){ if(!confirm("検知管"+r.wells.length+"を消しますか？")) return; r.wells.pop(); try{ localStorage.setItem(WK, r.wells.length); }catch(e){} save(); openW = -1; var y = window.scrollY; draw(); window.scrollTo(0,y); };
+      app.querySelectorAll("[data-dry]").forEach(function(b){ b.onclick = function(){ var w = r.wells[+b.dataset.dry]; w.water = "0"; save();
+        if(w.depth === ""){ var y = window.scrollY; draw(); window.scrollTo(0,y); var f = app.querySelector('.sheet [data-ik$=".depth"]'); if(f) f.focus(); return; } // 深さがまだなら深さへ
+        openW = -1; var y2 = window.scrollY; draw(); window.scrollTo(0,y2); }; });
+      app.querySelectorAll("[data-tab]").forEach(function(b){ b.onclick = function(){ tab = b.dataset.tab; openW = -1; openT = -1; openO = ""; var y = window.scrollY; draw(); window.scrollTo(0,y); }; });
+      app.querySelectorAll("[data-mlist]").forEach(function(b){ b.onclick = function(){ openW = -1; openT = -1; openO = ""; openM = 0; var y = window.scrollY; draw(); window.scrollTo(0,y); }; });
+      app.querySelectorAll("[data-wclose]").forEach(function(b){ b.onclick = function(){ openW = -1; openT = -1; openO = ""; openM = -1; var y = window.scrollY; draw(); window.scrollTo(0,y); }; });
       var ocr = app.querySelector("[data-ocr]");
       if(ocr) ocr.onchange = function(){
         var f = ocr.files && ocr.files[0], m = document.getElementById("ocrmsg"); if(!f) return;
@@ -384,15 +620,8 @@ label.f.big input{font-size:1.4rem;min-height:52px}
         if(window.Tesseract) run(); else { var sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"; sc.onload = run; sc.onerror = function(){ say("読み取りの準備ができませんでした。電波のある所で試してください"); }; document.head.appendChild(sc); }
       };
       app.querySelectorAll("[data-sk]").forEach(function(el){ el.onchange = function(){ var g = get(el.dataset.sk); g[0][g[1]] = el.value; save(); var y = window.scrollY; draw(); window.scrollTo(0,y); }; });
-      app.querySelectorAll("[data-cb]").forEach(function(el){ el.onchange = function(){ r[el.dataset.cb] = el.checked; save(); var y = window.scrollY; draw(); window.scrollTo(0,y); }; });
-      var t = app.querySelector("[data-to]"); t.oninput = function(){ to = t.value.trim(); try{ localStorage.setItem("leak-to", to); }catch(e){} status(); };
-      document.getElementById("reset").onclick = function(){
-        if(!r.nowNo.trim()){ alert("今回No.が入っていません。"); return; }
-        if(!confirm("送信は終わりましたか？\n前回No.を「"+r.nowNo+"」、前回の日付を「"+fmtJ(r.date)+"」に更新して、入力を消します。")) return;
-        done[site.id] = {last:r.date, prevDate:fmtJ(r.date), prevNo:r.nowNo};
-        try{ localStorage.setItem("leak-done-v1", JSON.stringify(done)); }catch(e){}
-        localStorage.removeItem(RK); start(); window.scrollTo(0,0);
-      };
+      app.querySelectorAll("[data-cb]").forEach(function(el){ el.onchange = function(){ r[el.dataset.cb] = el.checked; if(el.dataset.cb === "noteNone" && el.checked) r.note = ""; save(); var y = window.scrollY; draw(); window.scrollTo(0,y); }; });
+      var fr = document.getElementById("fresh"); if(fr) fr.onclick = function(){ if(!confirm("この現場の入力を全部消して、最初からにしますか？")) return; localStorage.removeItem(RK); start(); window.scrollTo(0,0); };
     }
     function fmtJ(d){ var p = String(d).split("-"); return p.length===3 ? p[0]+"年"+(+p[1])+"月"+(+p[2])+"日" : d; }
     function body(){
@@ -409,16 +638,37 @@ label.f.big input{font-size:1.4rem;min-height:52px}
         if(r.mob.length){ L.push(""); L.push("■移動タンク"); r.mob.forEach(function(v,i){ var mv = mobs[i]||{}; L.push((mv["車番"]||("車両"+(i+1)))+"："+v.done+(v.done==="実施" ? "　ステッカーNo."+v.sticker : "")); }); }
       }
       L.push(""); L.push("■特記事項"); L.push(r.noteNone ? "なし" : r.note);
-      L.push(""); L.push("写真：クラウドにアップロード済み");
+      if(String(r.mnoteAll||"").trim()){ L.push(""); L.push("■計量器（台帳と違っていた所）"); L.push(r.mnoteAll); } L.push("定期点検："+(r.teiki ? "あり" : "なし"));
+      
       L.push(""); L.push("■台帳の更新"); L.push("前回の日付 → "+fmtJ(r.date)+"／前回No. → "+r.nowNo);
       return L.join("\n");
     }
     document.getElementById("send").onclick = function(){
       tried = true;
       var e = check();
-      if(Object.keys(e).length){ draw(); var first = app.querySelector(".bad"); if(first) first.scrollIntoView({behavior:"smooth", block:"center"}); return; }
-      location.href = "mailto:"+to+"?subject="+encodeURIComponent("【漏洩検査】"+site.site+(site.fac?" "+site.fac:"")+" "+r.date)+"&body="+encodeURIComponent(body());
+      if(Object.keys(e).length){ var fk = Object.keys(e).filter(function(k){ return /^(wells|tanks|pump|lorry|mob)/.test(k); })[0] || ""; if(/^(wells|tanks|pump|lorry)/.test(fk)) tab = "tank"; else if(/^mob/.test(fk)) tab = "mob"; draw(); var first = app.querySelector(".bad, .ng"); if(first) first.scrollIntoView({behavior:"smooth", block:"center"}); return; }
+      var sb = document.getElementById("send"), st = document.getElementById("state");
+      if(sb.dataset.busy) return;
+      sb.dataset.busy = "1"; st.className = "state"; st.textContent = "天気を確認中…";
+      getWeather(function(w){
+        delete sb.dataset.busy;
+        if(w){ r.weather = w; wState = "ok"; }
+        else if(!r.weather){ wState = "fail"; draw(); var f = app.querySelector("[data-ck='weather']"); if(f) f.scrollIntoView({behavior:"smooth", block:"center"}); return; }
+        sendNow();
+      });
     };
+    function sendNow(){
+      var td = new Date(); r.date = td.getFullYear()+"-"+("0"+(td.getMonth()+1)).slice(-2)+"-"+("0"+td.getDate()).slice(-2); // 日付は送信した日
+      if(myName) r.writer = myName;
+      var href = "mailto:"+to+"?subject="+encodeURIComponent("【漏洩検査】"+site.site+(site.fac?" "+site.fac:"")+" "+r.date)+"&body="+encodeURIComponent(body());
+      // 送信と同時に台帳の前回No.・前回の日付を更新して、入力を消す（メールを送り損ねたときのために中身は残しておく）
+      done[site.id] = {last:r.date, prevDate:fmtJ(r.date), prevNo:r.nowNo};
+      try{ localStorage.setItem("leak-done-v1", JSON.stringify(done)); localStorage.setItem("leak-sent|"+site.id, JSON.stringify({href:href, no:r.nowNo, at:Date.now()})); }catch(x){}
+      localStorage.removeItem(RK); justSent = site.id; justSentDate = r.date; nextSite = null;
+      var sentId = site.id; findNext(sentId, r.date, function(n){ if(justSent !== sentId) return; nextSite = n; if(n){ var y = window.scrollY; drawNow(); window.scrollTo(0,y); } });
+      location.href = href;
+      setTimeout(function(){ start(); window.scrollTo(0,0); }, 300);
+    }
     draw(); autoWeather();
   }
 })();

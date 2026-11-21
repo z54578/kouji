@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 290" font-family="'BIZ UDPGothic','Hiragino Sans','Noto Sans JP',sans-serif">
+<rect width="380" height="290" fill="#ffffff"/>
+<rect x="160" y="46" width="60" height="24" fill="none" stroke="#1C2326" stroke-width="1.6"/>
+<text x="190.0" y="61.8" font-size="10" text-anchor="middle" fill="#1C2326">ポンプ室</text>
+<text x="150" y="86" font-size="9" text-anchor="end" fill="#1C2326">通気管○</text>
+<text x="230" y="86" font-size="9" text-anchor="start" fill="#1C2326">○給油口</text>
+<line x1="40" y1="78" x2="160" y2="78" stroke="#1C2326" stroke-width="2"/>
+<line x1="220" y1="78" x2="340" y2="78" stroke="#1C2326" stroke-width="2"/>
+<line x1="40" y1="78" x2="40" y2="280" stroke="#1C2326" stroke-width="2"/>
+<line x1="340" y1="78" x2="340" y2="280" stroke="#1C2326" stroke-width="2"/>
+<line x1="40" y1="280" x2="340" y2="280" stroke="#1C2326" stroke-width="2"/>
+<text x="190" y="230" font-size="18" text-anchor="middle" fill="#1C2326">駐 車 場</text>
+</svg>
