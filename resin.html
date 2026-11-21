@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap">
+<meta name="theme-color" content="#1C2326">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ANM">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>樹脂配管 切断長計算</title>
+<style>
+:root{
+  --bg:#ECEEEC; --surface:#FFFFFF; --ink:#1C2326; --muted:#475055; --line:#B4BCC0;
+  --field:#FFF3A6; --field-line:#D9C200; --focus:#1F4E8C; --sel:#1C2326; --sel-ink:#FFFFFF;
+  --cut:#1F4E8C; --cut-soft:#DCE6F3; --xred:#B42318;
+  color-scheme: light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+    --field:#3B3713; --field-line:#8F8320; --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C;
+    --cut:#9DBDEB; --cut-soft:#24344A; --xred:#FF8A7A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161A1C; --surface:#20262A; --ink:#E8ECEE; --muted:#9AA4A9; --line:#384146;
+  --field:#3B3713; --field-line:#8F8320; --focus:#7FA8E0; --sel:#E8ECEE; --sel-ink:#161A1C;
+  --cut:#9DBDEB; --cut-soft:#24344A; --xred:#FF8A7A; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;line-height:1.25;margin:4px 0 12px;font-weight:700}
+h2{font-size:1.05rem;margin:22px 0 8px;font-weight:700}
+.num{font-variant-numeric:tabular-nums}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px}
+.chip{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;padding:0 6px}
+.chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.fieldname{font-size:.85rem;color:var(--muted);margin:12px 0 6px}
+.fieldname:first-child{margin-top:0}
+.sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.fits{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.fits .chip{font-size:.92rem}
+.fits .chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;min-height:76px;line-height:1.25}
+.fits .chip svg,.shape svg{width:44px;height:28px;flex:none}
+.ico{display:flex;gap:4px}
+.sizes .chip{min-height:52px;padding:4px 2px;line-height:1.15}
+.sizes .chip small{display:block;font-size:.78rem;font-weight:400}
+.shapes{display:grid;gap:8px;margin-bottom:12px}
+.shape{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px}
+.shape b{display:block}
+.shape span{font-size:.85rem;color:var(--muted)}
+.fig{margin:14px 0 0;color:var(--muted)}
+.kinds2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fig svg{width:100%;height:auto;display:block}
+.fig figcaption{font-size:.8rem;margin-top:2px}
+.inrow{display:flex;align-items:center;gap:8px}
+.inrow input{flex:1;min-width:0;height:52px;text-align:right;padding:0 12px;font-size:1.5rem;font-family:inherit;border:2px solid var(--field-line);background:var(--field);color:var(--ink);border-radius:8px}
+.inrow .unit{color:var(--muted)}
+.manual{margin-top:8px}
+.manual input{height:44px;font-size:1.15rem}
+.answer{background:var(--cut-soft);color:var(--cut);border-radius:10px;padding:14px;margin-top:14px}
+.answer .lbl{font-size:.9rem;font-weight:700}
+.answer .big{font-size:2.6rem;line-height:1.1;font-weight:700}
+.answer .big small{font-size:1rem;font-weight:400;margin-left:4px}
+.answer .how{font-size:.85rem;margin-top:6px;color:var(--ink)}
+.hint{font-size:.85rem;color:var(--muted)}
+.btn{width:100%;height:50px;margin-top:12px;border-radius:10px;border:0;background:var(--sel);color:var(--sel-ink);font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}
+.list{display:grid;gap:6px}
+.item{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.item .t{font-size:.85rem;color:var(--muted)}
+.item b{font-size:1.25rem}
+.x{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;width:36px;height:36px;font-size:1rem;cursor:pointer}
+.ghost{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:8px 14px;font-family:inherit;font-size:.9rem;cursor:pointer}
+.actions{display:flex;justify-content:flex-end;margin-top:10px}
+.tbl{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow-x:auto;margin-bottom:12px}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{color:var(--muted);font-weight:700;font-size:.8rem}
+th:first-child,td:first-child{text-align:left;font-weight:700}
+.note{font-size:.82rem;color:var(--muted);margin:8px 0 0}
+[hidden]{display:none!important}
+button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+.back{display:inline-block;margin:0 0 6px;padding:6px 0;color:var(--muted);text-decoration:none;font-size:.9rem}
+.refs{display:grid;gap:6px;margin-bottom:8px}
+.refs > div{display:grid;grid-template-columns:40px 1fr;align-items:center;gap:6px}
+.refs span{font-weight:700;font-size:.9rem}
+#fit1,#fit2{display:none}
+.pp{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;gap:0;margin-bottom:6px}
+.pe{min-height:96px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px}
+.pe[aria-expanded="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.pe .ico svg{height:28px;width:auto}
+.pe b{font-size:.92rem;line-height:1.25;text-align:center}
+.pe small{font-size:.72rem;color:var(--muted)}
+.pbar{height:16px;background:var(--cut);border-radius:3px}
+.fitpop{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border-radius:12px;padding:10px;margin-bottom:8px}
+.fitpop .pt{grid-column:1/3;font-weight:700;font-size:.9rem}
+.fitpop button{min-height:56px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 8px;text-align:left}
+.fitpop button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.fitpop .ico svg{height:22px;width:auto}
+details.figs{margin:6px 0 10px}
+details.figs summary{cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px 0}
+.resbar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:2px solid var(--ink);padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.resbar .answer{margin:0;padding:0;background:none;min-height:0}
+.resbar .answer .big{font-size:2.1rem;line-height:1.1}
+.resbar .answer .lbl{font-size:.75rem}
+.resbar .answer .how{font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
+.resbar .answer .hint{font-size:.85rem;padding:0;background:none}
+.resbar .btn{margin:0;min-height:56px;padding:0 14px;font-size:.9rem;white-space:nowrap}
+body{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
+.item{display:grid;grid-template-columns:44px 1fr 40px;align-items:center;gap:8px}
+.item b{font-size:1.6rem}
+.item b small{font-size:.85rem}
+.ck{width:40px;height:40px;border-radius:10px;border:2px solid var(--ink);background:var(--surface);color:#fff;font-size:1.3rem;font-weight:700;cursor:pointer}
+.ck[aria-pressed="true"]{background:#2E9E4F;border-color:#2E9E4F}
+.item.done b{text-decoration:line-through;color:var(--muted)}
+.ng{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px}
+.ngh{font-size:.95rem;margin-bottom:6px}
+.bar{display:grid;grid-template-columns:44px 1fr;gap:6px;align-items:center;margin:4px 0}
+.bl{font-size:.75rem;color:var(--muted);font-weight:700}
+.bt{display:flex;height:40px;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.bt span{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--cut);color:#fff;font-size:.78rem;font-weight:700;border-right:2px solid var(--surface);min-width:0;overflow:hidden;white-space:nowrap}
+.bt span i{font-style:normal;font-size:.62rem;font-weight:400;opacity:.85}
+.bt span.dn{background:#2E9E4F}
+.bt span.rs{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,var(--line) 6px,var(--line) 8px);color:var(--muted);border-right:0}
+.btn.share{flex:1}
+.isl{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}
+.isl button{flex:none;min-height:42px;padding:0 14px;border-radius:21px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.isl button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.dg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:12px}
+.dg svg{display:block;width:100%;height:auto}
+.inp{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.inp .k{width:34px;height:34px;border-radius:50%;background:var(--xred);color:var(--surface);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.inp .k.b{background:#2F6FD6}
+.inp .k.g{background:var(--muted)}
+.inp .t b{display:block;font-size:.95rem}
+.inp .t small{display:block;color:var(--muted);font-size:.75rem;line-height:1.35}
+.inp input{width:96px;min-height:48px;border:2px solid var(--field-line);background:var(--field);border-radius:10px;font:inherit;font-size:1.3rem;text-align:right;padding:0 8px;color:var(--ink)}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 4px}
+.tg button{min-height:46px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.tg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cuts{width:100%;border-collapse:collapse;table-layout:fixed}
+.cuts col.c2{width:84px} .cuts col.c3{width:40px}
+.cuts td,.cuts th{border-bottom:1px solid var(--line);padding:8px 4px;text-align:left;vertical-align:middle}
+.cuts th{font-size:.8rem;color:var(--muted)}
+.cuts .n{text-align:right;white-space:nowrap}
+.cuts td:first-child{font-size:.95rem;font-weight:700;padding-left:34px;position:relative}
+.cuts .no{position:absolute;left:2px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:var(--cut);color:var(--surface);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.cuts b{font-size:1.45rem}
+.cuts small{display:block;color:var(--muted);font-size:.78rem;font-weight:400;overflow-wrap:anywhere;line-height:1.4}
+.cuts .q{font-weight:700;text-align:center}
+.pend b{font-size:1rem;color:var(--muted)}
+.warnbox{background:#FDECEA;color:#8A1C12;border-radius:10px;padding:8px 12px;font-weight:700;font-size:.88rem;margin:8px 0}
+.parts{width:100%;border-collapse:collapse}
+.parts td{border-bottom:1px solid var(--line);padding:7px 4px}
+.parts td:last-child{text-align:right;font-weight:700}
+.bar{display:grid;grid-template-columns:58px 1fr;gap:6px;align-items:center;margin:4px 0}
+.bl{font-size:.72rem;color:var(--muted);font-weight:700;line-height:1.25}
+.bt{display:flex;height:38px;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.bt span{display:flex;align-items:center;justify-content:center;background:var(--cut);color:#fff;font-size:.76rem;font-weight:700;border-right:2px solid var(--surface);min-width:0;overflow:hidden;white-space:nowrap}
+.bt span.rs{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,var(--line) 6px,var(--line) 8px);color:var(--muted);border-right:0}
+.btns{display:grid;gap:8px;margin-top:12px}
+.btn2{min-height:54px;border-radius:12px;border:0;background:var(--ink);color:var(--bg);font:inherit;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.btn3{min-height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.bt span{flex-direction:column;line-height:1.15}
+.okbox{margin:8px 0 0;padding:10px 12px;border-radius:10px;background:var(--cut-soft);color:var(--ink);font-size:.92rem;line-height:1.6}
+.cntsel button[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.cntsel button:disabled{opacity:.35}
+.hs{font-size:1rem;margin:14px 0 6px}
+.hs:first-child{margin-top:0}
+.steps{margin:0;padding-left:1.6em;line-height:1.6}
+.steps li{padding:6px 0;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:0}
+.pno{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--cut);color:var(--surface);font-size:.8rem;font-weight:700;margin:0 2px;vertical-align:-3px}
+[hidden]{display:none !important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:30;max-width:90vw}
+</style>
+<style>
+.sz{grid-template-columns:repeat(3,1fr)}
+.fit{grid-template-columns:repeat(3,1fr)}
+.fit button{font-size:.88rem;line-height:1.2;padding:6px 2px;min-height:52px}
+.endh{display:flex;align-items:center;gap:8px;margin:14px 0 6px;font-weight:700}
+.endh .tag{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:.85rem}
+.ins{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ins div{background:var(--cut-soft);border-radius:10px;padding:8px 10px;font-size:.85rem}
+.ins b{display:block;font-size:1.4rem;color:var(--cut)}
+.cl{list-style:none;margin:0;padding:0}
+.cl li{display:grid;grid-template-columns:34px 1fr auto 34px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.cl li.done .v{text-decoration:line-through;color:var(--muted)}
+.cl .ck{width:30px;height:30px;border-radius:8px;border:2px solid var(--line);background:var(--surface);font:inherit;font-weight:700;color:var(--cut);cursor:pointer}
+.cl li.done .ck{background:var(--cut);color:var(--surface);border-color:var(--cut)}
+.cl .v{font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.cl .d{font-size:.8rem;color:var(--muted)}
+.cl .x{border:0;background:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
+body{padding-bottom:110px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./index.html">← メニューに戻る</a>
+  <h1>樹脂配管 切断長計算</h1>
+  <p class="lead">エスロン バリアパイプSS（EF継手）。両はしの継手を選んで<b>芯々</b>を入れると、管を切る長さと差し込み印が出ます。</p>
+
+  <div class="card">
+    <h2 style="margin-top:0">呼び径</h2>
+    <div class="tg sz" id="sz"></div>
+
+    <div class="endh"><span class="tag">A</span>左はしの継手</div>
+    <div class="tg fit" id="fa"></div>
+    <div class="endh"><span class="tag">B</span>右はしの継手</div>
+    <div class="tg fit" id="fb"></div>
+
+    <div id="fig" style="margin-top:14px"></div>
+
+    <div class="inp" style="margin-top:6px"><span class="k">芯</span><div class="t"><b>芯々（A の芯 → B の芯）</b><small>mm</small></div><input id="cc" inputmode="decimal" placeholder="—"></div>
+    <div class="ins" id="ins"></div>
+    <details style="margin-top:10px"><summary style="cursor:pointer;color:var(--muted);font-size:.85rem;padding:6px 0">寸法の出どころ（カタログ 2025.7 改訂3版）</summary>
+      <div class="note" id="src" style="line-height:1.7;margin-top:4px"></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">切断リスト</h2>
+    <ul class="cl" id="list"></ul>
+    <p class="note" id="empty" style="margin:0">「リストに入れる」で、ここにたまります。切ったら ✓。</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">5m管の取り方</h2>
+    <div id="nest"></div>
+  </div>
+
+  <div class="btns">
+    <button class="btn3" id="share" type="button">Teamsで送る（共有）</button>
+    <button class="btn3" id="clear" type="button">リストを全部消す</button>
+  </div>
+</div>
+
+<div class="resbar">
+  <div class="answer"><div class="lbl" id="rl">切る長さ</div><div class="big" id="rv">—<small>mm</small></div><div class="how" id="rh">芯々を入れてください</div></div>
+  <button class="btn" id="add" type="button" style="white-space:nowrap">リストに入れる</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // カタログ値（単位mm）：H＝芯から端面、Le＝差し込み深さ。管の端は芯から (H − Le) のところ
+  var D = {
+    "30":  {pipe:"BP305",   el:{H:74, Le:45, code:"BPEL30"},  e45:null,                         tr:{H:70, Le:45.4, code:"BPET30（L140）"},  tb:{H:115, Le:45.4, code:"BPET30"},  so:{H:46.5, Le:45, code:"BPES30（L93）"}},
+    "50":  {pipe:"BP505",   el:{H:92, Le:52, code:"BPEL50"},  e45:{H:78, Le:52, code:"BPE4L50"},    tr:{H:85.5, Le:52, code:"BPET50（L171）"},  tb:{H:143, Le:52, code:"BPET50"},    so:{H:54, Le:52, code:"BPES50（L108）"}},
+    "100": {pipe:"BP1H5",   el:{H:136, Le:69, code:"BPEL1H"}, e45:{H:120, Le:69, code:"BPE4L1H"},   tr:{H:134, Le:69, code:"BPET1H（L268）"},   tb:{H:209, Le:69, code:"BPET1H"},    so:{H:71, Le:69, code:"BPES1HN（L142）"}}
+  };
+  var NAME = {el:"エルボ 90°", e45:"エルボ 45°", tr:"チーズ（通り）", tb:"チーズ（枝）", so:"ソケット"};
+  var STOCK = 5000, KEY = "resin-v1";
+  var st = {sz:"50", a:"el", b:"el", cc:"", list:[]};
+  try{ var sv = JSON.parse(localStorage.getItem(KEY) || "null"); if(sv && D[sv.sz]) st = sv; }catch(e){}
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+  function num(v){ var n = parseFloat(String(v||"").replace(/[^\d.\-]/g,"")); return isFinite(n) ? n : NaN; }
+  function r1(v){ return Math.round(v*10)/10; }
+  function F(k){ return D[st.sz][k]; }
+  function off(k){ var f = F(k); return f ? f.H - f.Le : NaN; }
+
+  function calc(){
+    var cc = num(st.cc), oa = off(st.a), ob = off(st.b);
+    if(!(cc > 0) || !isFinite(oa) || !isFinite(ob)) return null;
+    return {cut: Math.round(cc - oa - ob), cc:cc, oa:oa, ob:ob, la:F(st.a).Le, lb:F(st.b).Le};
+  }
+  function btns(id, cur, keys, label, onpick){
+    var el = document.getElementById(id);
+    el.innerHTML = keys.map(function(k){ var dis = label(k) === null; return '<button type="button" data-k="'+k+'" aria-pressed="'+(k===cur)+'"'+(dis?' disabled':'')+'>'+(dis ? NAME[k]+'<br><small>なし</small>' : label(k))+'</button>'; }).join("");
+    el.querySelectorAll("button").forEach(function(b){ b.onclick = function(){ onpick(b.dataset.k); }; });
+  }
+  function fig(){
+    // 横から見た略図：A継手 — 管 — B継手、芯々と切る長さ
+    var r = calc(), w = 340, cx1 = 46, cx2 = 294, y = 46;
+    var g = '<svg viewBox="0 0 '+w+' 108" width="100%" style="max-width:460px;display:block;margin:0 auto">';
+    var fitDraw = function(cx, k, side){
+      var s = side;  // -1 左はし, +1 右はし
+      if(k === "el" || k === "e45") return '<path d="M'+(cx - s*0)+' '+(y-26)+' L'+cx+' '+(y-6)+' Q'+cx+' '+y+' '+(cx-s*10)+' '+y+'" fill="none" stroke="currentColor" stroke-width="12"/><text x="'+cx+'" y="'+(y-30)+'" font-size="10" text-anchor="middle" fill="var(--muted)">'+(k==="el"?"90°":"45°")+'</text>';
+      if(k === "tr") return '<rect x="'+(cx-14)+'" y="'+(y-7)+'" width="28" height="14" rx="2" fill="currentColor"/><rect x="'+(cx-7)+'" y="'+(y-26)+'" width="14" height="20" fill="currentColor"/>';
+      if(k === "tb") return '<rect x="'+(cx-7)+'" y="'+(y-26)+'" width="14" height="40" rx="2" fill="currentColor"/><rect x="'+(cx-(s<0?0:14))+'" y="'+(y-7)+'" width="14" height="14" fill="currentColor"/>';
+      return '<rect x="'+(cx-14)+'" y="'+(y-8)+'" width="28" height="16" rx="3" fill="currentColor"/>';
+    };
+    g += '<line x1="'+(cx1+12)+'" y1="'+y+'" x2="'+(cx2-12)+'" y2="'+y+'" stroke="#E0A800" stroke-width="9"/>';
+    g += fitDraw(cx1, st.a, -1) + fitDraw(cx2, st.b, 1);
+    g += '<text x="'+cx1+'" y="'+(y+28)+'" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">A</text><text x="'+cx2+'" y="'+(y+28)+'" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">B</text>';
+    // 芯々
+    g += '<line x1="'+cx1+'" y1="'+(y+38)+'" x2="'+cx2+'" y2="'+(y+38)+'" stroke="var(--xred)" stroke-width="2"/><path d="M'+cx1+' '+(y+38)+' l8 -4 v8 Z M'+cx2+' '+(y+38)+' l-8 -4 v8 Z" fill="var(--xred)"/>';
+    g += '<text x="'+((cx1+cx2)/2)+'" y="'+(y+56)+'" font-size="12" font-weight="700" text-anchor="middle" fill="var(--xred)">芯々 '+(r ? r.cc : '')+'</text>';
+    // 切る長さ
+    g += '<text x="'+((cx1+cx2)/2)+'" y="'+(y-12)+'" font-size="12" font-weight="700" text-anchor="middle" fill="var(--cut)">切る長さ '+(r ? r.cut : '—')+'</text>';
+    g += '</svg>';
+    document.getElementById("fig").innerHTML = g;
+  }
+  function draw(){
+    btns("sz", st.sz, ["30","50","100"], function(k){ return k; }, function(k){ st.sz = k; if(!F(st.a)) st.a = "el"; if(!F(st.b)) st.b = "el"; save(); draw(); });
+    var keys = ["el","e45","tr","tb","so"], lab = function(k){ return F(k) ? NAME[k] : null; };
+    btns("fa", st.a, keys, lab, function(k){ st.a = k; save(); draw(); });
+    btns("fb", st.b, keys, lab, function(k){ st.b = k; save(); draw(); });
+    fig();
+    var r = calc();
+    document.getElementById("rl").textContent = "切る長さ（"+st.sz+"）";
+    document.getElementById("rv").innerHTML = (r ? (r.cut > 0 ? r.cut : '<span style="color:var(--xred)">短すぎ</span>') : '—')+'<small>mm</small>';
+    document.getElementById("rh").textContent = r ? '芯々 '+r.cc+' − A '+r1(r.oa)+' − B '+r1(r.ob) : '芯々を入れてください';
+    document.getElementById("ins").innerHTML = '<div>A 側の差し込み印<b>'+F(st.a).Le+' mm</b>管の端から</div><div>B 側の差し込み印<b>'+F(st.b).Le+' mm</b>管の端から</div>';
+    var s = D[st.sz], t = [];
+    ["el","e45","tr","tb","so"].forEach(function(k){ var f = s[k]; if(f) t.push(NAME[k]+' '+f.code+'：芯から端面 '+f.H+'、差し込み '+f.Le+' → 引く寸法 <b>'+r1(f.H-f.Le)+'</b>'); });
+    document.getElementById("src").innerHTML = t.join('<br>')+'<br>直管 '+s.pipe+'：5,000mm<br>※カタログの寸法は参考値。施工は施工要領書に従う';
+    drawList();
+  }
+  function drawList(){
+    var ul = document.getElementById("list");
+    ul.innerHTML = st.list.map(function(it, i){ return '<li class="'+(it.done?'done':'')+'"><button class="ck" type="button" data-i="'+i+'">'+(it.done?'✓':'')+'</button><div><div class="d">'+it.sz+'　'+NAME[it.a]+' ↔ '+NAME[it.b]+'</div><div class="d">芯々 '+it.cc+'・差し込み印 '+it.la+' / '+it.lb+'</div></div><div class="v">'+it.cut+'</div><button class="x" type="button" data-x="'+i+'" aria-label="消す">×</button></li>'; }).join("");
+    document.getElementById("empty").hidden = st.list.length > 0;
+    ul.querySelectorAll("[data-i]").forEach(function(b){ b.onclick = function(){ var it = st.list[+b.dataset.i]; it.done = !it.done; save(); drawList(); }; });
+    ul.querySelectorAll("[data-x]").forEach(function(b){ b.onclick = function(){ st.list.splice(+b.dataset.x, 1); save(); drawList(); }; });
+    drawNest();
+  }
+  function drawNest(){
+    var el = document.getElementById("nest"), h = '';
+    var by = {}; st.list.forEach(function(it, i){ (by[it.sz] = by[it.sz] || []).push({len:it.cut, tag:"#"+(i+1)}); });
+    var szs = Object.keys(by);
+    if(!szs.length){ el.innerHTML = '<p class="note" style="margin:0">切断リストに入れると、ここに出ます。</p>'; return; }
+    szs.forEach(function(sz){
+      var bars = [];
+      by[sz].sort(function(a,b){ return b.len-a.len; }).forEach(function(p){
+        var b = bars.filter(function(b){ return STOCK - b.used >= p.len; }).sort(function(a,c){ return (STOCK-a.used)-(STOCK-c.used); })[0];
+        if(!b){ b = {used:0, ps:[]}; bars.push(b); } b.ps.push(p); b.used += p.len; });
+      h += '<p style="margin:8px 0 4px;font-weight:700">'+sz+'：5m管 '+bars.length+'本</p>';
+      bars.forEach(function(b, k){ var s = 0, rest = STOCK - b.used;
+        h += '<div class="bar"><div class="bl">'+(k+1)+'本目</div><div class="bt">'+b.ps.map(function(p){ return '<span style="flex:'+p.len+'">'+(p.len/STOCK >= 0.09 ? p.len+'<i>'+p.tag+'</i>' : '')+'</span>'; }).join("")+(rest>0?'<span class="rs" style="flex:'+rest+'">残り '+rest+'</span>':'')+'</div></div>';
+        h += '<div style="margin:4px 0 12px;font-size:1rem;line-height:1.6">📏 端から印：'+b.ps.map(function(p){ s += p.len; return '<b>'+s+'</b>'; }).join(' → ')+'</div>'; });
+    });
+    h += '<p class="note" style="margin:0">樹脂管カッターは切り代がほぼ出ない前提です。</p>';
+    el.innerHTML = h;
+  }
+  var cc = document.getElementById("cc"); cc.value = st.cc || "";
+  cc.addEventListener("input", function(){ st.cc = cc.value; save(); draw(); });
+  document.getElementById("add").onclick = function(){ var r = calc(); if(!r || r.cut <= 0) return; st.list.push({sz:st.sz, a:st.a, b:st.b, cc:r.cc, cut:r.cut, la:r.la, lb:r.lb, done:false}); st.cc = ""; cc.value = ""; save(); draw(); };
+  document.getElementById("clear").onclick = function(){ if(st.list.length && confirm("切断リストを全部消しますか？")){ st.list = []; save(); draw(); } };
+  document.getElementById("share").onclick = function(){
+    var t = ["樹脂配管 切断リスト（エスロン バリアパイプSS）"];
+    st.list.forEach(function(it, i){ t.push("#"+(i+1)+" "+it.sz+"　"+it.cut+"mm（芯々"+it.cc+"・"+NAME[it.a]+"↔"+NAME[it.b]+"・差し込み印 "+it.la+"/"+it.lb+"）"+(it.done?" ✓":"")); });
+    var text = t.join("\n");
+    if(navigator.share){ navigator.share({title:"樹脂配管 切断リスト", text:text}).catch(function(){}); return; }
+    if(navigator.clipboard) navigator.clipboard.writeText(text).then(function(){ alert("コピーしました。Teamsに貼り付けてください"); }); else prompt("コピーしてください", text);
+  };
+  draw();
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>
