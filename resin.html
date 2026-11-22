@@ -190,6 +190,10 @@ h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
 .pno{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--cut);color:var(--surface);font-size:.8rem;font-weight:700;margin:0 2px;vertical-align:-3px}
 [hidden]{display:none !important}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:30;max-width:90vw}
+.cutsw{display:grid;grid-template-columns:repeat(3,1fr);margin:6px 0 10px;border:2px solid var(--ink,#1C2326);border-radius:12px;overflow:hidden}
+.cutsw a{display:flex;align-items:center;justify-content:center;min-height:44px;color:var(--ink,#1C2326);background:var(--surface,#fff);text-decoration:none;font-weight:700;font-size:.95rem;border-left:1px solid var(--line,#B4BCC0)}
+.cutsw a:first-child{border-left:0}
+.cutsw a[aria-current="page"]{background:var(--ink,#1C2326);color:var(--surface,#fff)}
 </style>
 <style>
 .sz{grid-template-columns:repeat(3,1fr)}
@@ -214,6 +218,7 @@ body{padding-bottom:110px}
 <body>
 <div class="wrap">
   <a class="back" href="./index.html">← メニューに戻る</a>
+  <nav class="cutsw" aria-label="切断長計算の種類"><a href="./thread.html">ねじ込み</a><a href="./weld.html">溶接</a><a href="./resin.html" aria-current="page">樹脂</a></nav>
   <h1>樹脂配管 切断長計算</h1>
   <p class="lead">エスロン バリアパイプSS（EF継手）。両はしの継手を選んで<b>芯々</b>を入れると、管を切る長さと差し込み印が出ます。</p>
 
@@ -367,5 +372,6 @@ body{padding-bottom:110px}
 <script>
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>
+<script>try{ localStorage.setItem("anm-cut-last", "./resin.html"); }catch(e){}</script>
 </body>
 </html>

@@ -42,7 +42,7 @@ a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .reg-in input{width:100%;min-height:52px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1.3rem;padding:8px 12px}
 .reg-in .err{color:#B42318;font-size:.85rem;margin:6px 0 0;min-height:1.2em}
 .reg-in .go{width:100%;min-height:52px;margin-top:8px;border:0;border-radius:10px;background:var(--ink);color:var(--surface);font-family:inherit;font-weight:700;font-size:1.05rem;cursor:pointer}
-.mhead{display:flex;align-items:flex-start;gap:10px}.mhead p{flex:1;margin-top:0}
+.mhead{display:flex;align-items:center;gap:10px;margin:0 0 12px}.mhead .me{flex:1;margin:0}.mhead .medit{margin-left:auto}
 .medit{flex:none;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:.85rem;cursor:pointer}
 .mbar{position:sticky;top:0;z-index:5;display:flex;flex-direction:column;gap:8px;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--ink);color:var(--surface);font-size:.85rem}
 .mbar[hidden]{display:none}
@@ -67,39 +67,77 @@ a.tool.off{display:none}
 .sos b{font-size:1.3rem;line-height:1.2}
 .sos small{font-size:.82rem;opacity:.92}
 .sos:active{transform:translateY(1px);box-shadow:none}
+/* 2列のコンパクト表示（並べ替え中は1列） */
+#tools:not(.editing){display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#tools:not(.editing) a.tool{grid-template-columns:1fr;justify-items:center;align-content:center;text-align:center;gap:6px;margin:0;padding:14px 8px 12px;border-left:1px solid var(--line);border-top:5px solid var(--ink);min-height:98px}
+#tools:not(.editing) a.tool svg{width:52px;height:36px}
+#tools:not(.editing) a.tool b{font-size:.95rem;line-height:1.3}
+#tools:not(.editing) a.tool span{display:none}
+#tools:not(.editing) a.tool.off{display:none}
+@media (min-width:700px){#tools:not(.editing){grid-template-columns:1fr 1fr 1fr}}
+/* 予定表 */
+.sched{background:var(--surface);border:2px solid var(--ink);border-radius:12px;margin:0 0 14px;overflow:hidden}
+.sched[hidden]{display:none}
+.sch-hd{display:flex;align-items:center;gap:6px;padding:8px 8px 8px 14px;border-bottom:1px solid var(--line)}
+.sch-hd b{flex:1;font-size:1.1rem}
+.sch-hd b small{font-weight:400;font-size:.8rem;color:var(--muted);margin-left:6px}
+.sch-hd button{min-width:44px;min-height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer}
+.sch-hd button:disabled{opacity:.3}
+.sch-row{display:grid;grid-template-columns:4.6em 1fr;gap:8px;padding:8px 12px;border-top:1px solid var(--line);font-size:.92rem;line-height:1.4}
+.sch-row:first-of-type{border-top:0}
+.sch-row > span{font-weight:700;color:var(--muted);font-size:.85rem;padding-top:1px}
+.sch-row.me{background:#EEF4FF}
+.sch-row.me > span{color:#1F4E8C}
+.sch-row a{color:var(--ink);text-decoration:underline;text-decoration-color:#2F6FD6;text-underline-offset:3px}
+.sch-row i{font-style:normal;font-size:.75rem;color:var(--muted);margin-right:4px}
+.sch-it + .sch-it{margin-top:2px}
+.sch-none{padding:12px 14px;color:var(--muted);font-size:.9rem}
+.sch-team{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:8px 12px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.sch-team button{min-height:30px;padding:0 8px;border:1px solid var(--line);border-radius:15px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.78rem;cursor:pointer}
+.sch-team button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+@media (prefers-color-scheme: dark){.sch-row.me{background:#1E2A3D}.sch-row.me > span{color:#9DBDEB}}
+.today{display:flex;align-items:baseline;gap:12px;margin:0 0 10px}
+.today b{font-size:1.35rem}
+.today span{font-size:1rem;color:var(--muted)}
+.schbtn{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:16px;border-radius:12px;background:var(--surface);border:2px solid var(--ink);color:var(--ink);text-decoration:none}
+.schbtn b{font-size:1.3rem}.schbtn small{font-size:.8rem;color:var(--muted)}
+#tools:not(.editing) .mcat{grid-column:1/-1}
+.mcat{display:flex;align-items:center;gap:8px;margin:6px 0 0}
+.mcat b{display:flex;align-items:center;gap:8px;font-size:1rem}
+.mcat b span{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--surface);font-size:.85rem}
+.mcat.empty{display:none!important}
+#tools.editing .mcat{margin:16px 0 8px;padding:6px 0;border-bottom:2px solid var(--ink)}
+#tools.editing .mcat .mc{margin-left:auto}
+a.tool{position:relative}
+a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72rem;font-weight:700;color:var(--muted)}
+#tools.editing a.tool .num{position:static;font-size:.8rem}
+#tools.editing a.tool{grid-template-columns:1fr;row-gap:6px;padding:10px 10px 10px 12px}
+#tools.editing a.tool .mc{grid-column:1/-1;justify-content:flex-end}
+#tools.editing .mcat .mc{grid-column:auto}
+#tools.editing a.tool svg{display:none}
+.mc select{min-height:42px;flex:1;max-width:160px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.8rem}
+.ver{position:fixed;right:8px;bottom:calc(6px + env(safe-area-inset-bottom,0px));font-size:.72rem;color:var(--muted);background:var(--bg);padding:2px 6px;border-radius:6px;opacity:.85}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>ANM</h1>
+  <div class="today"><b id="tDate"></b><span id="tTemp"></span></div>
   <a class="sos" href="./accident.html"><span>⚠</span><b>事故が起きたら</b><small>漏洩事故・ガス欠事故・その他</small></a>
-  <div class="me" id="me" hidden>名前：<b id="meName"></b><button type="button" id="meEdit">変える</button></div>
-  <div class="mhead"><p>使うアプリを選んでください。一度開けば、電波のない現場でも使えます。</p><button type="button" id="mEdit" class="medit">並べ替え</button></div>
-  <div class="mbar" id="mBar" hidden><span>↑↓で順番、「隠す」で非表示。このスマホだけの設定です</span><div><button type="button" id="mReset">元に戻す</button><button type="button" id="mDone" class="done">完了</button></div></div>
+  <a class="schbtn" href="./schedule.html"><b>予定表</b><small>準備中</small></a>
+  <div class="mhead"><div class="me" id="me" hidden>名前：<b id="meName"></b><button type="button" id="meEdit">変える</button></div><button type="button" id="mEdit" class="medit">並べ替え</button></div>
+  <div class="mbar" id="mBar" hidden><span id="mInfo">↑↓で順番、「カテゴリ」で移す場所、「隠す」で非表示。このスマホだけの設定です</span><div><button type="button" id="mReset">最初の並びに戻す</button><button type="button" id="mDone" class="done">完了</button></div></div>
   <div id="tools">
   <a class="tool" href="./pc.html">
     <svg viewBox="0 0 48 32" aria-hidden="true"><circle cx="24" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="24" cy="16" r="8" fill="none" stroke="#2F6FD6" stroke-width="4"/></svg>
     <div><b>PC打設量計算</b><span>配管ごとに、パイプコーティングの主剤（白）と硬化剤（青）の量を出す</span></div>
   </a>
-  <a class="tool" href="./thread.html">
-    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M4 11 H27 V27" stroke-width="9"/><path d="M4 4.5 V17.5 M20.5 27 H33.5" stroke-width="2.5"/></svg>
-    <div><b>ねじ込み配管 切断長計算</b><span>エルボ・チーズ・ソケット・フランジなどから、管を切る長さを出す</span></div>
+  <a class="tool" href="./cut.html">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M4 11 H27 V27" stroke-width="9"/><path d="M4 4.5 V17.5 M20.5 27 H33.5" stroke-width="2.5"/><path d="M36 4 L44 12 M44 4 L36 12" stroke="#2F6FD6" stroke-width="2.5"/></svg>
+    <div><b>配管 切断長計算</b><span>ねじ込み・溶接・樹脂（エスロン）。継手から管を切る長さを出す</span></div>
   </a>
-  <a class="tool" href="./weld.html">
-    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M4 11 H12 A15 15 0 0 1 27 26 V28" stroke-width="9"/><path d="M4 4.5 V17.5 M20.5 28 H33.5" stroke-width="2.5"/></svg>
-    <div><b>溶接配管 切断長計算</b><span>突合せ溶接継手・SOPフランジから、管を切る長さを出す</span></div>
-  </a>
-<a class="tool" href="./foam.html">
+  <a class="tool" href="./foam-set.html">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M16 4 H32 V8 H16 Z" stroke-width="2.5"/><path d="M24 8 V15" stroke-width="2.5"/><path d="M12 19 Q24 11 36 19" stroke-width="2.5"/><circle cx="14" cy="25" r="2.5" stroke-width="2"/><circle cx="24" cy="26" r="3" stroke-width="2"/><circle cx="34" cy="25" r="2.5" stroke-width="2"/></svg>
-    <div><b>泡消火配管 寸法計算</b><span>x を入れるだけで、切断寸法・部材・4m管の取り方を出す</span></div>
-  </a>
-<a class="tool" href="./foam-unit.html">
-    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="10" y="3" width="18" height="26" rx="2" stroke-width="2.5"/><path d="M28 10 H38 V29 M28 16 H34 V29" stroke-width="2.5"/></svg>
-    <div><b>泡消火ユニット 配管寸法</b><span>出す方向と本数を選ぶと、ユニットの中の管の長さを出す</span></div>
-  </a>
-<a class="tool" href="./resin.html">
-    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M4 16 H18 M30 16 H44" stroke-width="5"/><rect x="17" y="10" width="14" height="12" rx="2" stroke-width="2.5"/><path d="M21 7 V10 M27 7 V10" stroke-width="2"/></svg>
-    <div><b>樹脂配管 切断長計算</b><span>エスロン バリアパイプSS。芯々から管を切る長さと差し込み印を出す</span></div>
+    <div><b>泡消火 寸法計算</b><span>泡消火配管（x から切断寸法）とユニットの中の配管寸法</span></div>
   </a>
 <a class="tool" href="./sump-hole.html">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="6" y="4" width="36" height="24" rx="2" stroke-width="2.5"/><circle cx="20" cy="16" r="6" stroke-width="2"/><path d="M17 16 h6 M20 13 v6" stroke-width="2"/><circle cx="33" cy="17" r="4" stroke-width="2"/></svg>
@@ -107,27 +145,35 @@ a.tool.off{display:none}
   </a>
   <a class="tool" href="./zfile.html">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><circle cx="24" cy="16" r="13" stroke-width="2.5"/><circle cx="24" cy="16" r="6.5" stroke-width="2.5"/></svg>
-    <div><b>工事課ハンドブック</b><span>材料・工具・機械・車両の説明、月次点検、棚卸し、見積・注文</span></div>
+    <div><b>工事課ハンドブック</b><span>材料・工具・機械の説明と棚卸し</span></div>
   </a>
   <a class="tool" href="./gyomu.html">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="4" y="10" width="26" height="14" rx="1" stroke-width="2.5"/><path d="M30 14 H38 L44 20 V24 H30 Z" stroke-width="2.5"/><circle cx="12" cy="27" r="3" fill="currentColor" stroke="none"/><circle cx="37" cy="27" r="3" fill="currentColor" stroke="none"/></svg>
-    <div><b>業務課ハンドブック</b><span>ハイエース・ユニック車・移動車、検査機器、検査の手順、車両の月次点検</span></div>
+    <div><b>業務課ハンドブック</b><span>検査機器・検査の手順</span></div>
   </a>
-  <a class="tool" href="./fill.html">
-    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="10" y="3" width="24" height="26" rx="2" stroke-width="2.5"/><path d="M15 10 H29 M15 16 H29 M15 22 H23" stroke-width="2"/><path d="M30 24 L42 12 L45 15 L33 27 L29 28 Z" stroke-width="2"/></svg>
-    <div><b>未登録の記入フォーム</b><span>工事課ハンドブックの空欄を、わかる所から書いて送る</span></div>
-  </a>
-  <a class="tool" href="./leak-list.html">
-    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="8" y="3" width="32" height="26" rx="2" stroke-width="2.5"/><path d="M8 10 H40" stroke-width="2.5"/><path d="M14 16 H20 M24 16 H34 M14 22 H20 M24 22 H34" stroke-width="2"/></svg>
-    <div><b>漏洩検査 台帳</b><span>全現場を期限順に表示。今月の件数・期限切れ・地域ごとの絞り込み</span></div>
-  </a>
-  <a class="tool" href="./leak.html">
+  <a class="tool" href="./leak-set.html">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><ellipse cx="24" cy="18" rx="18" ry="9" stroke-width="2.5"/><path d="M24 2 V9" stroke-width="2.5"/><path d="M36 4 C38 8 38 10 36 12 C34 10 34 8 36 4 Z" fill="#2F6FD6" stroke="none"/></svg>
-    <div><b>漏洩検査 記録</b><span>現場で記入して、全部埋まったら事務員さんに送信（作業員用）</span></div>
+    <div><b>漏洩検査</b><span>台帳（期限順の一覧）・記録（現場で記入して送信）・現場データ作成</span></div>
   </a>
-  <a class="tool" href="./leak-admin.html">
-    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="10" y="3" width="24" height="26" rx="2" stroke-width="2.5"/><path d="M15 10 H29 M15 16 H29 M15 22 H23" stroke-width="2"/><path d="M36 20 L44 20 M40 16 L40 24" stroke-width="2.5"/></svg>
-    <div><b>漏洩検査 現場データ作成</b><span>現場ごとの情報を入れて、作業員に送るリンクを作る（事務所用）</span></div>
+  <a class="tool" href="./zfile.html?app=order">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M4 5 H10 L15 22 H38 L42 10 H12" stroke-width="2.5"/><circle cx="17" cy="27" r="2.5" stroke-width="2"/><circle cx="35" cy="27" r="2.5" stroke-width="2"/><path d="M22 15 H34" stroke="#2F6FD6" stroke-width="2.5"/></svg>
+    <div><b>材料注文</b><span>材料をカートに入れて、注文・見積のメールを作る</span></div>
+  </a>
+  <a class="tool" href="./zfile.html?app=rent">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="4" y="12" width="24" height="12" rx="2" stroke-width="2.5"/><circle cx="11" cy="26" r="3" stroke-width="2"/><circle cx="22" cy="26" r="3" stroke-width="2"/><path d="M28 16 H36 L40 20 V24 H28" stroke-width="2.5"/><path d="M8 12 V7 H20 V12" stroke-width="2"/><path d="M38 4 L44 4 L44 10" stroke="#2F6FD6" stroke-width="2.5"/></svg>
+    <div><b>レンタル依頼</b><span>コンプレッサー・ユニックなどを片桐機械に依頼するメールを作る</span></div>
+  </a>
+  <a class="tool" href="./zfile.html?app=inn">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M4 26 V10 M4 18 H44 V26 M44 18 V14 A4 4 0 0 0 40 10 H22 V18" stroke-width="2.5"/><circle cx="13" cy="14" r="3.5" stroke-width="2"/><path d="M34 6 L36 3 L38 6" stroke="#2F6FD6" stroke-width="2"/></svg>
+    <div><b>宿検索</b><span>地域ごとの宿の一覧。電話・地図</span></div>
+  </a>
+  <a class="tool" href="./vehicle.html">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="4" y="10" width="26" height="14" rx="1" stroke-width="2.5"/><path d="M30 14 H38 L44 20 V24 H30 Z" stroke-width="2.5"/><circle cx="12" cy="27" r="3" fill="currentColor" stroke="none"/><circle cx="37" cy="27" r="3" fill="currentColor" stroke="none"/><path d="M10 17 L14 21 L22 13" stroke="#2F6FD6" stroke-width="2.5"/></svg>
+    <div><b>車両管理</b><span>工事課・業務課の車両の記録・車検・月次点検</span></div>
+  </a>
+  <a class="tool" href="./kentei.html">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="8" y="3" width="20" height="26" rx="2" stroke-width="2.5"/><rect x="12" y="7" width="12" height="7" rx="1" stroke-width="2"/><path d="M28 12 H34 V24" stroke-width="2.5"/><circle cx="38" cy="22" r="6" stroke="#2F6FD6" stroke-width="2.5"/><path d="M35 22 L37.5 24.5 L41.5 19.5" stroke="#2F6FD6" stroke-width="2"/></svg>
+    <div><b>検定</b><span>計量器（7年）・ローリー（5年）</span></div>
   </a>
   <a class="tool" href="./remote-meter.html">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="6" y="8" width="22" height="20" rx="2" stroke-width="2.5"/><path d="M11 22 A6 6 0 0 1 23 22" stroke-width="2"/><path d="M17 22 L20 17" stroke-width="2"/><path d="M33 12 A6 6 0 0 1 39 6 M33 18 A12 12 0 0 1 45 6" stroke="#2F6FD6" stroke-width="2.5"/></svg>
@@ -138,7 +184,6 @@ a.tool.off{display:none}
     <div><b>非常用発電機負荷試験</b><span>準備中</span></div>
   </a>
   </div>
-  <div class="foot">継手の寸法はJISの規格値です。使い始めは手元の継手で実測して確かめてください。</div>
 </div>
 <div class="reg" id="reg" hidden><div class="reg-in" role="dialog" aria-modal="true" aria-labelledby="regT">
   <h2 id="regT">名前を登録してください</h2>
@@ -165,37 +210,82 @@ a.tool.off{display:none}
   show(); if(!get()) open();
 })();
 (function(){
-  // メニューの順番・非表示（このスマホだけ）
-  var KEY = "anm-menu-v1", box = document.getElementById("tools");
-  var all = [].slice.call(box.querySelectorAll("a.tool")), def = all.map(function(a){ return a.getAttribute("href"); });
-  var st = {order:[], hidden:[]}; try{ st = JSON.parse(localStorage.getItem(KEY)) || st; }catch(e){}
+  // 今日の日付と、今いる所の気温（Open-Meteo）
+  var d = new Date(); document.getElementById("tDate").textContent = (d.getMonth()+1)+"月"+d.getDate()+"日（"+"日月火水木金土".charAt(d.getDay())+"）";
+  var tt = document.getElementById("tTemp"), TK = "anm-temp-v1";
+  var show = function(v){ tt.textContent = v == null ? "" : "現在地 "+(Math.round(v*10)/10)+"℃"; };
+  var c = null; try{ c = JSON.parse(localStorage.getItem(TK)); }catch(e){}
+  if(c) show(c.t);
+  if(!c || Date.now() - c.at > 30*60*1000){
+    if(navigator.geolocation) navigator.geolocation.getCurrentPosition(function(p){
+      fetch("https://api.open-meteo.com/v1/forecast?latitude="+p.coords.latitude.toFixed(3)+"&longitude="+p.coords.longitude.toFixed(3)+"&current=temperature_2m&timezone=Asia%2FTokyo")
+        .then(function(r){ return r.json(); }).then(function(j){ var t = j && j.current ? j.current.temperature_2m : null; if(t == null) return; show(t); try{ localStorage.setItem(TK, JSON.stringify({t:t, at:Date.now()})); }catch(e){} }).catch(function(){});
+    }, function(){}, {timeout:8000, maximumAge:600000});
+  }
+})();
+(function(){
+  // メニュー：カテゴリごとに番号。カテゴリの順番・アプリの順番・入れるカテゴリ・非表示をスマホごとに変えられる
+  var KEY = "anm-menu-v2", box = document.getElementById("tools");
+  var all = [].slice.call(box.querySelectorAll("a.tool"));
+  var CATS = [
+    {k:"calc", n:"計算", a:["./pc.html","./cut.html","./foam-set.html","./sump-hole.html"]},
+    {k:"insp", n:"検定・検査", a:["./leak-set.html","./kentei.html","./remote-meter.html","./gen-load.html"]},
+    {k:"prep", n:"手配", a:["./zfile.html?app=order","./zfile.html?app=rent","./zfile.html?app=inn","./vehicle.html"]},
+    {k:"book", n:"ハンドブック", a:["./zfile.html","./gyomu.html"]}
+  ];
+  var hrefOf = function(a){ return a.getAttribute("href"); }, byHref = function(h){ return all.filter(function(a){ return hrefOf(a) === h; })[0]; };
+  var st = null; try{ st = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  function fresh(){ return {cats:CATS.map(function(c){ return c.k; }), items:CATS.reduce(function(o,c){ o[c.k] = c.a.slice(); return o; }, {}), hidden:[]}; }
+  if(!st || !st.cats) st = fresh();
+  // 新しく増えたアプリ・カテゴリを足す、なくなったものを消す
+  CATS.forEach(function(c){ if(st.cats.indexOf(c.k) < 0){ st.cats.push(c.k); st.items[c.k] = []; } });
+  var placed = {}; st.cats.forEach(function(k){ st.items[k] = (st.items[k]||[]).filter(function(h){ if(placed[h] || !byHref(h)) return false; placed[h] = 1; return true; }); });
+  CATS.forEach(function(c){ c.a.forEach(function(h){ if(!placed[h] && byHref(h)){ st.items[c.k].push(h); placed[h] = 1; } }); });
+  all.forEach(function(a){ var h = hrefOf(a); if(!placed[h]){ st.items[st.cats[0]].push(h); placed[h] = 1; } });
   var editing = false;
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
-  function order(){ var o = st.order.filter(function(h){ return def.indexOf(h) >= 0; }); def.forEach(function(h){ if(o.indexOf(h) < 0) o.push(h); }); return o; }
-  function byHref(h){ return all.filter(function(a){ return a.getAttribute("href") === h; })[0]; }
+  var nameOf = function(k){ return (CATS.filter(function(c){ return c.k === k; })[0] || {n:k}).n; };
+  var esc = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
   function render(){
-    var o = order();
-    o.forEach(function(h, i){ var a = byHref(h); box.appendChild(a); var off = st.hidden.indexOf(h) >= 0; a.classList.toggle("off", off);
-      var c = a.querySelector(".mc"); if(c) c.remove();
-      if(editing){ c = document.createElement("div"); c.className = "mc";
-        c.innerHTML = '<button type="button" data-up aria-label="上へ"'+(i === 0 ? ' disabled' : '')+'>↑</button><button type="button" data-down aria-label="下へ"'+(i === o.length-1 ? ' disabled' : '')+'>↓</button><button type="button" class="hide" data-hide>'+(off ? '表示' : '隠す')+'</button>';
-        a.appendChild(c);
-        c.querySelector("[data-up]").onclick = function(e){ e.preventDefault(); move(h,-1); };
-        c.querySelector("[data-down]").onclick = function(e){ e.preventDefault(); move(h,1); };
-        c.querySelector("[data-hide]").onclick = function(e){ e.preventDefault(); var k = st.hidden.indexOf(h); if(k >= 0) st.hidden.splice(k,1); else st.hidden.push(h); save(); render(); };
-      }
+    all.forEach(function(a){ var c = a.querySelector(".mc"); if(c) c.remove(); var n = a.querySelector(".num"); if(n) n.remove(); });
+    box.querySelectorAll(".mcat").forEach(function(x){ x.remove(); });
+    st.cats.forEach(function(k, ci){
+      var hd = document.createElement("div"); hd.className = "mcat";
+      hd.innerHTML = '<b><span>'+(ci+1)+'</span>'+esc(nameOf(k))+'</b>'+(editing ? '<div class="mc"><button type="button" data-cu'+(ci === 0 ? ' disabled' : '')+' aria-label="カテゴリを上へ">↑</button><button type="button" data-cd'+(ci === st.cats.length-1 ? ' disabled' : '')+' aria-label="カテゴリを下へ">↓</button></div>' : '');
+      box.appendChild(hd);
+      if(editing){ hd.querySelector("[data-cu]").onclick = function(){ mv(st.cats, ci, -1); }; hd.querySelector("[data-cd]").onclick = function(){ mv(st.cats, ci, 1); }; }
+      var list = st.items[k], vis = 0;
+      list.forEach(function(h, i){
+        var a = byHref(h); if(!a) return; var off = st.hidden.indexOf(h) >= 0; a.classList.toggle("off", off); box.appendChild(a);
+        if(!off) vis++;
+        if(editing){
+          var c = document.createElement("div"); c.className = "mc";
+          c.innerHTML = '<button type="button" data-up'+(i === 0 ? ' disabled' : '')+' aria-label="上へ">↑</button><button type="button" data-down'+(i === list.length-1 ? ' disabled' : '')+' aria-label="下へ">↓</button>'+
+            '<select data-cat aria-label="カテゴリ">'+st.cats.map(function(k2, j){ return '<option value="'+k2+'"'+(k2 === k ? ' selected' : '')+'>'+(j+1)+' '+esc(nameOf(k2))+'</option>'; }).join("")+'</select>'+
+            '<button type="button" class="hide'+(off ? ' on' : '')+'" data-hide>'+(off ? '表示' : '隠す')+'</button>';
+          a.appendChild(c);
+          c.querySelector("[data-up]").onclick = function(e){ e.preventDefault(); mv(list, i, -1); };
+          c.querySelector("[data-down]").onclick = function(e){ e.preventDefault(); mv(list, i, 1); };
+          c.querySelector("[data-cat]").onclick = function(e){ e.preventDefault(); e.stopPropagation(); };
+          c.querySelector("[data-cat]").onchange = function(e){ var to = e.target.value; list.splice(i,1); st.items[to].push(h); save(); render(); };
+          c.querySelector("[data-hide]").onclick = function(e){ e.preventDefault(); var x = st.hidden.indexOf(h); if(x >= 0) st.hidden.splice(x,1); else st.hidden.push(h); save(); render(); };
+        }
+      });
+      if(!editing && !vis) hd.classList.add("empty");
     });
     box.classList.toggle("editing", editing);
     document.getElementById("mBar").hidden = !editing; document.getElementById("mEdit").hidden = editing;
   }
-  function move(h, d){ var o = order(), i = o.indexOf(h), j = i + d; if(j < 0 || j >= o.length) return; o.splice(i,1); o.splice(j,0,h); st.order = o; save(); render(); }
-  box.addEventListener("click", function(e){ if(editing && e.target.closest("a.tool")) e.preventDefault(); });
+  function mv(arr, i, d){ var j = i + d; if(j < 0 || j >= arr.length) return; var x = arr.splice(i,1)[0]; arr.splice(j,0,x); save(); render(); }
+  box.addEventListener("click", function(e){ if(editing && e.target.closest("a.tool") && !e.target.closest("select")) e.preventDefault(); });
   document.getElementById("mEdit").onclick = function(){ editing = true; render(); };
   document.getElementById("mDone").onclick = function(){ editing = false; render(); window.scrollTo(0,0); };
-  document.getElementById("mReset").onclick = function(){ if(!confirm("順番と非表示を最初の状態に戻しますか？")) return; st = {order:[], hidden:[]}; save(); render(); };
+  document.getElementById("mReset").onclick = function(){ st = fresh(); save(); render(); };
+  try{ localStorage.removeItem("anm-usage-v1"); localStorage.removeItem("anm-menu-v1"); }catch(e){}
   render();
 })();
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>
+<div class="ver">v215</div>
 </body>
 </html>

@@ -172,6 +172,11 @@ img.dwg{display:block;width:100%;height:auto;border:1px solid var(--line);border
 .foot{font-size:.8rem;color:var(--muted);margin-top:18px}
 input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .jobaddr{margin:4px 0 0;font-size:.82rem;color:var(--muted)}
+/* 切り出したアプリでは、関係ないボタンを隠す */
+.hb #inspbtn,.hb #shaken,.hb #nInsp{display:none!important}
+.app-veh #invbtn,.app-veh #cartbtn,.app-veh #nCart,.app-veh .grps,.app-veh .recent{display:none!important}
+.app-rent .toolbar,.app-rent #shaken,.app-rent #cartbtn,.app-rent .bnav,.app-rent .grps,.app-rent .recent,
+.app-inn .toolbar,.app-inn #shaken,.app-inn #cartbtn,.app-inn .bnav,.app-inn .grps,.app-inn .recent{display:none!important}
 </style>
 </head>
 <body>
@@ -558,6 +563,21 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     {k:"車両", g:"veh", d:"ハイエース・ユニック車など", cats:["車両"]},
     {k:"検査", g:"mat", d:"検査機器・検査の手順", cats:["検査機器","検査の手順"]}
   ];
+  // アプリの切り出し：?app=rent（レンタル依頼）・inn（宿検索）・veh（車両管理）。何もなければハンドブック（切り出した分は出さない）
+  var APP = (location.search.match(/[?&]app=([a-z]+)/) || [])[1] || "";
+  var APPS = {veh:{t:"車両管理（業務課）", g:"veh", cats:["車両"], lead:"業務課の車両の説明・記録と月次点検。", back:"./vehicle.html", backT:"← 車両管理に戻る"}};
+  var OUT = ["車両"];
+  (function(){
+    var A = APPS[APP];
+    var keep = function(m){ var cs = Array.isArray(m.c) ? m.c : [m.c]; return A ? cs.some(function(c){ return A.cats.indexOf(c) >= 0; }) : !cs.every(function(c){ return OUT.indexOf(c) >= 0; }); };
+    M = M.filter(keep);
+    if(A){ GROUPS = [{k:A.t, g:A.g, d:"", cats:A.cats}]; CATS = A.cats.slice(); cur = A.cats[0]; }
+    else { GROUPS = GROUPS.filter(function(g){ return g.cats.some(function(c){ return OUT.indexOf(c) < 0; }); }).map(function(g){ return {k:g.k, g:g.g, d:g.d, cats:g.cats.filter(function(c){ return OUT.indexOf(c) < 0; })}; }); CATS = CATS.filter(function(c){ return OUT.indexOf(c) < 0; }); if(OUT.indexOf(cur) >= 0) cur = GROUPS[0].cats[0]; }
+    document.documentElement.classList.add(A ? "app-"+APP : "hb");
+    var h1 = document.querySelector("h1"), ld = document.querySelector(".lead2");
+    if(A){ h1.textContent = A.t; document.title = A.t; if(ld) ld.textContent = A.lead; var bk = document.querySelector("a.back"); if(bk && A.back){ bk.href = A.back; bk.textContent = A.backT; } }
+    else { h1.textContent = "業務課ハンドブック"; if(ld) ld.textContent = "検査機器・検査の手順の説明ができます。"; }
+  })();
   function grpOf(c){ for(var i=0;i<GROUPS.length;i++) if(GROUPS[i].cats.indexOf(c) >= 0) return GROUPS[i]; return GROUPS[0]; }
   function drawCats(){
     var G = grpOf(cur);

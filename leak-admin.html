@@ -64,11 +64,16 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,
   #form{columns:2;column-gap:16px}
   #form .card{break-inside:avoid;margin-top:0;margin-bottom:12px;display:inline-block;width:100%}
 }
+.cutsw{display:grid;grid-template-columns:1fr 1fr 1.5fr;margin:6px 0 10px;border:2px solid var(--ink,#1C2326);border-radius:12px;overflow:hidden}
+.cutsw a{display:flex;align-items:center;justify-content:center;min-height:44px;color:var(--ink,#1C2326);background:var(--surface,#fff);text-decoration:none;font-weight:700;font-size:.92rem;border-left:1px solid var(--line,#B4BCC0)}
+.cutsw a:first-child{border-left:0}
+.cutsw a[aria-current="page"]{background:var(--ink,#1C2326);color:var(--surface,#fff)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="./index.html">← メニューに戻る</a>
+  <nav class="cutsw" id="lsw" aria-label="漏洩検査の画面"><a href="./leak-list.html">台帳</a><a href="./leak.html">記録</a><a href="./leak-admin.html" aria-current="page">現場データ作成</a></nav>
   <h1>漏洩検査 現場データ作成（事務所用）</h1>
   <p class="lead">今まで紙に印刷していた内容を入れて「リンクを作る」を押すと、作業員に送る記録用紙のリンクができます。入力はこのスマホに残ります。</p>
   <div id="form"></div>
@@ -130,5 +135,6 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,
 <script>
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>
+<script>try{ localStorage.setItem("anm-leak-last", "./leak-admin.html"); }catch(e){}</script>
 </body>
 </html>

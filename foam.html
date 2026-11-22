@@ -190,11 +190,16 @@ h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
 .pno{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--cut);color:var(--surface);font-size:.8rem;font-weight:700;margin:0 2px;vertical-align:-3px}
 [hidden]{display:none !important}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:30;max-width:90vw}
+.cutsw{display:grid;grid-template-columns:repeat(2,1fr);margin:6px 0 10px;border:2px solid var(--ink,#1C2326);border-radius:12px;overflow:hidden}
+.cutsw a{display:flex;align-items:center;justify-content:center;min-height:44px;color:var(--ink,#1C2326);background:var(--surface,#fff);text-decoration:none;font-weight:700;font-size:.95rem;border-left:1px solid var(--line,#B4BCC0)}
+.cutsw a:first-child{border-left:0}
+.cutsw a[aria-current="page"]{background:var(--ink,#1C2326);color:var(--surface,#fff)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="./index.html">← メニューに戻る</a>
+  <nav class="cutsw" aria-label="泡消火の計算の種類"><a href="./foam.html" aria-current="page">泡消火配管</a><a href="./foam-unit.html">泡消火ユニット</a></nav>
   <h1>泡消火配管 寸法計算</h1>
   <p class="lead">赤い矢印 <b style="color:var(--xred)">x</b> の長さを測って入れるだけ。切断寸法と部材が出ます。</p>
   <div class="isl" id="isl"></div>
@@ -480,5 +485,6 @@ h2 .cnt{font-size:.85rem;font-weight:700;color:#2F6FD6;margin-left:6px}
 <script>
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>
+<script>try{ localStorage.setItem("anm-foam-last", "./foam.html"); }catch(e){}</script>
 </body>
 </html>
