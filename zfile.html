@@ -195,6 +195,7 @@ details.more > summary::after{content:none}
 .empty{color:var(--muted);text-align:center;padding:20px}
 .foot{font-size:.8rem;color:var(--muted);margin-top:18px}
 input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.jobaddr{margin:4px 0 0;font-size:.82rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -950,6 +951,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   var CKEY = "materials-cart-v1";
   var cart = {items:[], who:"", site:"", due:""};
   try{ var cs = JSON.parse(localStorage.getItem(CKEY)); if(cs && Array.isArray(cs.items)) cart = cs; }catch(e){}
+  if(!cart.who) cart.who = (function(){ try{ return localStorage.getItem("anm-name") || ""; }catch(e){ return ""; } })(); // 注文者：ANMに登録した名前
   function saveCart(){ try{ localStorage.setItem(CKEY, JSON.stringify(cart)); }catch(e){} }
   function findM(n){ for(var i=0;i<M.length;i++) if(M[i].n===n) return M[i]; return null; }
   function toast(t){ var el = document.getElementById("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.tm); toast.tm = setTimeout(function(){ el.hidden = true; }, t.length > 20 ? 4000 : 1800); }
@@ -959,17 +961,31 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     cart.items.forEach(function(it){ var k = it.order || ""; if(!g[k]){ g[k] = []; order.push(k); } g[k].push(it); });
     return {g:g, order:order};
   }
+  // 希望納期：カレンダーで選んだ日を「11月25日（水）」の形に
+  function isoToday(){ var d = new Date(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+  function dueTxt(v){ v = String(v||""); var m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/); if(!m) return v; var d = new Date(+m[1], +m[2]-1, +m[3]); return (+m[2])+"月"+(+m[3])+"日（"+"日月火水木金土".charAt(d.getDay())+"）"; }
+  // 現場名の候補：漏洩検査の台帳（sites.json）から
+  var siteNames = [], siteAddr = {}; fetch("sites.json").then(function(r){ return r.json(); }).then(function(l){ var seen = {}; l.forEach(function(x){ var n = (x.site+(x.fac ? " "+x.fac : "")).replace(/\s+/g," ").trim(); if(n && !seen[n]){ seen[n] = 1; siteNames.push(n); siteAddr[n] = String(x.addr||"").trim(); } }); var opts = siteNames.map(function(n){ return '<option value="'+esc(n)+'">'; }).join(""); var dl = document.getElementById("jobDL"); if(dl) dl.innerHTML = opts;
+    var gd = document.getElementById("siteDL"); if(!gd){ gd = document.createElement("datalist"); gd.id = "siteDL"; document.body.appendChild(gd); } gd.innerHTML = opts; }).catch(function(){});
   function mailFor(k, items, quote){
     var sp = k ? SUP[k] : null, reg = !!(sp && sp.mail);
     var lines = items.map(function(it){ return "・"+it.n+(it.size ? "　"+it.size : "")+"　"+it.qty; }).join("\n");
     var title = items[0].n + (items.length > 1 ? " ほか"+(items.length-1)+"点" : "");
     var subject = (quote ? "【見積・納期のお問い合わせ】" : reg ? "【注文】" : "【注文依頼】") + title;
     var body = (quote ? (sp && sp.person ? k+"\n"+sp.person+"様" : k+" ご担当者様")+"\n\nいつもお世話になっております。\n以下の材料の見積と納期を教えてください。" : reg ? (sp && sp.person ? k+"\n"+sp.person+"様" : k+" ご担当者様")+"\n\nいつもお世話になっております。\n以下の材料を注文します。" : "注文先が未登録の材料です。担当の方は注文をお願いします。") +
-      "\n\n"+lines+"\n\n希望納期："+(cart.due||"")+"\n納品場所："+((cart.dest||"会社")==="会社" ? "弊社（会社）" : "現場　"+(cart.site||""))+"\n注文者："+(cart.who||"")+(reg ? "\n\nよろしくお願いいたします。" : "");
+      "\n\n"+lines+"\n\n現場名："+(cart.job||"")+"\n希望納期："+dueTxt(cart.due)+"\n納品場所："+((cart.dest||"会社")==="会社" ? "弊社（会社）" : "現場　"+[cart.job||"", cart.site||""].filter(Boolean).join("　"))+"\n注文者："+(cart.who||"")+(reg ? "\n\nよろしくお願いいたします。" : "");
     var to = reg ? sp.mail : TEAM_CC.join(",");
     var cc = reg && TEAM_CC.length ? "cc="+TEAM_CC.join(",")+"&" : "";
     return "mailto:"+to+"?"+cc+"subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
   }
+  // 現場名を選ぶと、台帳の住所を納品先の住所に入れる
+  function wireJob(){ var el = document.getElementById("c-job"); if(!el) return;
+    var fill = function(){ cart.job = el.value; var a = siteAddr[el.value.replace(/\s+/g," ").trim()];
+      if(a){ cart.site = a; var s2 = document.getElementById("c-site"); if(s2) s2.value = a; var hn = document.getElementById("c-jobaddr"); if(hn){ hn.textContent = "住所："+a; hn.hidden = false; } }
+      saveCart(); };
+    el.oninput = fill; el.onchange = fill; }
+  // レンタル依頼：現場名を選ぶと住所も入れる
+  document.addEventListener("input", function(e){ var t = e.target; if(!t.matches || !t.matches('[data-rf="site"]')) return; var a = siteAddr[t.value.replace(/\s+/g," ").trim()]; if(!a) return; var box = t.closest(".rentform") || t.parentNode.parentNode; var ad = box.querySelector('[data-rf="addr"]'); if(ad) ad.value = a; });
   function drawCart(){
     var box = document.getElementById("cart");
     var h = '<div class="cartin"><div class="carthead"><h2>カート</h2><button type="button" class="gbtn" id="cclose">閉じる</button></div>';
@@ -979,9 +995,10 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     }
     h += cart.items.map(function(it, i){ return '<div class="citem"><div><b>'+esc(it.n)+'</b><span>'+(it.size ? esc(it.size)+'・' : '')+esc(it.qty)+'・'+(it.order ? esc(it.order) : '注文先未登録')+'</span></div><button type="button" class="gbtn" data-del="'+i+'" aria-label="'+esc(it.n)+'をカートから外す">外す</button></div>'; }).join("");
     h += '<label class="cfield">注文者<input id="c-who" value="'+esc(cart.who)+'" placeholder="名前"></label>'+
+      '<label class="cfield">現場名<input id="c-job" list="jobDL" value="'+esc(cart.job||"")+'" placeholder="例：〇〇石油 〇〇SS（入れると候補が出ます）"></label><datalist id="jobDL">'+siteNames.map(function(n){ return '<option value="'+esc(n)+'">'; }).join("")+'</datalist><p id="c-jobaddr" class="jobaddr"'+(cart.job && siteAddr[(cart.job||"").replace(/\s+/g," ").trim()] ? '' : ' hidden')+'>住所：'+esc(siteAddr[(cart.job||"").replace(/\s+/g," ").trim()]||"")+'</p>'+
          '<div class="cfield">納品場所<div class="chips" id="c-dest">'+["会社","現場"].map(function(x){ return '<button type="button" class="chip" data-d="'+x+'" aria-pressed="'+((cart.dest||"会社")===x)+'">'+x+'に納品</button>'; }).join("")+'</div></div>'+
-         ((cart.dest||"会社")==="現場" ? '<label class="cfield">現場名・住所<input id="c-site" value="'+esc(cart.site)+'" placeholder="例：〇〇SS 帯広市〇〇"></label>' : '')+
-         '<label class="cfield">希望納期<input id="c-due" value="'+esc(cart.due)+'" placeholder="例：11月10日"></label>';
+         ((cart.dest||"会社")==="現場" ? '<label class="cfield">納品する現場の住所<input id="c-site" value="'+esc(cart.site)+'" placeholder="例：帯広市〇〇"></label>' : '')+
+         '<label class="cfield">希望納期<input id="c-due" type="date" value="'+esc(/^\d{4}-\d{2}-\d{2}$/.test(cart.due||"") ? cart.due : "")+'" min="'+isoToday()+'"></label>'+(cart.due ? '<p class="cfield" style="margin:4px 0 0;font-size:.85rem">メールには「'+esc(dueTxt(cart.due))+'」と入ります</p>' : '');
     var gr = groups();
     gr.order.forEach(function(k){
       var sp = k ? SUP[k] : null, reg = !!(sp && sp.mail);
@@ -993,7 +1010,8 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
     h += '<p class="tnote" style="margin-top:14px">メールを送ったら、下のボタンでカートを空にしてください。</p><button type="button" class="gbtn" id="cdone" style="width:100%;margin-top:6px">注文済み・カートを空にする</button></div>';
     box.innerHTML = h;
     document.getElementById("cclose").onclick = closeCart;
-    [["c-who","who"],["c-site","site"],["c-due","due"]].forEach(function(p){ var el = document.getElementById(p[0]); if(el) el.oninput = function(){ cart[p[1]] = el.value; saveCart(); }; });
+    [["c-who","who"],["c-site","site"],["c-due","due"]].forEach(function(p){ var el = document.getElementById(p[0]); if(el) el.oninput = function(){ cart[p[1]] = el.value; saveCart(); }; if(p[0] === "c-due") el.onchange = function(){ cart.due = el.value; saveCart(); drawCart(); }; });
+    wireJob();
     box.querySelectorAll("#c-dest .chip").forEach(function(b){ b.onclick = function(){ cart.dest = b.dataset.d; saveCart(); var y = box.scrollTop; drawCart(); box.scrollTop = y; }; });
     box.querySelectorAll("[data-del]").forEach(function(b){ b.onclick = function(){ cart.items.splice(+b.dataset.del,1); saveCart(); updateCartBtn(); drawCart(); }; });
     box.querySelectorAll("[data-mail]").forEach(function(a){ a.onclick = function(){ var k = a.dataset.mail; a.href = mailFor(k, groups().g[k]); }; });
@@ -1150,6 +1168,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   try{ var p0 = JSON.parse(localStorage.getItem(PKEY)); if(p0 && p0.r) ps = p0; }catch(e){}
   if(!VEHS.some(function(v){ return v.n === ps.veh; })) ps.veh = VEHS[0].n;
   if(ps.p1 === undefined){ ps.p1 = ps.boss || ""; ps.p2 = ps.staff || ""; }
+  if(!ps.p1) ps.p1 = (function(){ try{ return localStorage.getItem("anm-name") || ""; }catch(e){ return ""; } })(); // 点検者1：ANMに登録した名前
   function savePs(){ try{ localStorage.setItem(PKEY, JSON.stringify(ps)); }catch(e){} }
   function month(){ var d = new Date(); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"; }
   function rk(i){ return ps.veh+"|"+month()+"|"+i; }
@@ -1199,7 +1218,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
       "\n\n内容：\n"+ng.join("\n")+"\n\n理由：安全に作業・走行するため、修理・交換が必要です。\n修理先：\n概算費用：\n修理希望日：\n\n決裁：　部長　　　課長　　　リーダー";
   }
   function sendText(text, subject, to){
-    location.href = "mailto:"+to.join(",")+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(text);
+    anmMail("mailto:"+to.join(",")+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(text));
   }
   function shareText(text, subject){
     if(navigator.share){ navigator.share({title:subject, text:subject+"\n\n"+text}).catch(function(){}); }
@@ -1207,7 +1226,7 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   }
   function openInsp(){ drawInsp(); document.getElementById("insp").hidden = false; document.body.style.overflow = "hidden"; }
   // レンタル（片桐機械）
-  var RENT_TO = { name:"片桐機械株式会社", person:"卜部係長", kana:"うらべ", mail:"" }; // メールアドレスが決まったら mail に入れる
+  var RENT_TO = { name:"片桐機械株式会社", person:"卜部係長", kana:"うらべ", mail:"h0539urabe@katagiri-g.com" }; // 営業課 卜部洋人 係長
   var WD = ["日","月","火","水","木","金","土"];
   function jd(v){ if(!v) return ""; var p = v.split("-"), d = new Date(+p[0], +p[1]-1, +p[2]); return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日（"+WD[d.getDay()]+"）"; }
   function rentHtml(m){
@@ -1221,9 +1240,9 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
       '<div class="cfield">搬入'+tm+'<div class="chips" data-rc="in"><button type="button" class="chip" data-v="あり" aria-pressed="false">搬入してもらう</button><button type="button" class="chip" data-v="なし" aria-pressed="false">取りに行く</button></div></div>'+
       '<div class="cfield">引取'+tm+'<div class="chips" data-rc="out"><button type="button" class="chip" data-v="あり" aria-pressed="false">引き取ってもらう</button><button type="button" class="chip" data-v="なし" aria-pressed="false">返しに行く</button></div></div>'+
       '<label class="cfield">台数<input data-rf="qty" inputmode="numeric" value="1"></label>'+
-      '<label class="cfield">現場名<input data-rf="site" placeholder="例：〇〇石油 〇〇SS"></label>'+
+      '<label class="cfield">現場名<input data-rf="site" list="siteDL" placeholder="例：〇〇石油 〇〇SS（入れると候補が出ます）"></label>'+
       '<label class="cfield">現場住所<input data-rf="addr" placeholder="例：帯広市〇〇"></label>'+
-      '<label class="cfield">注文者<input data-rf="who" placeholder="名前"></label>'+
+      '<label class="cfield">注文者<input data-rf="who" placeholder="名前" value="'+esc((function(){ try{ return localStorage.getItem("anm-name") || ""; }catch(e){ return ""; } })())+'"></label>'+
       '<div class="rmsg"></div>'+
       '<a href="#" class="pbtn rentgo" style="display:flex;align-items:center;justify-content:center;text-decoration:none;margin-top:10px">レンタルを依頼するメールを作る（全員にCC）</a></div>';
   }
@@ -1456,6 +1475,37 @@ input:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{o
   drawCats(); drawList();
 })();
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+<script>
+// メールのプレビュー：メールを開く前に、宛先・件名・本文を確認する画面を出す
+(function(){
+  var css = document.createElement("style");
+  css.textContent = ".mpv{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}"+
+    ".mpv[hidden]{display:none}.mpv-in{width:100%;max-width:640px;max-height:92vh;display:flex;flex-direction:column;background:var(--surface,#fff);color:var(--ink,#1C2326);border-radius:14px 14px 0 0;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px))}"+
+    "@media (min-width:700px){.mpv{align-items:center}.mpv-in{border-radius:14px}}"+
+    ".mpv-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}.mpv-hd b{flex:1;font-size:1.1rem}"+
+    ".mpv dl{display:grid;grid-template-columns:3.5em 1fr;gap:4px 8px;margin:0 0 8px;font-size:.88rem}.mpv dt{color:var(--muted,#475055)}.mpv dd{margin:0;word-break:break-all}"+
+    ".mpv pre{flex:1;min-height:120px;overflow:auto;margin:0;padding:10px 12px;border:1px solid var(--line,#B4BCC0);border-radius:8px;background:var(--bg,#ECEEEC);font-family:inherit;font-size:.92rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}"+
+    ".mpv-bt{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:10px}.mpv-bt button{min-height:50px;border-radius:10px;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer}"+
+    ".mpv-bt .no{border:1px solid var(--line,#B4BCC0);background:transparent;color:inherit}.mpv-bt .go{border:0;background:var(--ink,#1C2326);color:var(--surface,#fff)}";
+  document.head.appendChild(css);
+  var box = document.createElement("div"); box.className = "mpv"; box.hidden = true;
+  box.innerHTML = '<div class="mpv-in" role="dialog" aria-modal="true" aria-label="メールの確認"><div class="mpv-hd"><b>メールの確認</b></div><dl></dl><pre></pre><div class="mpv-bt"><button type="button" class="no">戻る</button><button type="button" class="go">メールを開く</button></div></div>';
+  document.body.appendChild(box);
+  var cur = "";
+  function dec(v){ try{ return decodeURIComponent(v); }catch(e){ return v; } }
+  function parse(u){ var m = u.replace(/^mailto:/i,""), i = m.indexOf("?"), o = {to:dec(i >= 0 ? m.slice(0,i) : m)};
+    (i >= 0 ? m.slice(i+1) : "").split("&").forEach(function(p){ if(!p) return; var j = p.indexOf("="); o[(j >= 0 ? p.slice(0,j) : p).toLowerCase()] = dec(j >= 0 ? p.slice(j+1) : ""); }); return o; }
+  var esc = function(t){ return String(t==null?"":t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  function show(u){ cur = u; var o = parse(u);
+    box.querySelector("dl").innerHTML = '<dt>宛先</dt><dd>'+esc(o.to.split(",").join("、") || "（なし）")+'</dd>'+(o.cc ? '<dt>CC</dt><dd>'+esc(o.cc.split(",").join("、"))+'</dd>' : '')+'<dt>件名</dt><dd>'+esc(o.subject||"")+'</dd>';
+    box.querySelector("pre").textContent = o.body || ""; box.hidden = false; }
+  box.querySelector(".no").onclick = function(){ box.hidden = true; };
+  box.querySelector(".go").onclick = function(){ box.hidden = true; location.href = cur; };
+  box.onclick = function(e){ if(e.target === box) box.hidden = true; };
+  window.anmMail = show;
+  document.addEventListener("click", function(e){ var a = e.target.closest && e.target.closest('a[href^="mailto:"]'); if(!a || e.defaultPrevented) return; e.preventDefault(); show(a.getAttribute("href")); });
+})();
 </script>
 </body>
 </html>

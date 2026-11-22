@@ -42,13 +42,41 @@ a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .reg-in input{width:100%;min-height:52px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1.3rem;padding:8px 12px}
 .reg-in .err{color:#B42318;font-size:.85rem;margin:6px 0 0;min-height:1.2em}
 .reg-in .go{width:100%;min-height:52px;margin-top:8px;border:0;border-radius:10px;background:var(--ink);color:var(--surface);font-family:inherit;font-weight:700;font-size:1.05rem;cursor:pointer}
+.mhead{display:flex;align-items:flex-start;gap:10px}.mhead p{flex:1;margin-top:0}
+.medit{flex:none;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:.85rem;cursor:pointer}
+.mbar{position:sticky;top:0;z-index:5;display:flex;flex-direction:column;gap:8px;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--ink);color:var(--surface);font-size:.85rem}
+.mbar[hidden]{display:none}
+.mbar div{display:flex;gap:8px;justify-content:flex-end}
+.mbar button{min-height:40px;padding:0 14px;border:1px solid rgba(255,255,255,.5);border-radius:8px;background:transparent;color:inherit;font-family:inherit;font-size:.9rem;cursor:pointer}
+.mbar button.done{background:var(--surface);color:var(--ink);font-weight:700;border-color:var(--surface)}
+#tools.editing a.tool{position:relative;grid-template-columns:44px 1fr auto;padding:10px 10px 10px 12px;cursor:default}
+#tools.editing a.tool svg{width:44px;height:30px}
+#tools.editing a.tool span{display:none}
+#tools.editing a.tool.off{border-left-color:var(--line);background:var(--bg)}
+#tools.editing a.tool.off > svg,#tools.editing a.tool.off > div:not(.mc){opacity:.4}
+#tools.editing a.tool b{font-size:.95rem}
+.mc button.hide.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+a.tool.off{display:none}
+#tools.editing a.tool.off{display:grid}
+.mc{display:flex;gap:4px}
+.mc button{min-width:42px;min-height:42px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}
+.mc button.hide{min-width:56px;font-size:.8rem}
+.mc button:disabled{opacity:.3}
+.sos{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;margin:0 0 14px;padding:14px 16px;border-radius:12px;background:#B42318;color:#fff;text-decoration:none;box-shadow:0 2px 0 #7A1810}
+.sos span{grid-row:1/3;font-size:2rem;line-height:1}
+.sos b{font-size:1.3rem;line-height:1.2}
+.sos small{font-size:.82rem;opacity:.92}
+.sos:active{transform:translateY(1px);box-shadow:none}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>ANM</h1>
+  <a class="sos" href="./accident.html"><span>⚠</span><b>事故が起きたら</b><small>漏洩事故・ガス欠事故・その他</small></a>
   <div class="me" id="me" hidden>名前：<b id="meName"></b><button type="button" id="meEdit">変える</button></div>
-  <p>使うアプリを選んでください。一度開けば、電波のない現場でも使えます。</p>
+  <div class="mhead"><p>使うアプリを選んでください。一度開けば、電波のない現場でも使えます。</p><button type="button" id="mEdit" class="medit">並べ替え</button></div>
+  <div class="mbar" id="mBar" hidden><span>↑↓で順番、「隠す」で非表示。このスマホだけの設定です</span><div><button type="button" id="mReset">元に戻す</button><button type="button" id="mDone" class="done">完了</button></div></div>
+  <div id="tools">
   <a class="tool" href="./pc.html">
     <svg viewBox="0 0 48 32" aria-hidden="true"><circle cx="24" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="24" cy="16" r="8" fill="none" stroke="#2F6FD6" stroke-width="4"/></svg>
     <div><b>PC打設量計算</b><span>配管ごとに、パイプコーティングの主剤（白）と硬化剤（青）の量を出す</span></div>
@@ -101,6 +129,15 @@ a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="10" y="3" width="24" height="26" rx="2" stroke-width="2.5"/><path d="M15 10 H29 M15 16 H29 M15 22 H23" stroke-width="2"/><path d="M36 20 L44 20 M40 16 L40 24" stroke-width="2.5"/></svg>
     <div><b>漏洩検査 現場データ作成</b><span>現場ごとの情報を入れて、作業員に送るリンクを作る（事務所用）</span></div>
   </a>
+  <a class="tool" href="./remote-meter.html">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="6" y="8" width="22" height="20" rx="2" stroke-width="2.5"/><path d="M11 22 A6 6 0 0 1 23 22" stroke-width="2"/><path d="M17 22 L20 17" stroke-width="2"/><path d="M33 12 A6 6 0 0 1 39 6 M33 18 A12 12 0 0 1 45 6" stroke="#2F6FD6" stroke-width="2.5"/></svg>
+    <div><b>遠隔検針システム</b><span>準備中</span></div>
+  </a>
+  <a class="tool" href="./gen-load.html">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="4" y="9" width="30" height="18" rx="2" stroke-width="2.5"/><path d="M8 27 V30 M30 27 V30" stroke-width="2.5"/><path d="M21 12 L15 19 H20 L17 25 L25 17 H20 L23 12 Z" fill="#2F6FD6" stroke="none"/><path d="M34 15 H40 V21 H34" stroke-width="2.5"/><path d="M40 18 H45" stroke-width="2.5"/></svg>
+    <div><b>非常用発電機負荷試験</b><span>準備中</span></div>
+  </a>
+  </div>
   <div class="foot">継手の寸法はJISの規格値です。使い始めは手元の継手で実測して確かめてください。</div>
 </div>
 <div class="reg" id="reg" hidden><div class="reg-in" role="dialog" aria-modal="true" aria-labelledby="regT">
@@ -126,6 +163,37 @@ a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
   inp.onkeydown = function(e){ if(e.key === "Enter") document.getElementById("regGo").click(); };
   document.getElementById("meEdit").onclick = open;
   show(); if(!get()) open();
+})();
+(function(){
+  // メニューの順番・非表示（このスマホだけ）
+  var KEY = "anm-menu-v1", box = document.getElementById("tools");
+  var all = [].slice.call(box.querySelectorAll("a.tool")), def = all.map(function(a){ return a.getAttribute("href"); });
+  var st = {order:[], hidden:[]}; try{ st = JSON.parse(localStorage.getItem(KEY)) || st; }catch(e){}
+  var editing = false;
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+  function order(){ var o = st.order.filter(function(h){ return def.indexOf(h) >= 0; }); def.forEach(function(h){ if(o.indexOf(h) < 0) o.push(h); }); return o; }
+  function byHref(h){ return all.filter(function(a){ return a.getAttribute("href") === h; })[0]; }
+  function render(){
+    var o = order();
+    o.forEach(function(h, i){ var a = byHref(h); box.appendChild(a); var off = st.hidden.indexOf(h) >= 0; a.classList.toggle("off", off);
+      var c = a.querySelector(".mc"); if(c) c.remove();
+      if(editing){ c = document.createElement("div"); c.className = "mc";
+        c.innerHTML = '<button type="button" data-up aria-label="上へ"'+(i === 0 ? ' disabled' : '')+'>↑</button><button type="button" data-down aria-label="下へ"'+(i === o.length-1 ? ' disabled' : '')+'>↓</button><button type="button" class="hide" data-hide>'+(off ? '表示' : '隠す')+'</button>';
+        a.appendChild(c);
+        c.querySelector("[data-up]").onclick = function(e){ e.preventDefault(); move(h,-1); };
+        c.querySelector("[data-down]").onclick = function(e){ e.preventDefault(); move(h,1); };
+        c.querySelector("[data-hide]").onclick = function(e){ e.preventDefault(); var k = st.hidden.indexOf(h); if(k >= 0) st.hidden.splice(k,1); else st.hidden.push(h); save(); render(); };
+      }
+    });
+    box.classList.toggle("editing", editing);
+    document.getElementById("mBar").hidden = !editing; document.getElementById("mEdit").hidden = editing;
+  }
+  function move(h, d){ var o = order(), i = o.indexOf(h), j = i + d; if(j < 0 || j >= o.length) return; o.splice(i,1); o.splice(j,0,h); st.order = o; save(); render(); }
+  box.addEventListener("click", function(e){ if(editing && e.target.closest("a.tool")) e.preventDefault(); });
+  document.getElementById("mEdit").onclick = function(){ editing = true; render(); };
+  document.getElementById("mDone").onclick = function(){ editing = false; render(); window.scrollTo(0,0); };
+  document.getElementById("mReset").onclick = function(){ if(!confirm("順番と非表示を最初の状態に戻しますか？")) return; st = {order:[], hidden:[]}; save(); render(); };
+  render();
 })();
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>

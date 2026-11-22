@@ -113,10 +113,25 @@ table.ht th.o{color:#B42318}
 .cellb.o{background:rgba(180,35,24,.18);color:#B42318}
 .cellb.sel{outline:3px solid var(--ink)}
 .z{color:var(--muted)}
+/* パソコン（横に広い画面）：左に集計と絞り込み、右に一覧を2〜3列で */
+@media (min-width: 1000px){
+  .wrap.pcw{max-width:1400px;display:grid;grid-template-columns:340px 1fr;column-gap:28px;align-items:start;padding:24px 24px 60px}
+  .pcw .side{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto;padding-right:4px}
+  .pcw .main{min-width:0}
+  .pcw .main .search{margin-top:0}
+  .pcw #tbl:not(:empty) + .search{margin-top:12px}
+  .pcw details.mg > .sitebox, .pcw #list > .sitebox{display:inline-block;vertical-align:top;width:calc(50% - 12px);margin-left:8px;margin-right:0}
+  .pcw a.site{min-height:84px}
+  body{font-size:15px}
+}
+@media (min-width: 1500px){
+  .pcw details.mg > .sitebox, .pcw #list > .sitebox{width:calc(33.33% - 11px)}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap pcw">
+  <div class="side">
   <a class="back" href="./index.html">← メニューに戻る</a>
   <h1>漏洩検査 台帳</h1>
   <p class="lead">現場をタップすると記録用紙が開きます。</p>
@@ -124,9 +139,12 @@ table.ht th.o{color:#B42318}
   <div class="kinds" id="kinds" role="group" aria-label="種類"><button type="button" data-k="tank" aria-pressed="true">地下タンク</button><button type="button" data-k="meter" aria-pressed="false">計量器検定</button><button type="button" data-k="lorry" aria-pressed="false">ローリー</button></div>
   <div class="views" id="views" role="group" aria-label="見かた"><button type="button" data-v="month" aria-pressed="true">月で見る</button><button type="button" data-v="area" aria-pressed="false">地域で見る</button><button type="button" data-v="table" aria-pressed="false">表で見る</button></div>
   <div class="chips" id="areas" style="margin-top:10px"></div>
+  </div>
+  <div class="main">
   <div id="tbl"></div>
   <input class="search" id="q" type="search" placeholder="現場名・住所で探す" aria-label="現場を探す">
   <div id="list"></div>
+  </div>
 </div>
 <script>
 (function(){

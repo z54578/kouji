@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap">
+<meta name="theme-color" content="#B42318">
+<link rel="icon" href="icon-192.png" type="image/png">
+<title>事故が起きたら</title>
+<style>
+:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#475055;--line:#B4BCC0;--red:#B42318;--red-soft:#FDECEC;--ok:#1D7A4A;--ok-soft:#E9F7EF;--focus:#1F4E8C;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--red:#F07065;--red-soft:#3A1F1C;--ok:#6BC48F;--ok-soft:#1C3326;--focus:#7FA8E0;color-scheme:dark}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",sans-serif;font-size:17px;line-height:1.55}
+.wrap{max-width:640px;margin:0 auto;padding:8px 14px 40px}
+.top{display:flex;align-items:center;gap:8px;min-height:46px}
+.top a{color:var(--ink);text-decoration:none;font-size:1.4rem;padding:4px 10px 4px 2px}
+.top h1{flex:1;margin:0;font-size:1.25rem;color:var(--red)}
+.top button{min-height:38px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:.85rem;cursor:pointer}
+.lead{margin:4px 0 10px;font-size:.95rem}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.types button{min-height:118px;padding:8px 4px;border:3px solid var(--red);border-radius:14px;background:var(--surface);color:var(--ink);font-family:inherit;font-weight:700;font-size:1.15rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.types button small{font-size:.72rem;font-weight:400;color:var(--muted);padding:0 6px;line-height:1.3}
+.types button span{font-size:2rem;line-height:1}
+.types button.wide{grid-column:1/-1;min-height:64px;flex-direction:row}
+.types button:active{background:var(--red-soft)}
+.rep{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin:8px 0;font-size:.92rem;font-weight:700}
+.rep.ok{background:var(--ok-soft);color:var(--ok)}
+.rep.ng{background:var(--red-soft);color:var(--red)}
+.rep.wait{background:var(--surface);border:1px solid var(--line)}
+.rep button{margin-left:auto;min-height:38px;padding:0 10px;border:1px solid currentColor;border-radius:8px;background:transparent;color:inherit;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap}
+.head{display:flex;align-items:center;gap:10px;background:var(--red);color:#fff;border-radius:12px;padding:12px 14px}
+.head span{font-size:1.8rem;line-height:1}
+.head b{flex:1;font-size:1.3rem}
+.head small{font-size:.85rem;opacity:.9}
+.steps{list-style:none;margin:10px 0 0;padding:0;counter-reset:s}
+.steps li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 12px 12px 56px;margin-bottom:8px}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:12px;top:12px;width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--surface);display:flex;align-items:center;justify-content:center;font-weight:700}
+.steps li.done{border-color:var(--ok);background:var(--ok-soft)}
+.steps li.done::before{content:"✓";background:var(--ok)}
+.steps li.must{border-width:2px;border-color:var(--red)}
+.steps li.must.done{border-color:var(--ok)}
+.steps b{display:block;font-size:1.05rem;line-height:1.35}
+.steps p{margin:4px 0 0;font-size:.88rem;color:var(--muted)}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.acts a,.acts button{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:44px;padding:0 14px;border-radius:10px;border:0;background:var(--red);color:#fff;font-family:inherit;font-weight:700;font-size:.95rem;text-decoration:none;cursor:pointer}
+.acts .g{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.chk{position:absolute;right:10px;top:10px;min-width:64px;min-height:36px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+.steps li.done .chk{background:var(--ok);color:#fff;border-color:var(--ok)}
+.steps li{padding-right:84px;min-height:60px}
+.note{font-size:.8rem;color:var(--muted);margin:12px 2px 0}
+.btn{width:100%;min-height:50px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;margin-top:10px}
+.set{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.set label{display:block;font-size:.85rem;color:var(--muted);margin-top:8px}
+.set input{width:100%;min-height:46px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:1rem;padding:8px 10px;margin-top:4px}
+.set p{margin:6px 0 0;font-size:.82rem;color:var(--muted)}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(function(){
+  var esc = function(t){ return String(t==null?"":t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  var get = function(k){ try{ return localStorage.getItem(k) || ""; }catch(e){ return ""; } };
+  var set = function(k,v){ try{ localStorage.setItem(k, v); }catch(e){} };
+  var NAME = get("anm-name");
+  // 会社の電話とTeamsの投稿先（ワークフローのURL）は公開の場所に置かず、各スマホに登録する
+  var cfg = function(){ return {tel:get("anm-acc-tel"), hook:get("anm-acc-hook")}; };
+  var T = {
+    leak:{ic:"🛢️", n:"漏洩事故", steps:[
+      {b:"火気厳禁・人を近づけない", p:"エンジン停止、たばこ・火花の出る作業を止める", must:1},
+      {b:"止められるなら漏れを止める", p:"バルブを閉じる・ポンプを止める。無理はしない", must:1},
+      {b:"広がりを防ぐ", p:"吸着マット・土のうで囲む。側溝・排水溝・雨水桝をふさぐ（川や下水に流さない）", must:1},
+      {b:"写真と記録", p:"漏れた場所・量（およそ）・油種・時刻・広がった範囲"},
+      {b:"回収・後片付けは会社の指示で", p:"使った吸着材も油ごみとして処理"}]},
+    gas:{ic:"⛽", n:"ガス欠事故", sub:"検査中にサービスタンク・中継タンクが空", steps:[
+      {b:"作業を止めて状況を確かめる", p:"どのタンクが空か。ボイラー・発電機・暖房・給湯が止まっていないか", must:1},
+      {b:"施設の担当者に知らせる", p:"暖房・給湯・非常用発電機が止まる（止まった）ことを伝える", must:1},
+      {b:"配管を元に戻して送油できるようにする", p:"閉めたバルブを開ける・止めたポンプを戻す。検査は中断", must:1},
+      {b:"サービスタンク・中継タンクに油を送る", p:"送油ポンプを運転して、油面が上がるのを確かめる"},
+      {b:"機器のエア抜き・再起動", p:"ボイラーや発電機は施設の担当者・設備業者と一緒に"},
+      {b:"記録する", p:"空になった時刻・どのタンクか・止まった機器・復旧した時刻"}]},
+    other:{ic:"⚠️", n:"その他", steps:[
+      {b:"安全を確保する", p:"二次災害を防ぐ。危ない所に近づかない", must:1},
+      {b:"けが人がいれば 119", call:"119", must:1},
+      {b:"写真と記録", p:"何が・いつ・どこで・どうなったか"}]}
+  };
+  var KEY = "anm-acc-v1", st = null; try{ st = JSON.parse(get(KEY)); }catch(e){}
+  if(st && !T[st.type]) st = null; // 消した種類（火災など）が残っていたら最初から
+  if(st && Date.now() - st.at > 12*3600*1000) st = null; // 12時間たったら最初の画面から
+  function save(){ set(KEY, JSON.stringify(st)); }
+  var app = document.getElementById("app"), showSet = false;
+  function hhmm(t){ var d = new Date(t); return d.getHours()+":"+("0"+d.getMinutes()).slice(-2); }
+  function msg(){ var t = T[st.type]; return "【事故発生】"+t.n+(t.sub ? "（"+t.sub+"）" : "")+"\n報告者："+(NAME||"（名前未登録）")+"\n時刻："+new Date(st.at).toLocaleString("ja-JP")+(st.geo ? "\n場所：https://www.google.com/maps?q="+st.geo : "\n場所：（位置情報なし）"); }
+  function post(){
+    var c = cfg(); if(!c.hook){ st.rep = "none"; save(); draw(); return; }
+    st.rep = "sending"; save(); draw();
+    var t = T[st.type], text = msg();
+    var card = {type:"message", attachments:[{contentType:"application/vnd.microsoft.card.adaptive", content:{type:"AdaptiveCard", version:"1.4", "$schema":"http://adaptivecards.io/schemas/adaptive-card.json", body:[
+      {type:"TextBlock", text:"【事故発生】"+t.n, weight:"Bolder", size:"Large", color:"Attention", wrap:true},
+      {type:"TextBlock", text:text.split("\n").slice(1).join("\n\n"), wrap:true}]}}]};
+    // Teamsのワークフローに送る（ブラウザから送れる形で）
+    fetch(c.hook, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body:JSON.stringify(card)})
+      .then(function(){ st.rep = "sent"; save(); draw(); })
+      .catch(function(){ st.rep = "fail"; save(); draw(); });
+  }
+  function start(type){
+    st = {type:type, at:Date.now(), done:{}, geo:"", rep:""}; save(); draw();
+    var go = function(){ post(); };
+    if(navigator.geolocation){ var fin = false; var tm = setTimeout(function(){ if(!fin){ fin = true; go(); } }, 6000);
+      navigator.geolocation.getCurrentPosition(function(p){ if(fin) return; fin = true; clearTimeout(tm); st.geo = p.coords.latitude.toFixed(6)+","+p.coords.longitude.toFixed(6); save(); go(); },
+        function(){ if(fin) return; fin = true; clearTimeout(tm); go(); }, {enableHighAccuracy:true, timeout:5500, maximumAge:60000});
+    } else go();
+  }
+  function repHtml(){
+    var c = cfg();
+    if(st.rep === "sent") return '<div class="rep ok">✓ 全体Teamsに報告しました（'+hhmm(st.at)+'）</div>';
+    if(st.rep === "sending" || st.rep === "") return '<div class="rep wait">全体Teamsに報告しています…</div>';
+    if(st.rep === "fail") return '<div class="rep ng">Teamsに送れませんでした（電波を確認）<button type="button" id="retry">もう一度</button></div>';
+    return '<div class="rep ng">Teamsの報告先が未設定です。下の文をTeamsに貼ってください<button type="button" id="copy">文をコピー</button></div>';
+  }
+  function telA(n, label){ return '<a href="tel:'+esc(n)+'">📞 '+esc(label||n)+'</a>'; }
+  function draw(){
+    var c = cfg(), h = '<div class="top"><a href="./index.html" aria-label="メニューに戻る" style="font-size:1rem;white-space:nowrap">← メニュー</a><h1>事故が起きたら</h1><button type="button" id="setb">設定</button></div>';
+    if(showSet || !st){
+      if(showSet) h += '<div class="set"><b>このスマホの設定</b>'+
+        '<label>全体TeamsのワークフローURL<input id="s-hook" value="'+esc(c.hook)+'" placeholder="https://…"></label>'+
+        '<p>Teamsの「全体」チャネル →「…」→「ワークフロー」→「Webhook 要求を受信したらチャネルに投稿する」で作ったURLを貼ります。公開の場所には保存しません。</p>'+
+        '<button type="button" class="btn" id="s-ok">保存して閉じる</button></div>';
+      if(!st){
+        h += '<p class="lead">何が起きましたか？ 押すとすぐに<b>全体Teamsに報告</b>され、そのあとやることが順番に出ます。</p><div class="types">'+
+          ["leak","gas","other"].map(function(k){ return '<button type="button" data-t="'+k+'"'+(k === "other" ? ' class="wide"' : '')+'><span>'+T[k].ic+'</span>'+T[k].n+(T[k].sub ? '<small>'+T[k].sub+'</small>' : '')+'</button>'; }).join("")+
+          '</div>'+
+          (!c.hook ? '<p class="note">※ 右上の「設定」でTeamsの報告先を登録してください（未登録）</p>' : '');
+      }
+      app.innerHTML = h; wire(); return;
+    }
+    var t = T[st.type], n = t.steps.length, k = Object.keys(st.done).filter(function(i){ return st.done[i]; }).length;
+    h += '<button type="button" class="btn" id="back" style="margin:0 0 8px;min-height:44px">← 種類を選び直す</button><div class="head"><span>'+t.ic+'</span><b>'+t.n+(t.sub ? '<br><small style="font-weight:400">'+t.sub+'</small>' : '')+'</b><small>'+hhmm(st.at)+' 発生<br>'+k+'／'+n+' 済み</small></div>'+repHtml();
+    if(st.rep === "none" || st.rep === "fail") h += '<div class="set" style="margin-top:0"><p style="margin:0;white-space:pre-wrap;color:var(--ink)">'+esc(msg())+'</p></div>';
+    h += '<ol class="steps">'+t.steps.map(function(s,i){
+      var a = '';
+      return '<li class="'+(s.must ? 'must' : '')+(st.done[i] ? ' done' : '')+'"><b>'+esc(s.b)+'</b>'+(s.p ? '<p>'+esc(s.p)+'</p>' : '')+(a ? '<div class="acts">'+a+'</div>' : '')+
+        '<button type="button" class="chk" data-c="'+i+'">'+(st.done[i] ? '済み' : 'やった')+'</button></li>'; }).join("")+'</ol>'+
+      (st.geo ? '<div class="acts"><a class="g" href="https://www.google.com/maps?q='+esc(st.geo)+'" target="_blank" rel="noopener">📍 今いる場所を地図で見る</a></div>' : '')+
+      '<button type="button" class="btn" id="end">対応が終わった（最初の画面に戻る）</button>'+
+      '<p class="note">赤い枠は必ずやること。会社のルールと違うところがあれば教えてください。</p>';
+    app.innerHTML = h; wire();
+  }
+  function wire(){
+    var q = function(s){ return app.querySelector(s); };
+    q("#setb").onclick = function(){ showSet = !showSet; draw(); };
+    if(q("#s-ok")) q("#s-ok").onclick = function(){ set("anm-acc-hook", q("#s-hook").value.trim()); showSet = false; draw(); };
+    app.querySelectorAll("[data-t]").forEach(function(b){ b.onclick = function(){ start(b.dataset.t); window.scrollTo(0,0); }; });
+    app.querySelectorAll("[data-c]").forEach(function(b){ b.onclick = function(){ var i = b.dataset.c; st.done[i] = !st.done[i]; save(); draw(); }; });
+    if(q("#retry")) q("#retry").onclick = post;
+    if(q("#copy")) q("#copy").onclick = function(){ if(navigator.clipboard) navigator.clipboard.writeText(msg()).then(function(){ q("#copy").textContent = "コピーしました"; }); };
+    // 確認は画面の中で（2回押す）。ダイアログが出ない環境でも動くように
+    var twice = function(b, again, fn){ if(!b) return; var lab = b.textContent; b.onclick = function(){ if(b.dataset.arm){ fn(); return; } b.dataset.arm = "1"; b.textContent = again; b.style.borderColor = "var(--red)"; b.style.color = "var(--red)"; setTimeout(function(){ if(b.isConnected){ delete b.dataset.arm; b.textContent = lab; b.style.borderColor = ""; b.style.color = ""; } }, 4000); }; };
+    var reset = function(){ st = null; try{ localStorage.removeItem(KEY); }catch(e){} draw(); window.scrollTo(0,0); };
+    twice(q("#back"), "もう一度押すと選び直します", reset);
+    twice(q("#end"), "もう一度押すと終わりにします", reset);
+  }
+  draw();
+})();
+</script>
+<script>
+if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
+</script>
+</body>
+</html>
