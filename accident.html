@@ -68,6 +68,8 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
   var get = function(k){ try{ return localStorage.getItem(k) || ""; }catch(e){ return ""; } };
   var set = function(k,v){ try{ localStorage.setItem(k, v); }catch(e){} };
   var NAME = get("anm-name");
+  // 記録用紙から開いたときは、現場名・住所を報告に入れる
+  var Q = {}; location.search.replace(/^\?/,"").split("&").forEach(function(p){ var i = p.indexOf("="); if(i > 0) Q[p.slice(0,i)] = decodeURIComponent(p.slice(i+1).replace(/\+/g," ")); });
   // 会社の電話とTeamsの投稿先（ワークフローのURL）は公開の場所に置かず、各スマホに登録する
   var cfg = function(){ return {tel:get("anm-acc-tel"), hook:get("anm-acc-hook")}; };
   var T = {
@@ -94,8 +96,9 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
   if(st && Date.now() - st.at > 12*3600*1000) st = null; // 12時間たったら最初の画面から
   function save(){ set(KEY, JSON.stringify(st)); }
   var app = document.getElementById("app"), showSet = false;
+  function backUrl(){ var id = (st && st.site) || Q.site; return id ? "./leak.html?id="+encodeURIComponent(id) : "./index.html"; }
   function hhmm(t){ var d = new Date(t); return d.getHours()+":"+("0"+d.getMinutes()).slice(-2); }
-  function msg(){ var t = T[st.type]; return "【事故発生】"+t.n+(t.sub ? "（"+t.sub+"）" : "")+"\n報告者："+(NAME||"（名前未登録）")+"\n時刻："+new Date(st.at).toLocaleString("ja-JP")+(st.geo ? "\n場所：https://www.google.com/maps?q="+st.geo : "\n場所：（位置情報なし）"); }
+  function msg(){ var t = T[st.type]; return "【事故発生】"+t.n+(t.sub ? "（"+t.sub+"）" : "")+(st.sn ? "\n現場："+st.sn+(st.sa ? "（"+st.sa+"）" : "") : "")+"\n報告者："+(NAME||"（名前未登録）")+"\n時刻："+new Date(st.at).toLocaleString("ja-JP")+(st.geo ? "\n場所：https://www.google.com/maps?q="+st.geo : "\n場所：（位置情報なし）"); }
   function post(){
     var c = cfg(); if(!c.hook){ st.rep = "none"; save(); draw(); return; }
     st.rep = "sending"; save(); draw();
@@ -109,7 +112,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
       .catch(function(){ st.rep = "fail"; save(); draw(); });
   }
   function start(type){
-    st = {type:type, at:Date.now(), done:{}, geo:"", rep:""}; save(); draw();
+    st = {type:type, at:Date.now(), done:{}, geo:"", rep:"", site:Q.site||"", sn:Q.n||"", sa:Q.a||""}; save(); draw();
     var go = function(){ post(); };
     if(navigator.geolocation){ var fin = false; var tm = setTimeout(function(){ if(!fin){ fin = true; go(); } }, 6000);
       navigator.geolocation.getCurrentPosition(function(p){ if(fin) return; fin = true; clearTimeout(tm); st.geo = p.coords.latitude.toFixed(6)+","+p.coords.longitude.toFixed(6); save(); go(); },
@@ -125,7 +128,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
   }
   function telA(n, label){ return '<a href="tel:'+esc(n)+'">📞 '+esc(label||n)+'</a>'; }
   function draw(){
-    var c = cfg(), h = '<div class="top"><a href="./index.html" aria-label="メニューに戻る" style="font-size:1rem;white-space:nowrap">← メニュー</a><h1>事故が起きたら</h1><button type="button" id="setb">設定</button></div>';
+    var c = cfg(), h = '<div class="top"><a href="'+esc(backUrl())+'" style="font-size:1rem;white-space:nowrap">'+(backUrl() === "./index.html" ? "← メニュー" : "← 記録用紙")+'</a><h1>事故が起きたら</h1><button type="button" id="setb">設定</button></div>';
     if(showSet || !st){
       if(showSet) h += '<div class="set"><b>このスマホの設定</b>'+
         '<label>全体TeamsのワークフローURL<input id="s-hook" value="'+esc(c.hook)+'" placeholder="https://…"></label>'+
@@ -140,6 +143,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
       app.innerHTML = h; wire(); return;
     }
     var t = T[st.type], n = t.steps.length, k = Object.keys(st.done).filter(function(i){ return st.done[i]; }).length;
+    if(st.sn) h += '<p class="lead" style="margin:0 0 6px">現場：<b>'+esc(st.sn)+'</b></p>';
     h += '<button type="button" class="btn" id="back" style="margin:0 0 8px;min-height:44px">← 種類を選び直す</button><div class="head"><span>'+t.ic+'</span><b>'+t.n+(t.sub ? '<br><small style="font-weight:400">'+t.sub+'</small>' : '')+'</b><small>'+hhmm(st.at)+' 発生<br>'+k+'／'+n+' 済み</small></div>'+repHtml();
     if(st.rep === "none" || st.rep === "fail") h += '<div class="set" style="margin-top:0"><p style="margin:0;white-space:pre-wrap;color:var(--ink)">'+esc(msg())+'</p></div>';
     h += '<ol class="steps">'+t.steps.map(function(s,i){

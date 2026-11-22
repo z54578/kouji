@@ -252,6 +252,10 @@ details.warnbox ul{margin:4px 0 2px;padding-left:1.2em;font-size:.88rem}
 .cutsw a{display:flex;align-items:center;justify-content:center;min-height:44px;color:var(--ink,#1C2326);background:var(--surface,#fff);text-decoration:none;font-weight:700;font-size:.92rem;border-left:1px solid var(--line,#B4BCC0)}
 .cutsw a:first-child{border-left:0}
 .cutsw a[aria-current="page"]{background:var(--ink,#1C2326);color:var(--surface,#fff)}
+.act.sosb{background:#B42318;color:#fff;border-color:#B42318}
+.top{flex-wrap:wrap;row-gap:4px}
+.top h2{flex:1 1 calc(100% - 52px)}
+.top .act:first-of-type{margin-left:auto}
 </style>
 </head>
 <body>
@@ -447,7 +451,7 @@ details.warnbox ul{margin:4px 0 2px;padding-left:1.2em;font-size:.88rem}
       var pipesHtml = (pipes.length || ohmChips) ? '<div class="pipes'+(ov||auto?' ov':'')+'">'+pipes.map(function(x){ return '<span class="pp"><small>'+x[0]+'</small>'+esc(x[1])+'</span>'; }).join("")+ohmChips+'</div>' : '';
       var h = '<div class="top"><a class="back" href="./index.html" aria-label="メニューに戻る" style="font-size:1.4rem;padding:4px 10px 4px 2px;color:var(--ink)">←</a><h2>'+esc(site.site)+(site.fac ? '<small>'+esc(site.fac)+'</small>' : '')+'</h2>'+
         (site.addr ? '<a class="act sm" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(site.addr)+'" target="_blank" rel="noopener">ナビ</a>' : '')+
-        '<button type="button" class="act sm ghost2" data-info="1" aria-expanded="'+showInfo+'">情報</button>'+(cs.length ? '<a class="act sm ghost2" href="tel:'+cs[0].tel.replace(/[^0-9+]/g,"")+'">電話</a>' : '')+'</div>@@TOP@@<div class="card tight mapcard">'+
+        '<a class="act sm sosb" href="./accident.html?site='+encodeURIComponent(site.id)+'&n='+encodeURIComponent(site.site+(site.fac ? " "+site.fac : ""))+'&a='+encodeURIComponent(site.addr||"")+'">⚠ 事故が起きたら</a>'+'<button type="button" class="act sm ghost2" data-info="1" aria-expanded="'+showInfo+'">情報</button>'+(cs.length ? '<a class="act sm ghost2" href="tel:'+cs[0].tel.replace(/[^0-9+]/g,"")+'">電話</a>' : '')+'</div>@@TOP@@<div class="card tight mapcard">'+
         (site.note ? (function(){ var ln = String(site.note).split(/\n+/).filter(function(x){ return x.trim(); });
           return ln.length > 1 ? '<details class="warnbox"><summary>⚠ '+esc(ln[0])+'<span class="more">ほか'+(ln.length-1)+'件</span></summary><ul>'+ln.slice(1).map(function(x){ return '<li>'+esc(x)+'</li>'; }).join("")+'</ul></details>'
             : '<div class="warnbox">⚠ '+esc(ln[0]||"")+'</div>'; })() : '')+

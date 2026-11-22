@@ -122,7 +122,6 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
 <body>
 <div class="wrap">
   <div class="today"><b id="tDate"></b><span id="tTemp"></span></div>
-  <a class="sos" href="./accident.html"><span>⚠</span><b>事故が起きたら</b><small>漏洩事故・ガス欠事故・その他</small></a>
   <a class="schbtn" href="./schedule.html"><b>予定表</b><small>準備中</small></a>
   <div class="mhead"><div class="me" id="me" hidden>名前：<b id="meName"></b><button type="button" id="meEdit">変える</button></div><button type="button" id="mEdit" class="medit">並べ替え</button></div>
   <div class="mbar" id="mBar" hidden><span id="mInfo">↑↓で順番、「カテゴリ」で移す場所、「隠す」で非表示。このスマホだけの設定です</span><div><button type="button" id="mReset">最初の並びに戻す</button><button type="button" id="mDone" class="done">完了</button></div></div>
@@ -183,6 +182,10 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="4" y="9" width="30" height="18" rx="2" stroke-width="2.5"/><path d="M8 27 V30 M30 27 V30" stroke-width="2.5"/><path d="M21 12 L15 19 H20 L17 25 L25 17 H20 L23 12 Z" fill="#2F6FD6" stroke="none"/><path d="M34 15 H40 V21 H34" stroke-width="2.5"/><path d="M40 18 H45" stroke-width="2.5"/></svg>
     <div><b>非常用発電機負荷試験</b><span>準備中</span></div>
   </a>
+  <a class="tool" href="./checklist.html">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><rect x="10" y="3" width="28" height="27" rx="2" stroke-width="2.5"/><path d="M15 11 L18 14 L23 9" stroke="#2F6FD6" stroke-width="2.5"/><path d="M26 12 H33" stroke-width="2.5"/><path d="M15 21 L18 24 L23 19" stroke="#2F6FD6" stroke-width="2.5"/><path d="M26 22 H33" stroke-width="2.5"/></svg>
+    <div><b>チェックリスト</b><span>準備中</span></div>
+  </a>
   </div>
 </div>
 <div class="reg" id="reg" hidden><div class="reg-in" role="dialog" aria-modal="true" aria-labelledby="regT">
@@ -231,7 +234,8 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
     {k:"calc", n:"計算", a:["./pc.html","./cut.html","./foam-set.html","./sump-hole.html"]},
     {k:"insp", n:"検定・検査", a:["./leak-set.html","./kentei.html","./remote-meter.html","./gen-load.html"]},
     {k:"prep", n:"手配", a:["./zfile.html?app=order","./zfile.html?app=rent","./zfile.html?app=inn","./vehicle.html"]},
-    {k:"book", n:"ハンドブック", a:["./zfile.html","./gyomu.html"]}
+    {k:"book", n:"ハンドブック", a:["./zfile.html","./gyomu.html"]},
+    {k:"check", n:"チェックリスト", a:["./checklist.html"]}
   ];
   var hrefOf = function(a){ return a.getAttribute("href"); }, byHref = function(h){ return all.filter(function(a){ return hrefOf(a) === h; })[0]; };
   var st = null; try{ st = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
@@ -286,6 +290,6 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
 })();
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>
-<div class="ver">v216</div>
+<div class="ver">v219</div>
 </body>
 </html>
