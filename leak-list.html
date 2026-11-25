@@ -198,7 +198,7 @@ table.ht th.o{color:#B42318}
   function card(s){
     var c = cls(s.due), d = s.due, tel = ((s.contacts||[])[0]||{}).tel || s.tel || "";
     return '<div class="sitebox '+c+'"><a class="site '+c+'" href="./leak.html?id='+encodeURIComponent(s.id)+'"><div class="due">'+(d ? '<b>'+(d.getMonth()+1)+'/'+d.getDate()+'</b><span>'+d.getFullYear()+'年</span>' : '<b>？</b><span>前回不明</span>')+'</div><div><div class="nm">'+esc(s.site)+(s.fac ? '　'+esc(s.fac) : '')+'</div>'+
-      '<div class="meta">'+esc(s.region)+'・'+esc(s.addr)+'</div><div class="meta">'+(s.tanks.length ? '<span class="tag">タンク'+s.tanks.length+'基</span>' : '')+(s.hasMob ? '<span class="tag">ローリー'+s.mob.length+'台</span>' : '')+(c==="o" && d ? '<span class="tag r">要対応</span>' : '')+'</div>'+
+      '<div class="meta">'+esc(s.region)+'・'+esc(s.addr)+'</div><div class="meta">'+(s.tanks.length ? '<span class="tag">タンク'+s.tanks.length+'基</span>' : '<span class="tag">タンク未登録</span>')+(s.hasMob ? '<span class="tag">ローリー'+s.mob.length+'台</span>' : '')+(c==="o" && d ? '<span class="tag r">要対応</span>' : '')+'</div>'+
       (kind === "meter" ? '<div class="meta">計量機 '+s.meters.length+'台・検定期限 '+esc(s.meters.map(function(m){ return m["検定期限"]; }).filter(function(v){ return pdue(v); }).sort(function(a,b){ return pdue(a)-pdue(b); }).filter(function(v,i,a){ return a.indexOf(v)===i; }).slice(0,3).join("・")||"不明")+'</div>' : '') +
       (kind === "lorry" ? '<div class="meta">'+s.mob.map(function(l){ return esc(l["車番"]||"")+(l["検査期限"] ? '（'+esc(l["検査期限"])+'）' : ''); }).join("、")+'</div><div class="meta" style="color:#B42318">ローリーの検査・検定は 6月〜9月第1週</div>' : '') +
       (kind !== "tank" ? '' : '<div class="meta">前回 '+esc(s.prevDate||"不明")+(s.prevNo ? '（No.'+esc(String(s.prevNo).replace(/^\s*N[Oo][.,]?\s*(N[Oo][.,]?\s*)?/,''))+'）' : '')+(s.cycle ? '・周期 '+esc(s.cycle) : '')+'</div>')+'</div></a>'+
@@ -213,7 +213,7 @@ table.ht th.o{color:#B42318}
     try{ localStorage.setItem("leak-list-view", JSON.stringify({view:view})); }catch(e){}
     var key = q.trim();
     document.querySelectorAll("[data-k]").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.k === kind); });
-    var has = function(s){ return kind === "tank" ? s.tanks.length > 0 : kind === "meter" ? s.meters.length > 0 : s.mob.length > 0; };
+    var has = function(s){ return kind === "tank" ? true : kind === "meter" ? s.meters.length > 0 : s.mob.length > 0; };
     all.forEach(function(s){ s.due = kind === "tank" ? s.dueT : kind === "meter" ? s.dueM : s.dueL; });
     var pool = all.filter(has).sort(function(a,b){ if(!a.due) return 1; if(!b.due) return -1; return a.due - b.due; });
     var base = pool.filter(function(s){ return !key || (s.site+s.fac+s.addr).indexOf(key) >= 0; });
