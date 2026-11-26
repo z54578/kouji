@@ -156,7 +156,7 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
   </a>
   <a class="tool" href="./report.html">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M12 3 H30 L38 11 V29 H12 Z" stroke-width="2.5"/><path d="M30 3 V11 H38" stroke-width="2"/><path d="M17 17 H33 M17 22 H28" stroke="#2F6FD6" stroke-width="2.5"/></svg>
-    <div><b>報告書づくり（事務所）</b><span>検査機のデータとメールから、漏洩検査の報告書（Excel）を作る。パソコンの Chrome・Edge で使う</span></div>
+    <div><b>報告書作成</b><span>検査機のデータとメールから、漏洩検査の報告書（Excel）を作る。事務所のパソコンの Chrome・Edge で使う</span></div>
   </a>
   <a class="tool" href="./zfile.html?app=order">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M4 5 H10 L15 22 H38 L42 10 H12" stroke-width="2.5"/><circle cx="17" cy="27" r="2.5" stroke-width="2"/><circle cx="35" cy="27" r="2.5" stroke-width="2"/><path d="M22 15 H34" stroke="#2F6FD6" stroke-width="2.5"/></svg>
@@ -236,7 +236,7 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
   var all = [].slice.call(box.querySelectorAll("a.tool"));
   var CATS = [
     {k:"calc", n:"計算", a:["./pc.html","./cut.html","./foam-set.html","./sump-hole.html"]},
-    {k:"insp", n:"検定・検査", a:["./leak-set.html","./kentei.html","./remote-meter.html","./gen-load.html"]},
+    {k:"insp", n:"検定・検査", a:["./leak-set.html","./report.html","./kentei.html","./remote-meter.html","./gen-load.html"]},
     {k:"prep", n:"手配", a:["./zfile.html?app=order","./zfile.html?app=rent","./zfile.html?app=inn","./vehicle.html"]},
     {k:"book", n:"ハンドブック", a:["./zfile.html","./gyomu.html"]},
     {k:"check", n:"チェックリスト", a:["./checklist.html"]}
@@ -250,6 +250,12 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
   var placed = {}; st.cats.forEach(function(k){ st.items[k] = (st.items[k]||[]).filter(function(h){ if(placed[h] || !byHref(h)) return false; placed[h] = 1; return true; }); });
   CATS.forEach(function(c){ c.a.forEach(function(h){ if(!placed[h] && byHref(h)){ st.items[c.k].push(h); placed[h] = 1; } }); });
   all.forEach(function(a){ var h = hrefOf(a); if(!placed[h]){ st.items[st.cats[0]].push(h); placed[h] = 1; } });
+  // v228：報告書作成を「検定・検査」へ（前の版で「計算」に入ってしまった分を1回だけ移す）
+  try{ if(!localStorage.getItem("anm-mig-report") && byHref("./report.html") && st.items.insp){
+    st.cats.forEach(function(k){ st.items[k] = st.items[k].filter(function(h){ return h !== "./report.html"; }); });
+    var li = st.items.insp.indexOf("./leak-set.html"); st.items.insp.splice(li < 0 ? 0 : li+1, 0, "./report.html");
+    localStorage.setItem("anm-mig-report","1"); try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){}
+  } }catch(e){}
   var editing = false;
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
   var nameOf = function(k){ return (CATS.filter(function(c){ return c.k === k; })[0] || {n:k}).n; };
@@ -294,6 +300,6 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
 })();
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>
-<div class="ver">v226</div>
+<div class="ver">v228</div>
 </body>
 </html>

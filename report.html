@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>報告書づくり</title>
+<title>報告書作成</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#475055;--line:#B4BCC0;--focus:#1F4E8C;--ok:#1F6B3A;--okbg:#E3F1E6;--warn:#8A4600;--warnbg:#FFF1DE;--ng:#B42318;--ngbg:#FDECEC;color-scheme:light}
@@ -45,7 +45,7 @@ pre{white-space:pre-wrap;background:rgba(127,127,127,.1);padding:10px;border-rad
 <body>
 <main>
 <header>
-  <h1>報告書づくり</h1>
+  <h1>報告書作成</h1>
   <a href="./index.html">← メニュー</a>
 </header>
 
@@ -238,6 +238,11 @@ var RC = (function(){
     if(t === "inlineStr"){ var tt = c.getElementsByTagName("t"); var x=""; for(var i=0;i<tt.length;i++) x += tt[i].textContent; return x; }
     return v ? v.textContent : "";
   };
+  Book.prototype.cells = async function(sheet){
+    var d = await this.doc(sheet), out = [], cs = d.getElementsByTagNameNS(NS,"c");
+    for(var i=0;i<cs.length;i++){ var r = cs[i].getAttribute("r"); var v = await this.get(sheet, r); if(v !== "") out.push({ref:r, col:colNum(r.replace(/\d+/,"")), row:+r.replace(/[A-Z]+/,""), v:v}); }
+    return out;
+  };
   Book.prototype._cell = function(d, ref, make){
     var m = ref.match(/^([A-Z]+)(\d+)$/), rn = +m[2], cn = colNum(m[1]);
     var sd = d.getElementsByTagNameNS(NS,"sheetData")[0];
@@ -312,7 +317,7 @@ var RC = (function(){
       if(l){
         await book.set(rep, SLOT.ekiso[k]+(l.ok===false ? "46" : "47"), "○"); await book.set(rep, SLOT.ekiso[k]+(l.ok===false ? "47" : "46"), "");
         log.push("No."+t.no+"：液相部 "+(l.ok===false ? "異常あり" : "異常なし")+"（最大変位 "+(l.max===null?"不明":l.max.toFixed(3))+"mm）");
-        if(cho) need.push("No."+t.no+"：液層部温度（印刷を見て入れてください）");
+
       }
       if(nos[ni]){ await book.set(rep, SLOT.ekiso[k]+"48", nos[ni]); } ni++;
       if(ten){
@@ -320,6 +325,8 @@ var RC = (function(){
         if(t.rest !== null) await book.set(ten, SLOT.tenRest[k]+"37", t.rest);
         await book.set(ten, SLOT.ten[k]+"39", t.water === "あり" ? Math.round((t.wmm||0)/10*10)/10 : 0);
       }
+      // 液層部温度は測っていないのでハイフン（前回の値が残らないように）
+      if(cho){ await book.set(cho, SLOT.cho[k]+"12", "-"); await book.set(cho, SLOT.cho[k]+"13", "-"); }
       if(cho && t.rest !== null){
         await book.set(cho, SLOT.cho[k]+"6", t.rest);
         var cap = parseFloat(await book.get(cho, SLOT.cho[k]+"5")) || t.kl*1000;
@@ -335,7 +342,39 @@ var RC = (function(){
         else { await book.set(cho1, cD+r, we.st); await book.set(cho1, cW+r, ""); }
       }
     }
-    if(m.pipes.length) need.push("配管の圧力変動値：検査機のデータ "+m.pipes.map(function(p){ return p.file+"（"+fmt2(p.dp)+"kPa）"; }).join("、")+" を、配管の欄に入れてください");
+    // 配管：前回の報告書で配管の欄（①　0.1 のような文字）があった所に、時刻順に入れる
+    var rep1b = book.find(/^報告書[１1]/);
+    if(m.pipes.length && rep1b){
+      var all = await book.cells(rep1b);
+      var slots = all.filter(function(c){ return c.row >= 35 && c.row <= 37 && /^[①-⑳]/.test(c.v); }).sort(function(a,b){ return a.col-b.col || a.row-b.row; });
+      var pipes = m.pipes.slice().sort(function(a,b){ return (a.time>b.time)-(a.time<b.time); });
+      if(slots.length && slots.length === pipes.length){
+        var hc = SLOT.hen.map(colNum);
+        for(var pi=0; pi<slots.length; pi++){
+          var sl = slots[pi], pp = pipes[pi];
+          await book.set(rep1b, sl.ref, sl.v.charAt(0)+"　"+(Math.round(pp.dp*10)/10).toFixed(1));
+          var gi2 = 0; for(var q=0;q<hc.length;q++){ if(hc[q] <= sl.col+1) gi2 = q; }
+          var oc = SLOT.hen[gi2];
+          if(pp.ok === false){ await book.set(rep1b, oc+"38", "○"); await book.set(rep1b, oc+"39", ""); }
+          log.push("配管 "+sl.v.charAt(0)+"："+(Math.round(pp.dp*10)/10).toFixed(1)+"kPa "+(pp.ok?"異常なし":"異常あり")+"（"+pp.file+"）");
+        }
+      } else if(slots.length){
+        need.push("配管の圧力変動値：前回の配管の欄は "+slots.length+"か所、今回のデータは "+pipes.length+"件で数が合いません。"+pipes.map(function(p){ return p.file+"（"+(Math.round(p.dp*10)/10).toFixed(1)+"kPa）"; }).join("、"));
+      } else {
+        need.push("配管の圧力変動値：前回の報告書に配管の欄がありません。"+pipes.map(function(p){ return p.file+"（"+(Math.round(p.dp*10)/10).toFixed(1)+"kPa）"; }).join("、"));
+      }
+    }
+    // 現場見取図：次の検査のために、前回点検日と前ステッカーを今回の値にする
+    var mi = book.find(/見取/);
+    if(mi){
+      var mc = await book.cells(mi);
+      var lab = function(re){ return mc.filter(function(c){ return re.test(c.v.replace(/\s/g,"")); })[0]; };
+      var a1 = lab(/前回点検日/), a2 = lab(/前ステッカー/);
+      var right = function(c){ var o = mc.filter(function(x){ return x.row === c.row && x.col > c.col && x.col <= c.col + 20; }).sort(function(x,y){ return x.col-y.col; })[0]; return o ? o.ref : colName(c.col+8)+c.row; };
+      if(a1){ await book.set(mi, right(a1), rec.date.replace(/-/g,"/")); }
+      if(a2 && rec.nowNo){ await book.set(mi, right(a2), rec.nowNo.replace(/^(No|NO|№)[.,．，]?\s*/,"")); }
+      if(a1 || a2) log.push("現場見取図：前回点検日と前ステッカーを今回の値にしました");
+    }
     return { log:log, need:need };
   }
   return { parseMails:parseMails, splitNo:splitNo, parseData:parseData, match:match, scoreReport:scoreReport, Book:Book, fill:fill, norm:norm };
@@ -446,7 +485,7 @@ var RC = (function(){
         var sel = '<label class="sr" for="uv'+i+'_'+ti+'">No.'+esc(t.no)+' のデータ</label><select id="uv'+i+'_'+ti+'" data-rec="'+i+'" data-t="'+ti+'"><option value="">（なし）</option>'+sameDay.map(function(d){ return '<option value="'+esc(d.file)+'"'+(u && u.file===d.file?' selected':'')+'>'+esc(d.file+"　"+d.kind+" "+(d.cap?d.cap/1000+"KL":"")+"　"+(d.time||""))+'</option>'; }).join("")+'</select>';
         return '<tr><td>No.'+esc(t.no)+'</td><td>'+esc(t.oil)+' '+t.kl+'KL</td><td>'+sel+'</td><td>'+(u ? (u.dp!==null?u.dp.toFixed(2):"—")+' kPa '+(u.ok?'<span class="badge b-ok">異常なし</span>':'<span class="badge b-ng">異常あり</span>') : '<span class="badge b-warn">データなし</span>')+'</td><td>'+(u ? u.t0.toFixed(1)+' → '+u.t1.toFixed(1)+'℃' : '')+'</td><td>'+(l ? (l.ok===false?'<span class="badge b-ng">異常あり</span>':'<span class="badge b-ok">異常なし</span>')+' '+(l.max!==null?'最大'+l.max.toFixed(3)+'mm':'') : '—')+'</td><td>'+(t.rest!==null?t.rest+'ℓ':'')+' '+(t.level!==null?t.level+'mm':'')+'</td></tr>';
       }).join("");
-      var pipes = m.pipes.length ? '<p class="muted">配管のデータ：'+m.pipes.map(function(p){ return esc(p.file)+'（'+p.dp.toFixed(2)+'kPa・'+(p.ok?'異常なし':'異常あり')+'）'; }).join("、")+'。配管の欄は報告書で入れてください。</p>' : '';
+      var pipes = m.pipes.length ? '<p class="muted">配管のデータ：'+m.pipes.map(function(p){ return esc(p.file)+'（'+p.dp.toFixed(2)+'kPa・'+(p.ok?'異常なし':'異常あり')+'）'; }).join("、")+'。前回の報告書の配管の欄に、時刻順に入れます。</p>' : '';
       return '<div class="site"><div class="row" style="justify-content:space-between"><h3>'+esc(rec.site)+(rec.fac?'　'+esc(rec.fac):'')+'</h3><span class="badge '+cls+'">'+st+'</span></div>'+
         '<p class="muted">検査日 '+esc(rec.date)+'　天候 '+esc(rec.weather)+'　済証 '+esc(rec.nowNo)+'　検知管 '+rec.wells.length+'本</p>'+
         '<div class="row"><label for="rep'+i+'">前回の報告書</label><select id="rep'+i+'" data-rep="'+i+'" style="max-width:100%">'+opts+'</select></div>'+
