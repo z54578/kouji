@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>報告書づくり</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--bg:#ECEEEC;--surface:#FFFFFF;--ink:#1C2326;--muted:#475055;--line:#B4BCC0;--focus:#1F4E8C;--ok:#1F6B3A;--okbg:#E3F1E6;--warn:#8A4600;--warnbg:#FFF1DE;--ng:#B42318;--ngbg:#FDECEC;color-scheme:light}
+@media (prefers-color-scheme: dark){:root{--bg:#161A1C;--surface:#20262A;--ink:#E8ECEE;--muted:#9AA4A9;--line:#384146;--focus:#7FA8E0;--ok:#8BD3A0;--okbg:#1E3326;--warn:#F2B66D;--warnbg:#3A2A14;--ng:#F59A90;--ngbg:#3D1F1C;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;line-height:1.6}
+main{max-width:1100px;margin:0 auto;padding:20px 16px 80px;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px}
+h1{font-size:1.7rem;margin:0}
+h2{font-size:1.2rem;margin:0}
+a{color:var(--focus)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.muted{color:var(--muted);font-size:.92rem;margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;min-height:150px}
+.drop.on{border-color:var(--focus);background:rgba(31,78,140,.06)}
+textarea{width:100%;min-height:150px;font:inherit;font-size:.9rem;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--surface);color:var(--ink);resize:vertical}
+button,select,.btn{font:inherit;font-size:.95rem;min-height:44px;padding:0 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button.main{background:var(--focus);border-color:var(--focus);color:#fff;font-weight:700}
+@media (prefers-color-scheme: dark){button.main{color:#10161C}}
+button:disabled{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{border-top:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:rgba(127,127,127,.1)}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.82rem;font-weight:700}
+.b-ok{background:var(--okbg);color:var(--ok)}.b-warn{background:var(--warnbg);color:var(--warn)}.b-ng{background:var(--ngbg);color:var(--ng)}
+details{border-top:1px solid var(--line);padding-top:10px}
+summary{cursor:pointer;font-weight:700}
+.site{border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.site h3{margin:0;font-size:1.05rem}
+ul.need{margin:0;padding-left:1.2em;color:var(--warn)}
+ul.log{margin:0;padding-left:1.2em;color:var(--muted);font-size:.9rem}
+pre{white-space:pre-wrap;background:rgba(127,127,127,.1);padding:10px;border-radius:8px;font-size:.82rem;max-height:260px;overflow:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>報告書づくり</h1>
+  <a href="./index.html">← メニュー</a>
+</header>
+
+<section class="card">
+  <h2>1　まとめて入れる</h2>
+  <p class="muted">何日分・何現場分でもまとめて入れて大丈夫です。関係ないファイルは無視します。</p>
+  <div class="grid">
+    <div class="drop" id="drop">
+      <b>検査機のUSBの中身</b>
+      <p class="muted">ここにフォルダごと落とすか、ボタンで選んでください（UV・LL・Rpt を読みます）。</p>
+      <div class="row">
+        <label class="btn" style="display:inline-flex;align-items:center">フォルダを選ぶ<input type="file" id="dirIn" webkitdirectory multiple class="sr"></label>
+        <label class="btn" style="display:inline-flex;align-items:center">ファイルを選ぶ<input type="file" id="fileIn" multiple class="sr"></label>
+      </div>
+      <p id="dataSum" class="muted" aria-live="polite"></p>
+    </div>
+    <div class="drop">
+      <label for="mail"><b>アプリから届いたメールの本文</b></label>
+      <textarea id="mail" placeholder="【漏洩検査】のメールの本文を、何通分でも続けて貼ってください"></textarea>
+      <p id="mailSum" class="muted" aria-live="polite"></p>
+    </div>
+    <div class="drop">
+      <b>前回の報告書（.xlsx）</b>
+      <p class="muted">報告書の共有フォルダをつなぐと、現場名で自動で探し、できた報告書も同じ場所に保存します。</p>
+      <div class="row">
+        <button type="button" id="connect">共有フォルダをつなぐ</button>
+        <label class="btn" style="display:inline-flex;align-items:center">ファイルで選ぶ<input type="file" id="repIn" accept=".xlsx" multiple class="sr"></label>
+      </div>
+      <p id="repSum" class="muted" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>2　現場ごとに確かめる</h2>
+  <p class="muted">メールの日付と、検査機のデータの日付・容量で振り分けています。色の付いた所だけ確かめてください。</p>
+  <div id="sites"><p class="muted">メールの本文を貼ると、ここに現場が並びます。</p></div>
+</section>
+
+<section class="card">
+  <div class="row" style="justify-content:space-between">
+    <div><h2>3　まとめて作る</h2><p class="muted">確かめ終わった現場の報告書を作ります。共有フォルダをつないでいれば同じフォルダに、そうでなければダウンロードに保存します。</p></div>
+    <button type="button" class="main" id="makeAll">報告書をまとめて作る</button>
+  </div>
+  <p id="makeSum" aria-live="polite"></p>
+</section>
+
+<details class="card">
+  <summary>最初の1回だけ：.xls の報告書をまとめて .xlsx にする Excel マクロ</summary>
+  <p class="muted">Excel で「開発」→「Visual Basic」→「挿入」→「標準モジュール」に貼って、F5 で実行します。フォルダを選ぶと、その中（下の階層も）の .xls を同じ場所に .xlsx で保存します。元の .xls は消しません。</p>
+  <button type="button" id="copyMacro">マクロをコピー</button>
+  <pre id="macro"></pre>
+</details>
+</main>
+
+<script>
+// ==CORE START== 報告書づくりの中心（ブラウザとテストの両方で使う）
+var RC = (function(){
+  var Z2H = function(s){ return String(s||"").replace(/[０-９．，－ー―]/g, function(c){ return {"．":".","，":",","－":"-","ー":"-","―":"-"}[c] || String.fromCharCode(c.charCodeAt(0)-0xFEE0); }); };
+  var norm = function(s){ return Z2H(s).replace(/株式会社|有限会社|合同会社|㈱|㈲|\(株\)|\(有\)|（株）|（有）|[\s　・.,、。()（）\-_]/g,"").toLowerCase(); };
+
+  // ---- アプリのメール本文 ----
+  function parseMails(text){
+    var out = [];
+    String(text||"").replace(/\r/g,"").split(/(?=■現場)/).forEach(function(blk){
+      if(!/■現場/.test(blk) || !/■今回/.test(blk)) return;
+      var g = function(re){ var m = blk.match(re); return m ? m[1].trim() : ""; };
+      var r = { site:g(/現場名：(.*)/), fac:g(/施設名：(.*)/), addr:g(/住所：(.*)/), date:g(/日付：(\d{4}-\d{2}-\d{2})/),
+        weather:g(/天候：([^\n　]*)/), writer:g(/記入者：([^\n　]*)/), kind:g(/区分：([^\n　]*)/), nowNo:g(/今回No\.：(.*)/), prev:g(/前回：(.*)/), wells:[], tanks:[], raw:blk };
+      var sec = function(name){ var i = blk.indexOf(name); if(i<0) return []; var rest = blk.slice(i).split("\n").slice(1); var o=[]; for(var k=0;k<rest.length;k++){ if(/^■/.test(rest[k])||!rest[k].trim()) break; o.push(rest[k]); } return o; };
+      sec("■漏洩検知管").forEach(function(l){ var m = l.match(/^(\d+)：(.*)$/); if(!m) return; var v = m[2].match(/^(\d+(?:\.\d+)?)／(\d+(?:\.\d+)?)?/);
+        r.wells.push({ no:+m[1], st: v ? "測定" : m[2].trim(), depth: v ? +v[1] : null, water: v && v[2] !== undefined ? +v[2] : null }); });
+      sec("■タンク").forEach(function(l){ var m = l.match(/^No\.(\S+)\s+(\S*)\s+([\d.]+)KL：([^ℓ]*)ℓ・([^m]*)mm・タンク内の水(\S+?)(?:（([\d.]+)mm）)?$/);
+        if(!m) return; r.tanks.push({ no:m[1], oil:m[2], kl:+m[3], rest: m[4]==="" ? null : +Z2H(m[4]), level: m[5]==="" ? null : +Z2H(m[5]), water:m[6], wmm: m[7] ? +m[7] : 0 }); });
+      out.push(r);
+    });
+    return out;
+  }
+  // 今回No.（L-229313〜317 など）をタンクごとに分ける
+  function splitNo(s, n){
+    s = Z2H(s).replace(/\s/g,"").replace(/[～〜~]/g,"〜").replace(/^(No|NO|no|№)[.,．，:：]?/,"");
+    if(!s) return [];
+    var head = (s.match(/^([A-Za-z]*-?)/)||["",""])[1], full = null, list = [];
+    s.split(/[・,、／\/]/).filter(Boolean).forEach(function(part){
+      var p = part.replace(/^[A-Za-z]*-?/, "");
+      var r = p.split("〜");
+      var fix = function(x){ if(!full) return x; return x.length < full.length ? full.slice(0, full.length-x.length)+x : x; };
+      var a = fix(r[0]); if(!full) full = a;
+      if(r.length > 1){ var b = a.slice(0, a.length-r[1].length)+r[1]; for(var v=+a; v<=+b && list.length<30; v++) list.push(head+String(v).padStart(a.length,"0")); }
+      else if(/^\d+$/.test(a)) list.push(head+a); else list.push(part);
+      full = a;
+    });
+    return list;
+  }
+
+  // ---- 検査機のデータ ----
+  function parseUV(name, text){
+    var L = text.replace(/\r/g,"").split("\n");
+    var h0 = L[0].split(","), ts = L[1].split(",").map(function(x){ return x.trim(); }), tp = L[2].split(","), h3 = L[3].split(",");
+    var a = +h0[3], rows = [];
+    for(var i=4;i<L.length;i++){ var c = L[i].split(","); if(c.length===3 && c[0]!=="") rows.push([+c[0], +c[1]/100, +c[2]]); }
+    var d = (ts[0].match(/(\d{2})\/(\d{2})\/(\d{2})/)||[]);
+    var date = d.length ? "20"+d[1]+"-"+d[2]+"-"+d[3] : "";
+    var target = String(h3[9]||"").trim();
+    var base = rows[a] ? rows[a][2] : null, s = rows[a+360], e = rows[rows.length-1];
+    var dp = (s && e) ? Math.round((s[2]-e[2])*100)/100 : null;
+    var test = base || 0;
+    var kind = /配管/.test(target) ? "配管" : (/検知層/.test(target) ? "検知層" : "タンク");
+    var limit = kind === "検知層" ? 0.10 : 0.02;
+    var method = test > 15 ? "加圧" : (test > 5 ? "加圧" : "微加圧");
+    return { file:name, type:"UV", date:date, time:(ts[0].split(" ")[1]||""), ch:+h0[0], cap:+h3[4]||0, oil:String(h3[3]||"").trim(), target:target, kind:kind,
+      testKPa: Math.round(test*10)/10, dp:dp, pct: (dp!==null && test) ? Math.round(dp/test*10000)/100 : null,
+      ok: dp===null ? null : Math.abs(dp) <= test*limit + 1e-9, t0:+tp[0], t1:+tp[1], method:method, n:rows.length };
+  }
+  function parseLL(name, text){
+    var L = text.replace(/\r/g,"").split("\n"); var l1 = (L[1]||"").split(",");
+    var d = (L[0].match(/(\d{2,4})[\/.](\d{2})[\/.](\d{2})/)||[]);
+    var y = d[1] ? (d[1].length===2 ? "20"+d[1] : d[1]) : "";
+    return { file:name, type:"LL", date: y ? y+"-"+d[2]+"-"+d[3] : "", cap:+l1[1]||0, level:+l1[2]||0, gw:+l1[3]||0, key:name.replace(/\.[^.]+$/,"").replace(/\.\d+$/,"") };
+  }
+  function parseRpt(name, text){
+    var mx = null, mn = null;
+    text.replace(/\r/g,"").split("\n").forEach(function(l){ var c = l.split(","); var v = parseFloat(c[1]); if(!isNaN(v) && /^\s*[\d:\/ ]+/.test(c[0]||"")){ mx = mx===null ? v : Math.max(mx,v); mn = mn===null ? v : Math.min(mn,v); } });
+    return { file:name, type:"Rpt", key:name.replace(/\.[^.]+$/,""), max:mx, min:mn };
+  }
+  function parseData(name, text){
+    if(/\.\d*UV$/i.test(name)) return parseUV(name, text);
+    if(/\.\d*LL$/i.test(name)) return parseLL(name, text);
+    if(/\.Rpt$/i.test(name)) return parseRpt(name, text);
+    return null;
+  }
+
+  // ---- 紐付け ----
+  // 同じ日のデータを、そのメールのタンクに当てはめる。同じ容量・油種でどれも異常なしなら番号順に（入れ替わってもよい、という決まり）
+  function match(rec, data){
+    var day = data.filter(function(d){ return d.date === rec.date; });
+    var uv = day.filter(function(d){ return d.type==="UV"; }).sort(function(a,b){ return (a.time>b.time)-(a.time<b.time) || a.ch-b.ch; });
+    var res = { tanks: rec.tanks.map(function(){ return {uv:null, ll:null}; }), pipes:[], layers:[], ask:[], unused:[] };
+    var used = {};
+    rec.tanks.forEach(function(t, i){
+      var cands = uv.filter(function(d){ return d.kind==="タンク" && !used[d.file] && Math.abs(d.cap - t.kl*1000) < 1; });
+      if(!cands.length) return;
+      var same = rec.tanks.filter(function(t2){ return Math.abs(t2.kl - t.kl) < 1e-6; }).length;
+      var pick = cands[0];
+      if(same > 1 && cands.some(function(c){ return c.ok === false; })) res.ask.push({tank:i, reason:"同じ容量のタンクで異常ありの結果があります。どのタンクか選んでください"});
+      used[pick.file] = 1; res.tanks[i].uv = pick;
+    });
+    uv.forEach(function(d){ if(used[d.file]) return; if(d.kind==="配管") res.pipes.push(d); else if(d.kind==="検知層") res.layers.push(d); else res.unused.push(d); });
+    var ll = day.filter(function(d){ return d.type==="LL"; });
+    var rpt = data.filter(function(d){ return d.type==="Rpt"; });
+    rec.tanks.forEach(function(t, i){
+      var c = ll.filter(function(d){ return !used[d.file] && Math.abs(d.cap - t.kl*1000) < 1; })[0];
+      if(!c) return; used[c.file] = 1;
+      var r = rpt.filter(function(x){ return x.key === c.key; })[0];
+      res.tanks[i].ll = { file:c.file, level:c.level, gw:c.gw, max: r ? r.max : null, ok: r && r.max !== null ? r.max < 0.020 : null };
+    });
+    return res;
+  }
+  // 日付（YYYY-MM-DD）と同じ日のデータがある記録を、データの側から探す
+  function scoreReport(rec, fname){
+    var n = norm(fname), s = norm(rec.site), f = norm(rec.fac);
+    var sc = 0; if(s && n.indexOf(s) >= 0) sc += 2; if(f && n.indexOf(f) >= 0) sc += 3;
+    // 部分一致（4文字ずつ）
+    [s,f].forEach(function(x){ for(var k=0;k+4<=x.length;k+=2){ if(n.indexOf(x.slice(k,k+4))>=0){ sc += 0.3; } } });
+    return sc;
+  }
+
+  // ---- Excel（.xlsx）の書き換え ----
+  function colNum(c){ var n=0; for(var i=0;i<c.length;i++) n = n*26 + c.charCodeAt(i)-64; return n; }
+  function colName(n){ var s=""; while(n){ var m=(n-1)%26; s=String.fromCharCode(65+m)+s; n=Math.floor((n-1)/26); } return s; }
+  var NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+  function Book(zip, DP, XS){ this.zip = zip; this.DP = DP; this.XS = XS; this.docs = {}; }
+  Book.prototype.init = async function(){
+    var wb = new this.DP().parseFromString(await this.zip.file("xl/workbook.xml").async("string"), "application/xml");
+    var rel = new this.DP().parseFromString(await this.zip.file("xl/_rels/workbook.xml.rels").async("string"), "application/xml");
+    var rmap = {}; var rs = rel.getElementsByTagName("Relationship"); for(var i=0;i<rs.length;i++) rmap[rs[i].getAttribute("Id")] = rs[i].getAttribute("Target");
+    this.sheets = {}; var ss = wb.getElementsByTagName("sheet");
+    for(var j=0;j<ss.length;j++){ var t = rmap[ss[j].getAttribute("r:id")]; if(!t) continue; t = t.replace(/^\/?xl\//,""); this.sheets[ss[j].getAttribute("name")] = "xl/"+t; }
+    var sst = this.zip.file("xl/sharedStrings.xml"); this.shared = [];
+    if(sst){ var sd = new this.DP().parseFromString(await sst.async("string"), "application/xml"); var si = sd.getElementsByTagName("si");
+      for(var k=0;k<si.length;k++){ var ts = si[k].getElementsByTagName("t"), x=""; for(var q=0;q<ts.length;q++) x += ts[q].textContent; this.shared.push(x); } }
+    return this;
+  };
+  Book.prototype.find = function(re){ var n = Object.keys(this.sheets).filter(function(k){ return re.test(k); }); return n[0] || null; };
+  Book.prototype.doc = async function(name){ if(!this.docs[name]){ var p = this.sheets[name]; this.docs[name] = new this.DP().parseFromString(await this.zip.file(p).async("string"), "application/xml"); } return this.docs[name]; };
+  Book.prototype.get = async function(sheet, ref){
+    var d = await this.doc(sheet); var c = this._cell(d, ref, false); if(!c) return "";
+    var t = c.getAttribute("t"), v = c.getElementsByTagName("v")[0];
+    if(t === "s" && v) return this.shared[+v.textContent] || "";
+    if(t === "inlineStr"){ var tt = c.getElementsByTagName("t"); var x=""; for(var i=0;i<tt.length;i++) x += tt[i].textContent; return x; }
+    return v ? v.textContent : "";
+  };
+  Book.prototype._cell = function(d, ref, make){
+    var m = ref.match(/^([A-Z]+)(\d+)$/), rn = +m[2], cn = colNum(m[1]);
+    var sd = d.getElementsByTagNameNS(NS,"sheetData")[0];
+    var rows = sd.getElementsByTagNameNS(NS,"row"), row = null, after = null;
+    for(var i=0;i<rows.length;i++){ var r = +rows[i].getAttribute("r"); if(r === rn){ row = rows[i]; break; } if(r > rn){ after = rows[i]; break; } }
+    if(!row){ if(!make) return null; row = d.createElementNS(NS,"row"); row.setAttribute("r", String(rn)); sd.insertBefore(row, after); }
+    var cs = row.getElementsByTagNameNS(NS,"c"), cell = null, before = null;
+    for(var j=0;j<cs.length;j++){ var cr = cs[j].getAttribute("r"), cc = colNum(cr.replace(/\d+/,"")); if(cc === cn){ cell = cs[j]; break; } if(cc > cn){ before = cs[j]; break; } }
+    if(!cell && make){ cell = d.createElementNS(NS,"c"); cell.setAttribute("r", ref);
+      // 行の中で左隣の書式を借りる（なければなし）
+      row.insertBefore(cell, before); }
+    return cell;
+  };
+  Book.prototype.set = async function(sheet, ref, val){
+    if(!sheet || !this.sheets[sheet]) return false;
+    var d = await this.doc(sheet); var c = this._cell(d, ref, true);
+    while(c.firstChild) c.removeChild(c.firstChild);
+    if(val === null || val === undefined || val === ""){ c.removeAttribute("t"); return true; }
+    if(typeof val === "number"){ c.removeAttribute("t"); var v = d.createElementNS(NS,"v"); v.textContent = String(val); c.appendChild(v); }
+    else { c.setAttribute("t","inlineStr"); var is = d.createElementNS(NS,"is"), t = d.createElementNS(NS,"t"); t.setAttribute("xml:space","preserve"); t.textContent = String(val); is.appendChild(t); c.appendChild(is); }
+    return true;
+  };
+  Book.prototype.save = async function(){
+    var self = this;
+    Object.keys(this.docs).forEach(function(n){ self.zip.file(self.sheets[n], new self.XS().serializeToString(self.docs[n])); });
+    // 計算し直しを Excel に任せる
+    var wbp = "xl/workbook.xml", w = await this.zip.file(wbp).async("string");
+    if(/<calcPr[^>]*>/.test(w)) w = w.replace(/<calcPr([^>]*?)\/?>/, function(m, a){ return "<calcPr"+a.replace(/\s*fullCalcOnLoad="[^"]*"/,"")+' fullCalcOnLoad="1"/>'; });
+    this.zip.file(wbp, w);
+    this.zip.remove("xl/calcChain.xml");
+    return this.zip;
+  };
+
+  // 報告書の欄の位置（エクセルシオール・新谷商店・手塚興産の報告書で確認）
+  var SLOT = { hen:["D","N","X","AH","AR"], ekiso:["D","M","W","AG","AQ"], ten:["F","N","V","AD","AL"], tenRest:["E","M","U","AC","AK"], cho:["O","W","AE","AM","AU"] };
+  function reiwa(date){ var p = date.split("-"); return [ +p[0]-2018, +p[1], +p[2] ]; }
+  function fmt2(x){ return (Math.round(x*100)/100).toFixed(2); }
+
+  async function fill(book, rec, m, opt){
+    opt = opt || {}; var log = [], need = [];
+    var dt = reiwa(rec.date);
+    // 前回（＝土台にした報告書の「今回」）を先に読む
+    var rep1 = book.find(/^報告書[１1]/), ten1 = book.find(/^点検[１1]/), cho1 = book.find(/^調査[１1]/), cover = book.find(/^表紙/);
+    var prevY = await book.get(rep1,"Q18"), prevM = await book.get(rep1,"T18"), prevD = await book.get(rep1,"W18");
+    var prevNos = []; for(var g=0; g<3; g++){ var rs = book.find(new RegExp("^報告書"+["[１1]～[５5]","[６6]～[１1][０0]","[１1][１1]～[１1][５5]"][g])); if(!rs) continue; for(var k=0;k<5;k++){ var x = await book.get(rs, SLOT.ekiso[k]+"48"); if(x) prevNos.push(x); } }
+    var prevNo = prevNos.length > 1 ? prevNos[0]+"～"+prevNos[prevNos.length-1].replace(/^.*?(\d{3})$/,"$1") : (prevNos[0]||"");
+    // 表紙・報告書の日付
+    if(cover){ await book.set(cover,"G42",dt[0]); await book.set(cover,"I42",dt[1]); await book.set(cover,"K42",dt[2]); }
+    var nos = splitNo(rec.nowNo, rec.tanks.length);
+    var groups = ["[１1]～[５5]","[６6]～[１1][０0]","[１1][１1]～[１1][５5]"];
+    for(var gi=0; gi<3; gi++){
+      var rep = book.find(new RegExp("^報告書"+groups[gi])), ten = book.find(new RegExp("^点検"+groups[gi])), cho = book.find(new RegExp("^調査"+groups[gi]));
+      if(!rep) continue;
+      await book.set(rep,"AR3",dt[0]); await book.set(rep,"AU3",dt[1]); await book.set(rep,"AX3",dt[2]);
+      await book.set(rep,"Q18",dt[0]); await book.set(rep,"T18",dt[1]); await book.set(rep,"W18",dt[2]);
+      if(rec.weather) await book.set(rep,"AH18",rec.weather);
+      if(ten && prevY){ await book.set(ten,"N42",+prevY||prevY); await book.set(ten,"P42",+prevM||prevM); await book.set(ten,"S42",+prevD||prevD); if(prevNo) await book.set(ten,"AB42",prevNo); }
+    }
+    var ni = 0;
+    for(var i=0;i<rec.tanks.length;i++){
+      var t = rec.tanks[i], slotNo = parseInt(t.no,10); if(!(slotNo>=1 && slotNo<=15)) slotNo = i+1;
+      var gix = Math.floor((slotNo-1)/5), k = (slotNo-1)%5;
+      var rep = book.find(new RegExp("^報告書"+groups[gix])), ten = book.find(new RegExp("^点検"+groups[gix])), cho = book.find(new RegExp("^調査"+groups[gix]));
+      if(!rep){ need.push("No."+t.no+"：報告書に入る場所がありません"); continue; }
+      var u = m.tanks[i].uv, l = m.tanks[i].ll;
+      if(u){
+        await book.set(rep, SLOT.hen[k]+"30", fmt2(u.dp));
+        await book.set(rep, SLOT.hen[k]+(u.ok ? "34" : "33"), "○"); await book.set(rep, SLOT.hen[k]+(u.ok ? "33" : "34"), "");
+        if(cho){ await book.set(cho, SLOT.cho[k]+"10", u.t0.toFixed(1)); await book.set(cho, SLOT.cho[k]+"11", u.t1.toFixed(1)); }
+        log.push("No."+t.no+"：変動値 "+fmt2(u.dp)+"kPa "+(u.ok?"異常なし":"異常あり")+"（"+u.file+"）");
+      } else need.push("No."+t.no+"：タンクの圧力変動値（検査機のデータが見つかりません）");
+      if(l){
+        await book.set(rep, SLOT.ekiso[k]+(l.ok===false ? "46" : "47"), "○"); await book.set(rep, SLOT.ekiso[k]+(l.ok===false ? "47" : "46"), "");
+        log.push("No."+t.no+"：液相部 "+(l.ok===false ? "異常あり" : "異常なし")+"（最大変位 "+(l.max===null?"不明":l.max.toFixed(3))+"mm）");
+        if(cho) need.push("No."+t.no+"：液層部温度（印刷を見て入れてください）");
+      }
+      if(nos[ni]){ await book.set(rep, SLOT.ekiso[k]+"48", nos[ni]); } ni++;
+      if(ten){
+        if(t.level !== null) await book.set(ten, SLOT.ten[k]+"35", Math.round(t.level/10*10)/10);
+        if(t.rest !== null) await book.set(ten, SLOT.tenRest[k]+"37", t.rest);
+        await book.set(ten, SLOT.ten[k]+"39", t.water === "あり" ? Math.round((t.wmm||0)/10*10)/10 : 0);
+      }
+      if(cho && t.rest !== null){
+        await book.set(cho, SLOT.cho[k]+"6", t.rest);
+        var cap = parseFloat(await book.get(cho, SLOT.cho[k]+"5")) || t.kl*1000;
+        await book.set(cho, SLOT.cho[k]+"7", Math.max(0, cap - t.rest));
+      }
+    }
+    // 検知管（調査１～５の下の表：1〜10 は D/F/L/R、11〜20 は Y/AA/AG/AM）
+    if(cho1){
+      for(var w=0; w<rec.wells.length && w<20; w++){
+        var we = rec.wells[w], r = 16 + (w % 10), right = w >= 10;
+        var cD = right ? "AA" : "F", cW = right ? "AG" : "L";
+        if(we.st === "測定"){ await book.set(cho1, cD+r, (we.depth/1000).toFixed(2)); await book.set(cho1, cW+r, we.water===null ? "" : (we.water/1000).toFixed(2)); }
+        else { await book.set(cho1, cD+r, we.st); await book.set(cho1, cW+r, ""); }
+      }
+    }
+    if(m.pipes.length) need.push("配管の圧力変動値：検査機のデータ "+m.pipes.map(function(p){ return p.file+"（"+fmt2(p.dp)+"kPa）"; }).join("、")+" を、配管の欄に入れてください");
+    return { log:log, need:need };
+  }
+  return { parseMails:parseMails, splitNo:splitNo, parseData:parseData, match:match, scoreReport:scoreReport, Book:Book, fill:fill, norm:norm };
+})();
+
+// ==CORE END==
+
+</script>
+<script>
+(function(){
+  var DATA = [], RECS = [], REPS = [], DIR = null, CHOICE = {}, DONE = {};
+  var td = new TextDecoder("shift_jis");
+  var $ = function(id){ return document.getElementById(id); };
+  var esc = function(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+
+  // ---- 検査機のデータ ----
+  function addFiles(list){
+    var ps = [];
+    Array.prototype.forEach.call(list, function(f){
+      if(!/\.(\d*UV|\d*LL|Rpt)$/i.test(f.name)) return;
+      if(DATA.some(function(d){ return d.file === f.name; })) return;
+      ps.push(f.arrayBuffer().then(function(b){ var d = RC.parseData(f.name, td.decode(b)); if(d) DATA.push(d); }).catch(function(){}));
+    });
+    Promise.all(ps).then(function(){
+      var n = {UV:0,LL:0,Rpt:0}; DATA.forEach(function(d){ n[d.type]++; });
+      var ds = DATA.map(function(d){ return d.date; }).filter(Boolean).sort();
+      $("dataSum").textContent = DATA.length ? "読み込みました：UV "+n.UV+"・LL "+n.LL+"・Rpt "+n.Rpt+"（"+ds[0]+"〜"+ds[ds.length-1]+"）" : "";
+      draw();
+    });
+  }
+  $("dirIn").onchange = function(){ addFiles(this.files); };
+  $("fileIn").onchange = function(){ addFiles(this.files); };
+  var drop = $("drop");
+  drop.addEventListener("dragover", function(e){ e.preventDefault(); drop.classList.add("on"); });
+  drop.addEventListener("dragleave", function(){ drop.classList.remove("on"); });
+  drop.addEventListener("drop", function(e){
+    e.preventDefault(); drop.classList.remove("on");
+    var items = e.dataTransfer.items, files = [], pend = 0;
+    var done = function(){ if(pend === 0) addFiles(files); };
+    function walk(ent){
+      pend++;
+      if(ent.isFile){ ent.file(function(f){ files.push(f); pend--; done(); }, function(){ pend--; done(); }); }
+      else if(ent.isDirectory){ var rd = ent.createReader(); var read = function(){ rd.readEntries(function(es){ if(!es.length){ pend--; done(); return; } es.forEach(walk); read(); }, function(){ pend--; done(); }); }; read(); }
+      else { pend--; done(); }
+    }
+    if(items && items.length && items[0].webkitGetAsEntry){ for(var i=0;i<items.length;i++){ var en = items[i].webkitGetAsEntry(); if(en) walk(en); } if(!pend) done(); }
+    else addFiles(e.dataTransfer.files);
+  });
+
+  // ---- メール ----
+  var mt = null;
+  $("mail").addEventListener("input", function(){ clearTimeout(mt); mt = setTimeout(function(){
+    RECS = RC.parseMails($("mail").value);
+    $("mailSum").textContent = RECS.length ? RECS.length+"通分を読み取りました" : ($("mail").value.trim() ? "読み取れませんでした。【漏洩検査】のメールの本文を貼ってください" : "");
+    draw();
+  }, 300); });
+
+  // ---- 前回の報告書 ----
+  async function scan(dir, path, out, depth){
+    for await (var ent of dir.values()){
+      if(ent.kind === "file" && /\.xlsx?$/i.test(ent.name) && !/^~\$/.test(ent.name)) out.push({name:ent.name, path:path+ent.name, handle:ent, dir:dir});
+      else if(ent.kind === "directory" && depth < 6) await scan(ent, path+ent.name+"/", out, depth+1);
+    }
+  }
+  $("connect").onclick = async function(){
+    if(!window.showDirectoryPicker){ $("repSum").textContent = "このブラウザではフォルダをつなげません。Chrome か Edge で開いてください。"; return; }
+    try{
+      DIR = await window.showDirectoryPicker({mode:"readwrite"});
+      $("repSum").textContent = "フォルダの中を探しています…";
+      var out = []; await scan(DIR, "", out, 0);
+      REPS = REPS.filter(function(r){ return !r.handle; }).concat(out);
+      var nx = out.filter(function(r){ return /\.xlsx$/i.test(r.name); }).length, ns = out.length - nx;
+      $("repSum").textContent = "つなぎました：.xlsx "+nx+"件"+(ns ? "・.xls "+ns+"件（.xls はマクロで .xlsx にしてください）" : "");
+      draw();
+    }catch(e){ $("repSum").textContent = "フォルダをつなげませんでした（"+e.name+"）"; }
+  };
+  $("repIn").onchange = function(){ Array.prototype.forEach.call(this.files, function(f){ REPS.push({name:f.name, path:f.name, file:f}); }); $("repSum").textContent = "ファイルで選んだ報告書："+REPS.filter(function(r){ return r.file; }).length+"件"; draw(); };
+
+  function candidates(rec){
+    return REPS.map(function(r){ return {r:r, s:RC.scoreReport(rec, r.path)}; }).filter(function(x){ return x.s > 1; })
+      .sort(function(a,b){ return b.s - a.s || (b.r.name > a.r.name ? 1 : -1); }).slice(0, 8);
+  }
+  var key = function(rec){ return rec.site+"|"+rec.fac+"|"+rec.date; };
+
+  // ---- 一覧 ----
+  function draw(){
+    var box = $("sites");
+    if(!RECS.length){ box.innerHTML = '<p class="muted">メールの本文を貼ると、ここに現場が並びます。</p>'; return; }
+    box.innerHTML = RECS.map(function(rec, i){
+      var m = RC.match(rec, DATA); rec._m = m;
+      var cands = candidates(rec), k = key(rec);
+      if(CHOICE[k] === undefined && cands.length && /\.xlsx$/i.test(cands[0].r.name)) CHOICE[k] = REPS.indexOf(cands[0].r);
+      var ci = CHOICE[k], rep = ci !== undefined && ci >= 0 ? REPS[ci] : null;
+      var nUv = m.tanks.filter(function(t){ return t.uv; }).length, ng = m.tanks.some(function(t){ return (t.uv && t.uv.ok === false) || (t.ll && t.ll.ok === false); });
+      var st, cls;
+      if(DONE[k]){ st = "作りました"; cls = "b-ok"; }
+      else if(!rep){ st = "前回の報告書を選んでください"; cls = "b-warn"; }
+      else if(rep && /\.xls$/i.test(rep.name)){ st = ".xls なので .xlsx にしてください"; cls = "b-warn"; }
+      else if(m.ask.length){ st = "どのタンクか選んでください"; cls = "b-warn"; }
+      else if(ng){ st = "異常ありがあります"; cls = "b-ng"; }
+      else if(nUv < rec.tanks.length){ st = "データが足りないタンクがあります"; cls = "b-warn"; }
+      else { st = "確かめるだけ"; cls = "b-ok"; }
+      var opts = '<option value="-1">前回の報告書を選んでください</option>'+cands.map(function(c){ var ix = REPS.indexOf(c.r); return '<option value="'+ix+'"'+(ix===ci?' selected':'')+'>'+esc(c.r.path)+'</option>'; }).join("")+
+        (rep && !cands.some(function(c){ return REPS.indexOf(c.r)===ci; }) ? '<option value="'+ci+'" selected>'+esc(rep.path)+'</option>' : '');
+      var sameDay = DATA.filter(function(d){ return d.date === rec.date && d.type === "UV"; });
+      var rows = rec.tanks.map(function(t, ti){
+        var u = m.tanks[ti].uv, l = m.tanks[ti].ll;
+        var sel = '<label class="sr" for="uv'+i+'_'+ti+'">No.'+esc(t.no)+' のデータ</label><select id="uv'+i+'_'+ti+'" data-rec="'+i+'" data-t="'+ti+'"><option value="">（なし）</option>'+sameDay.map(function(d){ return '<option value="'+esc(d.file)+'"'+(u && u.file===d.file?' selected':'')+'>'+esc(d.file+"　"+d.kind+" "+(d.cap?d.cap/1000+"KL":"")+"　"+(d.time||""))+'</option>'; }).join("")+'</select>';
+        return '<tr><td>No.'+esc(t.no)+'</td><td>'+esc(t.oil)+' '+t.kl+'KL</td><td>'+sel+'</td><td>'+(u ? (u.dp!==null?u.dp.toFixed(2):"—")+' kPa '+(u.ok?'<span class="badge b-ok">異常なし</span>':'<span class="badge b-ng">異常あり</span>') : '<span class="badge b-warn">データなし</span>')+'</td><td>'+(u ? u.t0.toFixed(1)+' → '+u.t1.toFixed(1)+'℃' : '')+'</td><td>'+(l ? (l.ok===false?'<span class="badge b-ng">異常あり</span>':'<span class="badge b-ok">異常なし</span>')+' '+(l.max!==null?'最大'+l.max.toFixed(3)+'mm':'') : '—')+'</td><td>'+(t.rest!==null?t.rest+'ℓ':'')+' '+(t.level!==null?t.level+'mm':'')+'</td></tr>';
+      }).join("");
+      var pipes = m.pipes.length ? '<p class="muted">配管のデータ：'+m.pipes.map(function(p){ return esc(p.file)+'（'+p.dp.toFixed(2)+'kPa・'+(p.ok?'異常なし':'異常あり')+'）'; }).join("、")+'。配管の欄は報告書で入れてください。</p>' : '';
+      return '<div class="site"><div class="row" style="justify-content:space-between"><h3>'+esc(rec.site)+(rec.fac?'　'+esc(rec.fac):'')+'</h3><span class="badge '+cls+'">'+st+'</span></div>'+
+        '<p class="muted">検査日 '+esc(rec.date)+'　天候 '+esc(rec.weather)+'　済証 '+esc(rec.nowNo)+'　検知管 '+rec.wells.length+'本</p>'+
+        '<div class="row"><label for="rep'+i+'">前回の報告書</label><select id="rep'+i+'" data-rep="'+i+'" style="max-width:100%">'+opts+'</select></div>'+
+        '<details'+(cls==="b-ok"&&!DONE[k]?'':' open')+'><summary>タンクとデータ（'+nUv+'/'+rec.tanks.length+'）</summary><div class="wrap"><table><tr><th>タンク</th><th>油種・容量</th><th>検査機のデータ</th><th>変動値</th><th>気層部温度</th><th>液相部</th><th>残量・油面高</th></tr>'+rows+'</table></div>'+pipes+'</details>'+
+        (rec._res ? '<ul class="log">'+rec._res.log.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join("")+'</ul>'+(rec._res.need.length?'<p><b>報告書で入れてほしい所</b></p><ul class="need">'+rec._res.need.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join("")+'</ul>':'') : '')+
+        '<div class="row"><button type="button" data-make="'+i+'"'+(rep && /\.xlsx$/i.test(rep.name)?'':' disabled')+'>この現場の報告書を作る</button></div></div>';
+    }).join("");
+    box.querySelectorAll("select[data-rep]").forEach(function(s){ s.onchange = function(){ CHOICE[key(RECS[+s.dataset.rep])] = +s.value; draw(); }; });
+    box.querySelectorAll("select[data-t]").forEach(function(s){ s.onchange = function(){
+      var rec = RECS[+s.dataset.rec], ti = +s.dataset.t; rec._over = rec._over || {}; rec._over[ti] = s.value; draw(); }; });
+    box.querySelectorAll("button[data-make]").forEach(function(b){ b.onclick = function(){ make(+b.dataset.make); }; });
+  }
+  // 手で選び直したデータを反映
+  var baseMatch = RC.match;
+  RC.match = function(rec, data){
+    var m = baseMatch(rec, data);
+    if(rec._over) Object.keys(rec._over).forEach(function(ti){ var f = rec._over[ti]; m.tanks[ti].uv = f ? data.filter(function(d){ return d.file === f; })[0] || null : null; });
+    return m;
+  };
+
+  function newName(rep, rec){
+    var base = rep.name.replace(/\.xlsx$/i,"").replace(/[_\s]*(R|令和)?\d{1,2}[.\-年]\d{1,2}[.\-月]\d{1,2}日?$/,"");
+    var p = rec.date.split("-"); return base+"_R"+(+p[0]-2018)+"."+(+p[1])+"."+(+p[2])+".xlsx";
+  }
+  async function make(i){
+    var rec = RECS[i], k = key(rec), rep = REPS[CHOICE[k]];
+    if(!rep) return;
+    try{
+      var buf = rep.file ? await rep.file.arrayBuffer() : await (await rep.handle.getFile()).arrayBuffer();
+      var zip = await JSZip.loadAsync(buf);
+      var book = await new RC.Book(zip, DOMParser, XMLSerializer).init();
+      if(!book.find(/^報告書[１1]/)){ alert("この Excel には「報告書１～５」のシートがありません。前回の報告書を選び直してください。"); return; }
+      var res = await RC.fill(book, rec, RC.match(rec, DATA));
+      var blob = await (await book.save()).generateAsync({type:"blob", mimeType:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+      var name = newName(rep, rec);
+      if(rep.dir){
+        var fh = await rep.dir.getFileHandle(name, {create:true}); var w = await fh.createWritable(); await w.write(blob); await w.close();
+        res.log.unshift("保存しました："+rep.path.replace(/[^/]*$/,"")+name);
+        REPS.push({name:name, path:rep.path.replace(/[^/]*$/,"")+name, handle:fh, dir:rep.dir});
+      } else {
+        var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+        res.log.unshift("ダウンロードしました："+name);
+      }
+      rec._res = res; DONE[k] = 1; draw();
+      return true;
+    }catch(e){ alert("報告書を作れませんでした："+e.message); }
+  }
+  $("makeAll").onclick = async function(){
+    var n = 0, skip = 0;
+    for(var i=0;i<RECS.length;i++){ var rec = RECS[i], k = key(rec), rep = REPS[CHOICE[k]];
+      if(DONE[k]) continue;
+      var m = RC.match(rec, DATA);
+      if(!rep || !/\.xlsx$/i.test(rep.name) || m.ask.length){ skip++; continue; }
+      if(await make(i)) n++;
+    }
+    $("makeSum").textContent = n+"件作りました"+(skip ? "。"+skip+"件は、前回の報告書かタンクを選んでから作ってください" : "");
+  };
+
+  var MACRO = [
+    "Sub xlsをxlsxにまとめて変える()",
+    "    Dim fd As FileDialog",
+    "    Set fd = Application.FileDialog(msoFileDialogFolderPicker)",
+    "    If fd.Show <> -1 Then Exit Sub",
+    "    Application.DisplayAlerts = False",
+    "    Application.ScreenUpdating = False",
+    "    Dim n As Long",
+    "    n = 変える(fd.SelectedItems(1))",
+    "    Application.DisplayAlerts = True",
+    "    Application.ScreenUpdating = True",
+    "    MsgBox n & \" 件を .xlsx にしました\"",
+    "End Sub",
+    "",
+    "Function 変える(ByVal p As String) As Long",
+    "    Dim fso As Object, f As Object, d As Object, wb As Workbook, n As Long, x As String",
+    "    Set fso = CreateObject(\"Scripting.FileSystemObject\")",
+    "    For Each f In fso.GetFolder(p).Files",
+    "        If LCase(fso.GetExtensionName(f.Name)) = \"xls\" And Left(f.Name, 2) <> \"~$\" Then",
+    "            x = Left(f.Path, Len(f.Path) - 4) & \".xlsx\"",
+    "            If Not fso.FileExists(x) Then",
+    "                Set wb = Workbooks.Open(f.Path, UpdateLinks:=0, ReadOnly:=True)",
+    "                wb.SaveAs Filename:=x, FileFormat:=51",
+    "                wb.Close SaveChanges:=False",
+    "                n = n + 1",
+    "            End If",
+    "        End If",
+    "    Next",
+    "    For Each d In fso.GetFolder(p).SubFolders",
+    "        n = n + 変える(d.Path)",
+    "    Next",
+    "    変える = n",
+    "End Function"].join("\n");
+  $("macro").textContent = MACRO;
+  $("copyMacro").onclick = function(){ navigator.clipboard.writeText(MACRO).then(function(){ $("copyMacro").textContent = "コピーしました"; }); };
+})();
+</script>
+</body>
+</html>

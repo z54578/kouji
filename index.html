@@ -154,6 +154,10 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><ellipse cx="24" cy="18" rx="18" ry="9" stroke-width="2.5"/><path d="M24 2 V9" stroke-width="2.5"/><path d="M36 4 C38 8 38 10 36 12 C34 10 34 8 36 4 Z" fill="#2F6FD6" stroke="none"/></svg>
     <div><b>漏洩検査</b><span>台帳（期限順の一覧）・記録（現場で記入して送信）・現場データ作成</span></div>
   </a>
+  <a class="tool" href="./report.html">
+    <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M12 3 H30 L38 11 V29 H12 Z" stroke-width="2.5"/><path d="M30 3 V11 H38" stroke-width="2"/><path d="M17 17 H33 M17 22 H28" stroke="#2F6FD6" stroke-width="2.5"/></svg>
+    <div><b>報告書づくり（事務所）</b><span>検査機のデータとメールから、漏洩検査の報告書（Excel）を作る。パソコンの Chrome・Edge で使う</span></div>
+  </a>
   <a class="tool" href="./zfile.html?app=order">
     <svg viewBox="0 0 48 32" aria-hidden="true" fill="none" stroke="currentColor"><path d="M4 5 H10 L15 22 H38 L42 10 H12" stroke-width="2.5"/><circle cx="17" cy="27" r="2.5" stroke-width="2"/><circle cx="35" cy="27" r="2.5" stroke-width="2"/><path d="M22 15 H34" stroke="#2F6FD6" stroke-width="2.5"/></svg>
     <div><b>材料注文</b><span>材料をカートに入れて、注文・見積のメールを作る</span></div>
@@ -290,6 +294,6 @@ a.tool .num{position:absolute;left:8px;top:6px;font-style:normal;font-size:.72re
 })();
 if("serviceWorker" in navigator){ window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); }); }
 </script>
-<div class="ver">v225</div>
+<div class="ver">v226</div>
 </body>
 </html>
